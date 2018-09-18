@@ -1,0 +1,56 @@
+#
+#  Copyright (c) Microsoft Corporation. All rights reserved.
+#  Copyright (c) 2013-2018, ARM Limited. All rights reserved.
+#
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+
+[Defines]
+  DEC_SPECIFICATION              = 0x0001001A
+  PACKAGE_NAME                   = iMX8Pkg
+
+  PACKAGE_GUID                   = 4F3BDBA2-496B-64BB-FAB3-199D81AAE5A2
+  PACKAGE_VERSION                = 0.1
+
+################################################################################
+#
+# Include Section - list of Include Paths that are provided by this package.
+#                   Comments are used for Keywords and Module Types.
+#
+# Supported Module Types:
+#  BASE SEC PEI_CORE PEIM DXE_CORE DXE_DRIVER DXE_RUNTIME_DRIVER DXE_SMM_DRIVER DXE_SAL_DRIVER UEFI_DRIVER UEFI_APPLICATION
+#
+################################################################################
+[Includes.common]
+  Include                        # Root include for the package
+
+[Guids.common]
+  giMX8TokenSpaceGuid    =  { 0x4F3BDBA2, 0x496B, 0x64BB, { 0xFA, 0xB3, 0x19, 0x9D, 0x81, 0xAA, 0xE5, 0xA2 } }
+
+[PcdsFeatureFlag.common]
+  giMX8TokenSpaceGuid.PcdPciMaxPayloadFixup|FALSE|BOOLEAN|0x00000013
+
+[PcdsFixedAtBuild.common]
+  giMX8TokenSpaceGuid.PcdPcieControlBaseAddress|0x33800000|UINT64|0x0000000B
+  giMX8TokenSpaceGuid.PcdPcieRootPortBaseAddress|0x18000000|UINT64|0x0000000C
+  giMX8TokenSpaceGuid.PcdPciConfigurationSpaceBaseAddress|0x40000000|UINT64|0x00000011
+  giMX8TokenSpaceGuid.PcdPciConfigurationSpaceSize|0x10000000|UINT64|0x00000012
+
+  #
+  giMX8TokenSpaceGuid.PcdUsb1XhciBaseAddress|0x38100000|UINT64|0x00000004
+  giMX8TokenSpaceGuid.PcdUsb2XhciBaseAddress|0x38200000|UINT64|0x00000005
+
+  # MaxMode must be one number higher than the actual max mode,
+  # i.e. for actual maximum mode 2, set the value to 3.
+  #
+  # Default value zero allows platform to enumerate maximum supported mode.
+  #
+  # For a list of mode numbers look in HdLcdiMX8.c
+  giMX8TokenSpaceGuid.PcdArmHdLcdMaxMode|0|UINT32|0x00000017
+
