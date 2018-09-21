@@ -375,9 +375,8 @@
   # iMXPlatformPkg
   #
 
-  # System Memory (3GB of DRAM at the top of the 32bit address space)
+  # System Memory base
   gArmTokenSpaceGuid.PcdSystemMemoryBase|0x40000000
-  gArmTokenSpaceGuid.PcdSystemMemorySize|0xC0000000
 
   # GOP driver memory
 !ifndef CONFIG_HEADLESS
