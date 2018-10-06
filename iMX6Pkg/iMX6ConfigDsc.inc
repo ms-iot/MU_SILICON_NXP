@@ -83,9 +83,6 @@
   DEFINE CONFIG_SECURE_BOOT = TRUE
 !endif
 
-  # Provison SecureBoot with MS test certs and keys that are baked into the FV
-  # on first UEFI boot if SecureBoot found to be not provisioned
-  DEFINE CONFIG_SECURE_BOOT_AUTO_CONFIG = TRUE
 !else
 
 !ifndef CONFIG_AUTH_VAR
