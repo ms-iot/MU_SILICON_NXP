@@ -185,26 +185,6 @@ READ_LOCK_STATUS   = TRUE
   INF SecurityPkg/Tcg/Tcg2Dxe/Tcg2Dxe.inf
 !endif
 
-!if $(CONFIG_SECURE_BOOT_AUTO_CONFIG) == TRUE
-  INF Platform/Microsoft/Drivers/SecureBootAutoConfigDxe/SecureBootAutoConfigDxe.inf
-
-  #
-  # In the debug (pre-release) version of UEFI we include the Microsoft pre-release OS
-  # version of the secure boot configuration files.
-  #
-  FILE FREEFORM = 442FF1AA-7891-4A79-88E3-75EC4409B059 {
-    SECTION RAW = Platform/Microsoft/Binary/SecureBoot/Test/PK.bin
-  }
-
-  FILE FREEFORM = 33630B18-7705-468B-92BD-FEBE27799EDB {
-    SECTION RAW = Platform/Microsoft/Binary/SecureBoot/Test/KEK.bin
-  }
-
-  FILE FREEFORM = 27A9C9E7-4B7A-4C7E-A8F5-77DB38D7100A {
-    SECTION RAW = Platform/Microsoft/Binary/SecureBoot/Test/db.bin
-  }
-!endif
-
   # Hello World TA UUID in UEFI format: 8aaaf200-2450-11e4-abe2-0002a5d5c51b
   FILE FREEFORM = 8AAAF200-2450-11E4-ABE2-0002A5D5C51B {
    SECTION RAW = Platform/Microsoft/OpteeClientPkg/Bin/HelloWorldTa/Arm/Test/8aaaf200-2450-11e4-abe2-0002a5d5c51b.ta
