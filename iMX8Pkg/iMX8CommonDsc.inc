@@ -149,6 +149,13 @@
   SortLib|MdeModulePkg/Library/UefiSortLib/UefiSortLib.inf
 
   #
+  # Security
+  #
+  TpmMeasurementLib|SecurityPkg/Library/DxeTpmMeasurementLib/DxeTpmMeasurementLib.inf
+  Tcg2PhysicalPresenceLib|SecurityPkg/Library/DxeTcg2PhysicalPresenceLib/DxeTcg2PhysicalPresenceLib.inf
+  Tcg2PpVendorLib|SecurityPkg/Library/Tcg2PpVendorLibNull/Tcg2PpVendorLibNull.inf
+
+  #
   # Secure Boot dependencies
   #
 !if $(SECURE_BOOT_ENABLE) == TRUE
@@ -262,6 +269,8 @@
   OpteeClientApiLib|Platform/Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
 !endif
 
+  ShellCEntryLib|ShellPkg/Library/UefiShellCEntryLib/UefiShellCEntryLib.inf
+
 [LibraryClasses.common.UEFI_DRIVER]
   ExtractGuidedSectionLib|MdePkg/Library/DxeExtractGuidedSectionLib/DxeExtractGuidedSectionLib.inf
   PerformanceLib|MdeModulePkg/Library/DxePerformanceLib/DxePerformanceLib.inf
@@ -369,6 +378,7 @@
   #  DEBUG_BM        0x00000400  // Boot Manager
   #  DEBUG_BLKIO     0x00001000  // BlkIo Driver
   #  DEBUG_NET       0x00004000  // SNP Driver
+  #  DEBUG_OPTEE     0x00008000  // OPTEE Driver
   #  DEBUG_UNDI      0x00010000  // UNDI Driver
   #  DEBUG_LOADFILE  0x00020000  // LoadFile
   #  DEBUG_EVENT     0x00080000  // Event messages
@@ -409,7 +419,7 @@
 ########################
 [PcdsFixedAtBuild.common]
   #
-  # iMX Plaform Memory Layout
+  # iMX8 Plaform Memory Layout
   #                                        PcdSystemMemoryBase
   # +-------------------+===> (0x40000000) PcdArmLcdDdrFrameBufferBase (Frame buffer)
   # | HDMI framebuffer  |  ^
@@ -470,23 +480,6 @@
   # Global data area
   giMXPlatformTokenSpaceGuid.PcdGlobalDataBaseAddress|0x407E9000
   giMXPlatformTokenSpaceGuid.PcdGlobalDataSize|0x1000
-!endif
-
-!if $(CONFIG_OPTEE) == TRUE
-  gOpteeClientPkgTokenSpaceGuid.PcdTrustZonePrivateMemoryBase|0xFE000000
-  gOpteeClientPkgTokenSpaceGuid.PcdTrustZonePrivateMemorySize|0x01E00000
-
-  #
-  # TrustZone shared memory (2Mb)
-  # This memory is managed by the normal world but shared with the OpTEE OS.
-  # It must match OpTEE optee_os/core/arch/arm/plat-imx/platform_config.h:
-  #    CFG_SHMEM_START & CFG_SHMEM_SIZE
-  # NOTE: The first page of the SHMEM is owned by OPTEE for mobj bookkeeping
-  # and we should not touch it. We will skip the first 4K of SHMEM and take that
-  # into account for SHMEM size in PcdTrustZoneSharedMemorySize.
-  #
-  gOpteeClientPkgTokenSpaceGuid.PcdTrustZoneSharedMemoryBase|0xFFE00000
-  gOpteeClientPkgTokenSpaceGuid.PcdTrustZoneSharedMemorySize|0x00200000
 !endif
 
   # SDHC memory
@@ -689,8 +682,44 @@
       PrintLib|MdePkg/Library/BasePrintLib/BasePrintLib.inf
       BcfgCommandLib|ShellPkg/Library/UefiShellBcfgCommandLib/UefiShellBcfgCommandLib.inf
   }
+
 !if $(INCLUDE_TFTP_COMMAND) == TRUE
   ShellPkg/DynamicCommand/TftpDynamicCommand/TftpDynamicCommand.inf
+!endif
+
+!if $(CONFIG_SECURE_UEFI) == TRUE
+  Platform/Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf
+# SecurityPkg/Application/VariableAuthTestDxe/VariableAuthTestDxe.inf
+
+  !if $(CONFIG_MEASURED_BOOT) == TRUE
+    #
+    # FTPM
+    #
+    SecurityPkg/Tcg/Tcg2Dxe/Tcg2Dxe.inf {
+      <LibraryClasses>
+        NULL|SecurityPkg/Library/HashInstanceLibSha1/HashInstanceLibSha1.inf
+        NULL|SecurityPkg/Library/HashInstanceLibSha256/HashInstanceLibSha256.inf
+        Tpm2DeviceLib|Platform/Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
+
+      <PcdsFixedAtBuild>
+        !if $(CONFIG_OPTEE_PROFILE) == TRUE
+          gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|1
+        !else
+          gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0
+        !endif
+    }
+  !endif
+
+  !if $(CONFIG_SECURE_BOOT_AUTO_CONFIG) == TRUE
+    Platform/Microsoft/Drivers/SecureBootAutoConfigDxe/SecureBootAutoConfigDxe.inf {
+      <PcdsFixedAtBuild>
+        !if $(CONFIG_OPTEE_PROFILE) == TRUE
+          gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|1
+        !else
+          gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0
+        !endif
+     }
+  !endif
 !endif
 
 [Components.AARCH64]

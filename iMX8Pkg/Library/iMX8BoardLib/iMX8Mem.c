@@ -49,6 +49,14 @@ ARM_MEMORY_REGION_DESCRIPTOR iMX8MemoryDescriptor[] =
     MEMORY_ATTRIBUTES_PCDCACHEENABLE,
   },
 #endif
+#ifdef CONFIG_OPTEE
+  {
+    FixedPcdGet64 (PcdTrustZoneSharedMemoryBase),
+    FixedPcdGet64 (PcdTrustZoneSharedMemoryBase),
+    FixedPcdGet64 (PcdTrustZoneSharedMemorySize),
+	MEMORY_ATTRIBUTES_PCDCACHEENABLE,
+  },
+#endif
   {
     ARM_PERIPHERALS_REGISTERS_PHYSICAL,
     ARM_PERIPHERALS_REGISTERS_PHYSICAL,

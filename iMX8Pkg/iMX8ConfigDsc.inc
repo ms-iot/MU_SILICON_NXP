@@ -46,7 +46,7 @@
 
   # States whether OPTEE boot flow is in effect or not. This has the following
   # implications:
-  # - OPTEE owns the SecureWorld and UEFI has to run in NormalWorld.
+  # - OPTEE must have been loaded by ATF.
   # - Specific memory layout that is defined in the platform .dsc file.
 !ifndef CONFIG_OPTEE
   DEFINE CONFIG_OPTEE = TRUE
@@ -60,39 +60,35 @@
 
   # Call build with -D CONFIG_SECURE_UEFI=1 to enable the follwing security features
 !if $(CONFIG_SECURE_UEFI) == TRUE
-
   # UEFI authenticated variable runtime services
-!ifndef CONFIG_AUTH_VAR
-  DEFINE CONFIG_AUTH_VAR = TRUE
-!endif
+  !ifndef CONFIG_AUTH_VAR
+    DEFINE CONFIG_AUTH_VAR = TRUE
+  !endif
 
   # TPM stack for the fTPM
-!ifndef CONFIG_MEASURED_BOOT
-  DEFINE CONFIG_MEASURED_BOOT = TRUE
-!endif
+  !ifndef CONFIG_MEASURED_BOOT
+    DEFINE CONFIG_MEASURED_BOOT = TRUE
+  !endif
 
   # If Platform Key (PK) is provisioned, then SecureBoot variables will get
   # updated to reflect that SecureBoot is enabled. Otherwise, SecureBoot
   # variables will indicate that the feature is disabled, and the OS will
   # not boot apply SecureBoot policies
-!ifndef CONFIG_SECURE_BOOT
-  DEFINE CONFIG_SECURE_BOOT = TRUE
-!endif
-
+  !ifndef CONFIG_SECURE_BOOT
+    DEFINE CONFIG_SECURE_BOOT = TRUE
+  !endif
 !else
+  !ifndef CONFIG_AUTH_VAR
+    DEFINE CONFIG_AUTH_VAR = FALSE
+  !endif
 
-!ifndef CONFIG_AUTH_VAR
-  DEFINE CONFIG_AUTH_VAR = FALSE
-!endif
+  !ifndef CONFIG_MEASURED_BOOT
+    DEFINE CONFIG_MEASURED_BOOT = FALSE
+  !endif
 
-!ifndef CONFIG_MEASURED_BOOT
-  DEFINE CONFIG_MEASURED_BOOT = FALSE
-!endif
-
-!ifndef CONFIG_SECURE_BOOT
-  DEFINE CONFIG_SECURE_BOOT = FALSE
-!endif
-
+  !ifndef CONFIG_SECURE_BOOT
+    DEFINE CONFIG_SECURE_BOOT = FALSE
+  !endif
 !endif
 
 [BuildOptions]

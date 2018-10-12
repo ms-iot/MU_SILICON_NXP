@@ -61,7 +61,7 @@
 
 #define IMX_SERIAL_DBG_PORT_SUBTYPE     0x000C
 
-#define SERIAL_DEBUG_PORT_INIT_MSG "\nUEFI Debug Serial Port Init\n"
+#define SERIAL_DEBUG_PORT_INIT_MSG "\r\nUEFI Debug Serial Port Init\r\n"
 
 //
 // Clock Source
