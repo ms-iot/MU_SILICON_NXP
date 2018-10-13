@@ -839,6 +839,7 @@ MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
 
   # Applications
   MdeModulePkg/Application/HelloWorld/HelloWorld.inf
+  Platform/Microsoft/Application/StorageTest/StorageTest.inf
 #  iMX7Pkg/Application/ImxClkPwr/ImxClkPwr.inf
 
 !if $(CONFIG_SECURE_UEFI) == TRUE
