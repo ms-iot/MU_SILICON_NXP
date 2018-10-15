@@ -939,7 +939,7 @@ MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
   # Applications
   MdeModulePkg/Application/HelloWorld/HelloWorld.inf
   iMX6Pkg/Application/ImxClkPwr/ImxClkPwr.inf
-  Platform/Microsoft/Application/StorageTest/StorageTest.inf
+  #Platform/Microsoft/Application/StorageTest/StorageTest.inf
 
 !if $(CONFIG_SECURE_UEFI) == TRUE
   Platform/Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf
