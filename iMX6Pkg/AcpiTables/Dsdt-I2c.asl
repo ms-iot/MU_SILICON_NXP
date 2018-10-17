@@ -21,13 +21,10 @@ Device (I2C1)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      MEMORY32FIXED (ReadWrite, 0x021A0000, 0x14, )
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 68 }
-    })
-    Return (RBUF)
-  }
+  Name (_CRS, ResourceTemplate () {
+    MEMORY32FIXED (ReadWrite, 0x021A0000, 0x14, )
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 68 }
+  })
 }
 
 Device (I2C2)
@@ -39,13 +36,10 @@ Device (I2C2)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      MEMORY32FIXED (ReadWrite, 0x021A4000, 0x14, )
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 69 }
-    })
-    Return (RBUF)
-  }
+  Name (_CRS, ResourceTemplate () {
+    MEMORY32FIXED (ReadWrite, 0x021A4000, 0x14, )
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 69 }
+  })
 }
 
 Device (I2C3)
@@ -57,11 +51,8 @@ Device (I2C3)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      MEMORY32FIXED (ReadWrite, 0x021A8000, 0x14, )
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 70 }
-    })
-    Return (RBUF)
-  }
+  Name (_CRS, ResourceTemplate () {
+    MEMORY32FIXED (ReadWrite, 0x021A8000, 0x14, )
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 70 }
+  })
 }

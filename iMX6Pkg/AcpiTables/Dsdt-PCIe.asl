@@ -35,7 +35,7 @@ Device (PCI0)
   }
 
   // PCIe is only available if PCIe PHY reference clock is enabled and link is up
-  Method (_STA) {
+  Method (_STA, 0x0, Serialized) {
     Name (LNK, 0x0);
     Name (GPR, 0x0);
     Store (GPR1, GPR);  // read IOMUXC_GPR1 register
@@ -58,24 +58,21 @@ Device (PCI0)
   }
 
   // Declare the resources assigned to this root complex.
-  Method (_CRS, 0, Serialized) {
-    Name (RBUF, ResourceTemplate () {
-      WordBusNumber (
-        ResourceProducer, // Specify bus ranged is passed to child devices
-        MinFixed,         // Specify min address is fixed
-        MaxFixed,         // Specify max address is fixed
-        PosDecode,        // Positive decode of bus number
-        0,                // AddressGranularity 2 power of 0
-        0,                // AddressMinimum - Minimum Bus Number
-        1,                // AddressMaximum - Maximum Bus Number
-        0,                // AddressTranslation - Set to 0
-        2)                // RangeLength - Number of Busses
+  Name (_CRS, ResourceTemplate () {
+    WordBusNumber (
+      ResourceProducer, // Specify bus ranged is passed to child devices
+      MinFixed,         // Specify min address is fixed
+      MaxFixed,         // Specify max address is fixed
+      PosDecode,        // Positive decode of bus number
+      0,                // AddressGranularity 2 power of 0
+      0,                // AddressMinimum - Minimum Bus Number
+      1,                // AddressMaximum - Maximum Bus Number
+      0,                // AddressTranslation - Set to 0
+      2)                // RangeLength - Number of Busses
 
-      // PCI memory space
-      Memory32Fixed (ReadWrite, 0x01100000, 0x00E00000, )
-    })
-    Return (RBUF)
-  }
+    // PCI memory space
+    Memory32Fixed (ReadWrite, 0x01100000, 0x00E00000, )
+  })
 
   // Declare the PCI Routing Table.
   Name (_PRT, Package() {

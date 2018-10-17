@@ -21,13 +21,10 @@ Device (PWM1)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      MEMORY32FIXED (ReadWrite, 0x02080000, 0x4000, )
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 115 }
-    })
-    Return (RBUF)
-  }
+  Name (_CRS, ResourceTemplate () {
+    MEMORY32FIXED (ReadWrite, 0x02080000, 0x4000, )
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 115 }
+  })
 }
 
 Device (PWM2)
@@ -39,13 +36,10 @@ Device (PWM2)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      MEMORY32FIXED (ReadWrite, 0x02084000, 0x4000, )
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 116 }
-    })
-    Return (RBUF)
-  }
+  Name (_CRS, ResourceTemplate () {
+    MEMORY32FIXED (ReadWrite, 0x02084000, 0x4000, )
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 116 }
+  })
 }
 
 Device (PWM3)
@@ -57,13 +51,10 @@ Device (PWM3)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      MEMORY32FIXED (ReadWrite, 0x02088000, 0x4000, )
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 117 }
-    })
-    Return (RBUF)
-  }
+  Name (_CRS, ResourceTemplate () {
+    MEMORY32FIXED (ReadWrite, 0x02088000, 0x4000, )
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 117 }
+  })
 }
 
 Device (PWM4)
@@ -75,11 +66,8 @@ Device (PWM4)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      MEMORY32FIXED (ReadWrite, 0x0208C000, 0x4000, )
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 118 }
-    })
-    Return (RBUF)
-  }
+  Name (_CRS, ResourceTemplate () {
+    MEMORY32FIXED (ReadWrite, 0x0208C000, 0x4000, )
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 118 }
+  })
 }

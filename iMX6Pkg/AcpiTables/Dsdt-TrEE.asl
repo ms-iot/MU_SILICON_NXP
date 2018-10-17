@@ -22,12 +22,9 @@ Device (TREE)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      // OP-TEE Shared memory area.
-      // Needs to match: PcdTrustZoneSharedMemoryBase, PcdTrustZoneSharedMemorySize
-      MEMORY32FIXED (ReadWrite, 0x12800000, 0x00200000, )
-    })
-    Return (RBUF)
-  }
+  Name (_CRS, ResourceTemplate () {
+    // OP-TEE Shared memory area.
+    // Needs to match: PcdTrustZoneSharedMemoryBase, PcdTrustZoneSharedMemorySize
+    MEMORY32FIXED (ReadWrite, 0x12800000, 0x00200000, )
+  })
 }

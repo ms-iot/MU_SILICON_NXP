@@ -87,20 +87,17 @@ Device (PEP0)
   Method (_STA) {
     Return (0xf)
   }
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      // CCM request 1
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 119 }
+  Name (_CRS, ResourceTemplate () {
+    // CCM request 1
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 119 }
 
-      // CCM request 2
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 120 }
+    // CCM request 2
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 120 }
 
-      // GPC request 1
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 121 }
+    // GPC request 1
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 121 }
 
-      // UART1
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Shared) { 58 }
-    })
-    Return (RBUF)
-  }
+    // UART1
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Shared) { 58 }
+  })
 }

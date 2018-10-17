@@ -22,13 +22,10 @@ Device (SDH1)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      MEMORY32FIXED (ReadWrite, 0x02190000, 0x4000, )
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 54 }
-    })
-    Return (RBUF)
-  }
+  Name (_CRS, ResourceTemplate () {
+    MEMORY32FIXED (ReadWrite, 0x02190000, 0x4000, )
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 54 }
+  })
 
   // Child node to represent the only SD/MMC slot on this SD/MMC bus
   // In theory an SDHC can be connected to multiple SD/MMC slots at
@@ -55,13 +52,10 @@ Device (SDH2)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      MEMORY32FIXED (ReadWrite, 0x02194000, 0x4000, )
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 55 }
-    })
-    Return (RBUF)
-  }
+  Name (_CRS, ResourceTemplate () {
+    MEMORY32FIXED (ReadWrite, 0x02194000, 0x4000, )
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 55 }
+  })
 
   Device (SD0) {
     Method (_ADR) {
@@ -84,13 +78,10 @@ Device (SDH3)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      MEMORY32FIXED (ReadWrite, 0x02198000, 0x4000, )
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 56 }
-    })
-    Return (RBUF)
-  }
+  Name (_CRS, ResourceTemplate () {
+    MEMORY32FIXED (ReadWrite, 0x02198000, 0x4000, )
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 56 }
+  })
 
   Device (SD0) {
     Method (_ADR) {
@@ -113,13 +104,10 @@ Device (SDH4)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      MEMORY32FIXED (ReadWrite, 0x0219C000, 0x4000, )
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 57 }
-    })
-    Return (RBUF)
-  }
+  Name (_CRS, ResourceTemplate () {
+    MEMORY32FIXED (ReadWrite, 0x0219C000, 0x4000, )
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 57 }
+  })
 
   Device (SD0) {
     Method (_ADR) {
