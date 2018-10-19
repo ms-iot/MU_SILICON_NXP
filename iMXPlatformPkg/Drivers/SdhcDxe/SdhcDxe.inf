@@ -26,8 +26,8 @@
 [Packages]
   EmbeddedPkg/EmbeddedPkg.dec
   MdePkg/MdePkg.dec
-  Platform/Microsoft/MsPkg.dec
-  Silicon/NXP/iMXPlatformPkg/iMXPlatformPkg.dec
+  Microsoft/MsPkg.dec
+  iMXPlatformPkg/iMXPlatformPkg.dec
 
 [LibraryClasses]
   iMXIoMuxLib

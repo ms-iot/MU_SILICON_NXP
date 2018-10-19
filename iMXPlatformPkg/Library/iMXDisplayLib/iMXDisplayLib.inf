@@ -23,7 +23,7 @@
 [Packages]
   EmbeddedPkg/EmbeddedPkg.dec
   MdePkg/MdePkg.dec
-  Silicon/NXP/iMXPlatformPkg/iMXPlatformPkg.dec
+  iMXPlatformPkg/iMXPlatformPkg.dec
 
 [LibraryClasses]
 

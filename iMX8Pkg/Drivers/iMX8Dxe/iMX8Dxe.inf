@@ -28,8 +28,8 @@
   EmbeddedPkg/EmbeddedPkg.dec
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  Platform/ARM/ARM.dec
-  Silicon/NXP/iMX8Pkg/iMX8Pkg.dec
+  ARM/ARM.dec
+  iMX8Pkg/iMX8Pkg.dec
 
 [LibraryClasses]
   ArmLib

@@ -30,7 +30,7 @@
   ArmPkg/ArmPkg.dec
   ArmPlatformPkg/ArmPlatformPkg.dec
   MdePkg/MdePkg.dec
-  Silicon/NXP/iMX8Pkg/iMX8Pkg.dec
+  iMX8Pkg/iMX8Pkg.dec
 
 [LibraryClasses]
   BaseLib

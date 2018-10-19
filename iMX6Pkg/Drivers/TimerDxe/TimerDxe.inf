@@ -28,7 +28,7 @@
   ArmPkg/ArmPkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
   MdePkg/MdePkg.dec
-  Silicon/NXP/iMX6Pkg/iMX6Pkg.dec
+  iMX6Pkg/iMX6Pkg.dec
 
 [LibraryClasses]
   BaseLib

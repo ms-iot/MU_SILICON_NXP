@@ -80,8 +80,8 @@
   ResetSystemLib|ArmPkg/Library/ArmSmcPsciResetSystemLib/ArmSmcPsciResetSystemLib.inf
 
   # iMX8 specifics
-  iMXIoMuxLib|Silicon/NXP/iMX8Pkg/Library/iMX8IoMuxLib/iMX8IoMuxLib.inf
-  iMX8ClkPwrLib|Silicon/NXP/iMX8Pkg/Library/iMX8ClkPwrLib/iMX8ClkPwrLib.inf
+  iMXIoMuxLib|iMX8Pkg/Library/iMX8IoMuxLib/iMX8IoMuxLib.inf
+  iMX8ClkPwrLib|iMX8Pkg/Library/iMX8ClkPwrLib/iMX8ClkPwrLib.inf
 
   # ARM Real Time Clock
 #  EmbeddedPkg/RealTimeClockRuntimeDxe/RealTimeClockRuntimeDxe.inf
@@ -89,7 +89,7 @@
   TimerLib|ArmPkg/Library/ArmArchTimerLib/ArmArchTimerLib.inf
 
   # NXP UART Driver
-  SerialPortLib|Silicon/NXP/iMXPlatformPkg/Library/UartSerialPortLib/UartSerialPortLib.inf
+  SerialPortLib|iMXPlatformPkg/Library/UartSerialPortLib/UartSerialPortLib.inf
 
   #
   # Uncomment (and comment out the next line) For RealView Debugger. The Standard IO window
@@ -116,7 +116,7 @@
 
   # RunAxf support via Dynamic Shell Command protocol
   # It uses the Shell libraries.
-  ArmShellCmdRunAxfLib|Platform/ARM/Library/ArmShellCmdRunAxf/ArmShellCmdRunAxf.inf
+  ArmShellCmdRunAxfLib|ARM/Library/ArmShellCmdRunAxf/ArmShellCmdRunAxf.inf
   ShellLib|ShellPkg/Library/UefiShellLib/UefiShellLib.inf
   FileHandleLib|MdePkg/Library/UefiFileHandleLib/UefiFileHandleLib.inf
   SortLib|MdeModulePkg/Library/UefiSortLib/UefiSortLib.inf
@@ -323,7 +323,7 @@
   #                              // significantly impact boot performance
   #  DEBUG_ERROR     0x80000000  // Error
 #  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8012004F
-  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8000000F
+  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x80080246
 
   gEfiMdePkgTokenSpaceGuid.PcdReportStatusCodePropertyMask|0x07
 
@@ -445,7 +445,7 @@
   #
   gEfiMdeModulePkgTokenSpaceGuid.PcdSetNxForStack|TRUE
 
-!if 0
+!if TRUE == FALSE
 [PcdsDynamicHii.common.DEFAULT]
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|10
 !endif
@@ -457,9 +457,9 @@
   }
 
   # Versatile Express FileSystem
-  Platform/ARM/Drivers/BootMonFs/BootMonFs.inf
+  ARM/Drivers/BootMonFs/BootMonFs.inf
 
-!if 0
+!if TRUE == FALSE
   #
   # Networking stack
   #

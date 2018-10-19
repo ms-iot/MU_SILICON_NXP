@@ -32,8 +32,8 @@
   ShellPkg/ShellPkg.dec
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  Silicon/NXP/iMXPlatformPkg/iMXPlatformPkg.dec
-  Silicon/NXP/iMX6Pkg/iMX6Pkg.dec
+  iMXPlatformPkg/iMXPlatformPkg.dec
+  iMX6Pkg/iMX6Pkg.dec
 
 [LibraryClasses]
   LibC
