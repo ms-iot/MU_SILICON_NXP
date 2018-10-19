@@ -58,7 +58,7 @@
   DEFINE CONFIG_OPTEE_PROFILE = FALSE
 !endif
 
-  # Call build with -D CONFIG_SECURE_UEFI=1 to enable the follwing security features
+  # Call build with -D CONFIG_SECURE_UEFI=1 to enable the following security features
 !if $(CONFIG_SECURE_UEFI) == TRUE
   # UEFI authenticated variable runtime services
   !ifndef CONFIG_AUTH_VAR

@@ -13,7 +13,6 @@
 #
 
 [Defines]
-  SECURE_BOOT_ENABLE    = FALSE
   INCLUDE_TFTP_COMMAND  = FALSE
 
 [BuildOptions]
@@ -148,29 +147,6 @@
   FileHandleLib|MdePkg/Library/UefiFileHandleLib/UefiFileHandleLib.inf
   SortLib|MdeModulePkg/Library/UefiSortLib/UefiSortLib.inf
 
-  #
-  # Security
-  #
-  TpmMeasurementLib|SecurityPkg/Library/DxeTpmMeasurementLib/DxeTpmMeasurementLib.inf
-  Tcg2PhysicalPresenceLib|SecurityPkg/Library/DxeTcg2PhysicalPresenceLib/DxeTcg2PhysicalPresenceLib.inf
-  Tcg2PpVendorLib|SecurityPkg/Library/Tcg2PpVendorLibNull/Tcg2PpVendorLibNull.inf
-
-  #
-  # Secure Boot dependencies
-  #
-!if $(SECURE_BOOT_ENABLE) == TRUE
-  IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
-  OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
-  TpmMeasurementLib|SecurityPkg/Library/DxeTpmMeasurementLib/DxeTpmMeasurementLib.inf
-  AuthVariableLib|SecurityPkg/Library/AuthVariableLib/AuthVariableLib.inf
-  BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
-
-  # re-use the UserPhysicalPresent() dummy implementation from the ovmf tree
-  PlatformSecureLib|OvmfPkg/Library/PlatformSecureLib/PlatformSecureLib.inf
-!else
-  TpmMeasurementLib|MdeModulePkg/Library/TpmMeasurementLibNull/TpmMeasurementLibNull.inf
-  AuthVariableLib|MdeModulePkg/Library/AuthVariableLibNull/AuthVariableLibNull.inf
-!endif
   VarCheckLib|MdeModulePkg/Library/VarCheckLib/VarCheckLib.inf
 
 [LibraryClasses.common.SEC]
@@ -244,6 +220,9 @@
   PerformanceLib|MdeModulePkg/Library/DxePerformanceLib/DxePerformanceLib.inf
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
 
+  #
+  # Security libraries
+  #
 !if $(CONFIG_OPTEE) == TRUE
   IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
@@ -252,6 +231,12 @@
   HashLib|SecurityPkg/Library/HashLibBaseCryptoRouter/HashLibBaseCryptoRouterDxe.inf
   Tpm2DeviceLibOptee|Platform/Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
   Tpm2CommandLib|SecurityPkg/Library/Tpm2CommandLib/Tpm2CommandLib.inf
+!endif
+
+!if $(CONFIG_MEASURED_BOOT) == TRUE
+  TpmMeasurementLib|SecurityPkg/Library/DxeTpmMeasurementLib/DxeTpmMeasurementLib.inf
+  Tcg2PhysicalPresenceLib|SecurityPkg/Library/DxeTcg2PhysicalPresenceLib/DxeTcg2PhysicalPresenceLib.inf
+  Tcg2PpVendorLib|SecurityPkg/Library/Tcg2PpVendorLibNull/Tcg2PpVendorLibNull.inf
 !endif
 
 [LibraryClasses.common.UEFI_APPLICATION]
@@ -282,9 +267,6 @@
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
   ReportStatusCodeLib|MdeModulePkg/Library/RuntimeDxeReportStatusCodeLib/RuntimeDxeReportStatusCodeLib.inf
-!if $(SECURE_BOOT_ENABLE) == TRUE
-  BaseCryptLib|CryptoPkg/Library/BaseCryptLib/RuntimeCryptLib.inf
-!endif
 !if $(TARGET) != RELEASE
   DebugLib|MdePkg/Library/DxeRuntimeDebugLibSerialPort/DxeRuntimeDebugLibSerialPort.inf
 !endif
@@ -473,6 +455,10 @@
   # Global data area
   giMXPlatformTokenSpaceGuid.PcdGlobalDataBaseAddress|0x40000000
   giMXPlatformTokenSpaceGuid.PcdGlobalDataSize|0x1000
+
+  # Reserved for TPM2 ACPI
+  gOpteeClientPkgTokenSpaceGuid.PcdTpm2AcpiBufferBase|0x40001000
+  gOpteeClientPkgTokenSpaceGuid.PcdTpm2AcpiBufferSize|0x3000
 !else
   gArmPlatformTokenSpaceGuid.PcdArmLcdDdrFrameBufferBase|0x40000000
   gArmPlatformTokenSpaceGuid.PcdArmLcdDdrFrameBufferSize|0x007E9000	# ~8 MB (4 * 1920 * 1080)
@@ -480,6 +466,10 @@
   # Global data area
   giMXPlatformTokenSpaceGuid.PcdGlobalDataBaseAddress|0x407E9000
   giMXPlatformTokenSpaceGuid.PcdGlobalDataSize|0x1000
+
+  # Reserved for TPM2 ACPI
+  gOpteeClientPkgTokenSpaceGuid.PcdTpm2AcpiBufferBase|0x407EA000
+  gOpteeClientPkgTokenSpaceGuid.PcdTpm2AcpiBufferSize|0x3000
 !endif
 
   # SDHC memory
@@ -487,13 +477,6 @@
   giMXPlatformTokenSpaceGuid.PcdSdhc2Base|0x30B50000
   giMXPlatformTokenSpaceGuid.PcdSdhc3Base|0x00000000
   giMXPlatformTokenSpaceGuid.PcdSdhc4Base|0x00000000
-
-  #
-  # FileSystem
-  #
-
-  # List of Device Paths that support BootMonFs
-  gArmBootMonFsTokenSpaceGuid.PcdBootMonFsSupportedDevicePaths|L"VenHw(E7223039-5836-41E1-B542-D7EC736C5E59);VenHw(1F15DA3C-37FF-4070-B471-BB4AF12A724A)"
 
   # RunAxf support via Dynamic Shell Command protocol
   # We want to use the Shell Libraries but don't want it to initialise
@@ -505,13 +488,6 @@
 
   # use the TTY terminal type
   gEfiMdePkgTokenSpaceGuid.PcdDefaultTerminalType|4
-
-!if $(SECURE_BOOT_ENABLE) == TRUE
-  # override the default values from SecurityPkg to ensure images from all sources are verified in secure boot
-  gEfiSecurityPkgTokenSpaceGuid.PcdOptionRomImageVerificationPolicy|0x04
-  gEfiSecurityPkgTokenSpaceGuid.PcdFixedMediaImageVerificationPolicy|0x04
-  gEfiSecurityPkgTokenSpaceGuid.PcdRemovableMediaImageVerificationPolicy|0x04
-!endif
 
   # GUID of the UI app
   gEfiMdeModulePkgTokenSpaceGuid.PcdBootManagerMenuFile|{ 0x21, 0xaa, 0x2c, 0x46, 0x14, 0x76, 0x03, 0x45, 0x83, 0x6e, 0x8a, 0xb6, 0xf4, 0x66, 0x23, 0x31 }
@@ -537,6 +513,44 @@
 !if TRUE == FALSE
 [PcdsDynamicHii.common.DEFAULT]
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|10
+!endif
+
+########################
+#
+# MsPkg PCDs
+#
+########################
+[PcdsFixedAtBuild.common]
+
+!if $(CONFIG_SECURE_BOOT) == TRUE
+  gMsPkgTokenSpaceGuid.PcdSecureBootEnable|TRUE
+!else
+  gMsPkgTokenSpaceGuid.PcdSecureBootEnable|FALSE
+!endif
+
+########################
+#
+# SecurityPkg PCDs
+#
+########################
+
+[PcdsFixedAtBuild.common]
+!if $(CONFIG_MEASURED_BOOT) == TRUE
+  #
+  # override the default values from SecurityPkg to ensure images from all sources are verified in secure boot
+  #
+  gEfiSecurityPkgTokenSpaceGuid.PcdOptionRomImageVerificationPolicy|0x04
+  gEfiSecurityPkgTokenSpaceGuid.PcdFixedMediaImageVerificationPolicy|0x04
+  gEfiSecurityPkgTokenSpaceGuid.PcdRemovableMediaImageVerificationPolicy|0x04
+
+  #
+  # PcdTpmInstanceGuid tells the Tcg2 Driver which TPM version is being used.
+  # The below GUID is TPMv2 GUID.
+  #
+  gEfiSecurityPkgTokenSpaceGuid.PcdTpmInstanceGuid|{ 0x5a, 0xf2, 0x6b, 0x28, 0xc3, 0xc2, 0x8c, 0x40, 0xb3, 0xb4, 0x25, 0xe6, 0x75, 0x8b, 0x73, 0x17 }
+
+[PcdsDynamicExDefault.common.DEFAULT]
+  gEfiSecurityPkgTokenSpaceGuid.PcdTcg2HashAlgorithmBitmap|0x0
 !endif
 
 ################################################################################
@@ -632,9 +646,6 @@
       NULL|MdeModulePkg/Library/BootManagerUiLib/BootManagerUiLib.inf
       NULL|MdeModulePkg/Library/BootMaintenanceManagerUiLib/BootMaintenanceManagerUiLib.inf
   }
-
-  # Versatile Express FileSystem
-  ARM/Drivers/BootMonFs/BootMonFs.inf
 
 !if TRUE == FALSE
   #

@@ -21,18 +21,18 @@
   INF ArmPkg/Drivers/CpuDxe/CpuDxe.inf
 
   INF MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
-  INF ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
-  INF ArmPkg/Drivers/TimerDxe/TimerDxe.inf
-#  INF ArmPkg/Drivers/GenericWatchdogDxe/GenericWatchdogDxe.inf
-  INF MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
   INF MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
+  INF MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
   INF MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
   INF MdeModulePkg/Universal/MonotonicCounterRuntimeDxe/MonotonicCounterRuntimeDxe.inf
+  INF ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
+
+  # Timers
+  INF ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   INF MdeModulePkg/Universal/ResetSystemRuntimeDxe/ResetSystemRuntimeDxe.inf
   INF EmbeddedPkg/RealTimeClockRuntimeDxe/RealTimeClockRuntimeDxe.inf
   INF EmbeddedPkg/MetronomeDxe/MetronomeDxe.inf
 
-#  INF MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf
   INF MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
   INF MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
 
@@ -47,9 +47,6 @@
   INF MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
   INF MdeModulePkg/Universal/SerialDxe/SerialDxe.inf
 
-  # Versatile Express FileSystem
-  INF ARM/Drivers/BootMonFs/BootMonFs.inf
-
   #
   # FAT filesystem + GPT/MBR partitioning
   #
@@ -57,8 +54,8 @@
   INF MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
   INF FatBinPkg/EnhancedFatDxe/Fat.inf
   INF MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
-  INF iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
   INF Platform/Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf
+  INF iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
 
   # FV FileSystem
   INF MdeModulePkg/Universal/FvSimpleFileSystemDxe/FvSimpleFileSystemDxe.inf

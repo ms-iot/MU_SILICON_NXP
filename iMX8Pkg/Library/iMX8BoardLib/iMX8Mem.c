@@ -183,7 +183,7 @@ ArmPlatformGetVirtualMemoryMap (
     FixedPcdGet32 (PcdTrustZonePrivateMemorySize)
     );
 #endif
-#if 0
+
   // Reserve TPM2 Control Area
   BuildResourceDescriptorHob (
     EFI_RESOURCE_MEMORY_RESERVED,
@@ -193,7 +193,6 @@ ArmPlatformGetVirtualMemoryMap (
     FixedPcdGet32 (PcdTpm2AcpiBufferBase),
     FixedPcdGet32 (PcdTpm2AcpiBufferSize)
     );
-#endif
 
   // Reserve Global Data area
   BuildResourceDescriptorHob (
@@ -206,4 +205,3 @@ ArmPlatformGetVirtualMemoryMap (
     );
   *VirtualMemoryMap = virtualMemoryTable;
 }
-
