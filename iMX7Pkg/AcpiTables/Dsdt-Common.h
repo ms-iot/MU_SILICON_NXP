@@ -1,7 +1,8 @@
-/*
-* Common IMX definitions
+/** @file
 *
-*  Copyright (c) Microsoft Corporation. All rights reserved.
+*  Common IMX definitions
+*
+*  Copyright (c) 2018 Microsoft Corporation. All rights reserved.
 *
 *  This program and the accompanying materials
 *  are licensed and made available under the terms and conditions of the BSD License
@@ -10,12 +11,9 @@
 *
 *  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
 *  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
-*/
+**/
 
-//
 // IMX alternate settings codes
-//
-
 #define IMX_ALT0 0x0
 #define IMX_ALT1 0x1
 #define IMX_ALT2 0x2
@@ -25,12 +23,23 @@
 #define IMX_ALT6 0x6
 #define IMX_ALT7 0x7
 
-//
+// Vendor Macro defines for MsftFunctionConfig
+#define MSFT_UUID 0x00,0x60,0x44,0xd5,0xf3,0x1f,0x11,0x60,0x4a,0xb8,0xb0,0x9c,0x2d,0x23,0x30,0xdd,0x2f
+#define MSFT_FUNCTION_CONFIG 0x8d
+#define RESOURCEPRODUCER_EXCLUSIVE 0x00,0x00
+#define RESOURCEPRODUCER_SHARED 0x01,0x00
+#define RESOURCECONSUMER_EXCLUSIVE 0x10,0x00
+#define RESOURCECONSUMER_SHARED 0x11,0x00
+#define PULL_DEFAULT 0x0
+#define PULL_UP 0x1
+#define PULL_DOWN 0x2
+#define PULL_NONE 0x3
+#define PIN_TABLE_OFFSET 0x12,0x00
+#define SB_GPIO 0x5c,0x5f,0x53,0x42,0x2e,0x47,0x50,0x49,0x4f,0x00 // \_SB.GPIO in ASCII
+
 // IMX SDMA request lines.
 // These are logical values, the mapping to the SOC
 // actual DMA request lines are done in the HAL extension.
-//
-
 #define IMX7_SDMA_REQ_ECSPI1_RX 0
 #define IMX7_SDMA_REQ_ECSPI1_TX 1
 #define IMX7_SDMA_REQ_ECSPI2_RX 2

@@ -37,11 +37,6 @@
 ################################################################################
 [BuildOptions]
   GCC:*_*_*_CC_FLAGS = -D$(BOARD_NAME) -DCPU_$(IMX_FAMILY) -Wno-unused-local-typedefs
-  GCC:*_*_*_OBJCOPY_PATH = noop
-  GCC:*_*_*_SYMRENAME_PATH = noop
-  *_*_*_ASL_PATH == asl.exe
-  *_*_*_ASL_FLAGS == /MsftInternal
-  *_*_*_ASL_OUTFLAGS == /Fo=
 
 # CPU_* compiler flag is used to select constants for iMX7.h
 
@@ -852,4 +847,3 @@ MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
 # standard library.
 #
 !include StdLib/StdLib.inc
-
