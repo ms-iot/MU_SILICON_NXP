@@ -37,27 +37,6 @@
 
 ################################################################################
 #
-# [BuildOptions] Section
-#
-################################################################################
-[BuildOptions]
-  GCC:*_*_*_CC_FLAGS = -D$(BOARD_NAME) -DCPU_$(IMX_FAMILY) -DSOCTYPE_$(IMX_CHIP_TYPE) -Wno-unused-local-typedefs
-  GCC:*_*_*_OBJCOPY_PATH = noop
-  GCC:*_*_*_SYMRENAME_PATH = noop
-  *_*_*_ASL_PATH == asl.exe
-  *_*_*_ASL_FLAGS == /MsftInternal
-  *_*_*_ASL_OUTFLAGS == /Fo=
-
-# CPU_* compiler flag is used to select constants for iMX6.h
-
-[BuildOptions.common.EDKII.DXE_CORE,BuildOptions.common.EDKII.DXE_DRIVER,BuildOptions.common.EDKII.UEFI_DRIVER,BuildOptions.common.EDKII.UEFI_APPLICATION]
-  GCC:*_*_*_DLINK_FLAGS = -z common-page-size=0x1000
-
-[BuildOptions.common.EDKII.DXE_RUNTIME_DRIVER]
-  GCC:*_*_ARM_DLINK_FLAGS = -z common-page-size=0x1000
-
-################################################################################
-#
 # [LibraryClasses] Sections
 #
 # When parsing the DSC file, the precedence rules will followed.
