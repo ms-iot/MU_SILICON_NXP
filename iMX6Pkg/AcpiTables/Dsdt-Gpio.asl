@@ -49,4 +49,6 @@ Device (GPIO)
     // GPIO7 0-15, 16-31
     Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 110, 111 }
   })
+
+  OperationRegion (OTGP, GeneralPurposeIO, Zero, One)
 }
