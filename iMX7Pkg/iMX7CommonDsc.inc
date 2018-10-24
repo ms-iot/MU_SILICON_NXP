@@ -806,8 +806,6 @@
       gEfiMdePkgTokenSpaceGuid.PcdUefiLibMaxPrintBufferSize|8000
   }
 
-!if $(CONFIG_SECURE_UEFI) == TRUE
-
 !if $(CONFIG_MEASURED_BOOT) == TRUE
   #
   # FTPM
@@ -827,8 +825,6 @@
   }
 !endif
 
-!endif
-
 MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
 
 
@@ -837,10 +833,8 @@ MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
   #Platform/Microsoft/Application/StorageTest/StorageTest.inf
 #  iMX7Pkg/Application/ImxClkPwr/ImxClkPwr.inf
 
-!if $(CONFIG_SECURE_UEFI) == TRUE
   Platform/Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf
   #SecurityPkg/Application/VariableAuthTestDxe/VariableAuthTestDxe.inf
-!endif
 
 #
 # Boilerplate for compiling UEFI applications and UEFI drivers with the

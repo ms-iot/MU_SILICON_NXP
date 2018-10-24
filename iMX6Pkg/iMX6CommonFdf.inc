@@ -82,8 +82,6 @@
   #
   INF ShellPkg/Application/Shell/Shell.inf
 
-!if $(CONFIG_SECURE_UEFI) == TRUE
-
   #
   # Authenticated Variables and OPTEE TAs
   #
@@ -105,8 +103,6 @@
   FILE FREEFORM = BC50D971-D4C9-42C4-82CB-343FB7F37896 {
     SECTION RAW = Platform/Microsoft/OpteeClientPkg/Bin/fTpmTa/Arm/Test/bc50d971-d4c9-42c4-82cb-343fb7f37896.ta
   }
-!endif
-
 !endif
 
 INF MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
