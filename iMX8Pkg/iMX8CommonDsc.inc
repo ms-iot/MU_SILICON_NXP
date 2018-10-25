@@ -609,7 +609,7 @@
   #
   # FAT filesystem + GPT/MBR partitioning
   #
-  FatBinPkg/EnhancedFatDxe/Fat.inf
+  FatPkg/EnhancedFatDxe/Fat.inf
   MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf
   MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
   Platform/Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf

@@ -44,7 +44,7 @@
   #
   INF MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf
   INF MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
-  INF FatBinPkg/EnhancedFatDxe/Fat.inf
+  INF FatPkg/EnhancedFatDxe/Fat.inf
   INF MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
   INF Platform/Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf
   INF iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
