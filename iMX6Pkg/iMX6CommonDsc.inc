@@ -177,6 +177,7 @@
   # iMX6 Specifics
   #
   iMXIoMuxLib|iMX6Pkg/Library/iMX6IoMuxLib/iMX6IoMuxLib.inf
+  iMX6AudioLib|iMX6Pkg/Library/iMX6AudioLib/iMX6AudioLib.inf
 !if $(IMX_FAMILY) == IMX6SX
   iMX6ClkPwrLib|iMX6Pkg/Library/iMX6SxClkPwrLib/iMX6SxClkPwrLib.inf
 !else

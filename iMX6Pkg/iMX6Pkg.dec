@@ -32,6 +32,7 @@
 
 [LibraryClasses]
   iMXIoMuxLib|iMX6Pkg/Include/iMX6IoMux.h
+  iMX6AudioLib|iMX6Pkg/Include/iMX6Audio.h
   iMX6ClkPwrLib|iMX6Pkg/Include/iMX6ClkPwr.h
   iMX6UsbPhyLib|iMX6Pkg/Include/iMX6UsbPhy.h
 
