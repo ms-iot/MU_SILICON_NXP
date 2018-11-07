@@ -46,7 +46,11 @@ EFI_TPM2_ACPI_TABLE Tpm2Table = {
   0,
 
   // Control Area
+#if CONFIG_MEASURED_BOOT
   FixedPcdGet64(PcdTpm2AcpiBufferBase),
+#else
+  0,
+#endif
 
   // StartMethod
   EFI_TPM2_ACPI_TABLE_START_METHOD_COMMAND_RESPONSE_BUFFER_INTERFACE_WITH_TREE,

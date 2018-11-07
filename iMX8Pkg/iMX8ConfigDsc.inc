@@ -58,8 +58,23 @@
   DEFINE CONFIG_OPTEE_PROFILE = FALSE
 !endif
 
-  # Call build with -D CONFIG_SECURE_UEFI=1 to enable the following security features
-!if $(CONFIG_SECURE_UEFI) == TRUE
+  # Call build with -D CONFIG_NOT_SECURE_UEFI=1 to disable the following security features
+!if $(CONFIG_NOT_SECURE_UEFI) == TRUE
+
+  !ifndef CONFIG_AUTH_VAR
+    DEFINE CONFIG_AUTH_VAR = FALSE
+  !endif
+
+  !ifndef CONFIG_MEASURED_BOOT
+    DEFINE CONFIG_MEASURED_BOOT = FALSE
+  !endif
+
+  !ifndef CONFIG_SECURE_BOOT
+    DEFINE CONFIG_SECURE_BOOT = FALSE
+  !endif
+
+!else
+
   # UEFI authenticated variable runtime services
   !ifndef CONFIG_AUTH_VAR
     DEFINE CONFIG_AUTH_VAR = TRUE
@@ -77,18 +92,7 @@
   !ifndef CONFIG_SECURE_BOOT
     DEFINE CONFIG_SECURE_BOOT = TRUE
   !endif
-!else
-  !ifndef CONFIG_AUTH_VAR
-    DEFINE CONFIG_AUTH_VAR = FALSE
-  !endif
 
-  !ifndef CONFIG_MEASURED_BOOT
-    DEFINE CONFIG_MEASURED_BOOT = FALSE
-  !endif
-
-  !ifndef CONFIG_SECURE_BOOT
-    DEFINE CONFIG_SECURE_BOOT = FALSE
-  !endif
 !endif
 
 [BuildOptions]

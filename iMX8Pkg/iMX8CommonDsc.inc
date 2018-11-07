@@ -698,39 +698,39 @@
   ShellPkg/DynamicCommand/TftpDynamicCommand/TftpDynamicCommand.inf
 !endif
 
-!if $(CONFIG_SECURE_UEFI) == TRUE
+!if $(CONFIG_OPTEE) == TRUE
   Platform/Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf
 # SecurityPkg/Application/VariableAuthTestDxe/VariableAuthTestDxe.inf
+!endif
 
-  !if $(CONFIG_MEASURED_BOOT) == TRUE
-    #
-    # FTPM
-    #
-    SecurityPkg/Tcg/Tcg2Dxe/Tcg2Dxe.inf {
-      <LibraryClasses>
-        NULL|SecurityPkg/Library/HashInstanceLibSha1/HashInstanceLibSha1.inf
-        NULL|SecurityPkg/Library/HashInstanceLibSha256/HashInstanceLibSha256.inf
-        Tpm2DeviceLib|Platform/Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
+!if $(CONFIG_MEASURED_BOOT) == TRUE
+  #
+  # FTPM
+  #
+  SecurityPkg/Tcg/Tcg2Dxe/Tcg2Dxe.inf {
+    <LibraryClasses>
+      NULL|SecurityPkg/Library/HashInstanceLibSha1/HashInstanceLibSha1.inf
+      NULL|SecurityPkg/Library/HashInstanceLibSha256/HashInstanceLibSha256.inf
+      Tpm2DeviceLib|Platform/Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
 
-      <PcdsFixedAtBuild>
-        !if $(CONFIG_OPTEE_PROFILE) == TRUE
-          gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|1
-        !else
-          gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0
-        !endif
-    }
-  !endif
+    <PcdsFixedAtBuild>
+      !if $(CONFIG_OPTEE_PROFILE) == TRUE
+        gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|1
+      !else
+        gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0
+      !endif
+  }
+!endif
 
-  !if $(CONFIG_SECURE_BOOT_AUTO_CONFIG) == TRUE
-    Platform/Microsoft/Drivers/SecureBootAutoConfigDxe/SecureBootAutoConfigDxe.inf {
-      <PcdsFixedAtBuild>
-        !if $(CONFIG_OPTEE_PROFILE) == TRUE
-          gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|1
-        !else
-          gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0
-        !endif
-     }
-  !endif
+!if $(CONFIG_SECURE_BOOT_AUTO_CONFIG) == TRUE
+  Platform/Microsoft/Drivers/SecureBootAutoConfigDxe/SecureBootAutoConfigDxe.inf {
+    <PcdsFixedAtBuild>
+      !if $(CONFIG_OPTEE_PROFILE) == TRUE
+        gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|1
+      !else
+        gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0
+      !endif
+   }
 !endif
 
 [Components.AARCH64]
