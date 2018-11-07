@@ -722,17 +722,6 @@
   }
 !endif
 
-!if $(CONFIG_SECURE_BOOT_AUTO_CONFIG) == TRUE
-  Platform/Microsoft/Drivers/SecureBootAutoConfigDxe/SecureBootAutoConfigDxe.inf {
-    <PcdsFixedAtBuild>
-      !if $(CONFIG_OPTEE_PROFILE) == TRUE
-        gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|1
-      !else
-        gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0
-      !endif
-   }
-!endif
-
 [Components.AARCH64]
   #
   # EBC
