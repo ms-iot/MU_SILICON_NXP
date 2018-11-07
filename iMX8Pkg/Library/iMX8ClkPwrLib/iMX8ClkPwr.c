@@ -84,8 +84,8 @@ ImxActiveClock[] = {
 //  55, // Sai5     0x4370
 //  56, // Sai6     0x4380
 //  57, // Sctr     0x4390
-//  58, // Sdma1    0x43A0
-//  59, // Sdma2    0x43B0
+  58, // Sdma1    0x43A0
+  59, // Sdma2    0x43B0
 //  60, // Sec_debug    0x43C0
 //  61, // Sema1    0x43D0
 //  62, // Sema2    0x43E0
