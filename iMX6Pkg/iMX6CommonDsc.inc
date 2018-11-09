@@ -471,7 +471,7 @@
   gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel| 0x80000047
 !endif
   gEfiMdePkgTokenSpaceGuid.PcdReportStatusCodePropertyMask|0x07
-  gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|0
+  gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|3
 
 ########################
 #
@@ -909,7 +909,11 @@ MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
   # Applications
   MdeModulePkg/Application/HelloWorld/HelloWorld.inf
   iMX6Pkg/Application/ImxClkPwr/ImxClkPwr.inf
-  #Microsoft/Application/StorageTest/StorageTest.inf
+
+!if $(CONFIG_EDK_TESTS) == TRUE
+  Microsoft/Application/StorageTest/StorageTest.inf
+  Microsoft/Application/AuthVarTest/AuthVarTest.inf
+!endif
 
   Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf
   #SecurityPkg/Application/VariableAuthTestDxe/VariableAuthTestDxe.inf
