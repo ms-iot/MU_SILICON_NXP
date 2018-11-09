@@ -104,6 +104,16 @@
   }
 !endif
 
+!if $(CONFIG_EDK_TESTS) == TRUE
+  FILE FREEFORM = 33630B18-7705-468B-92BD-FEBE27799EDB {
+    SECTION RAW = Microsoft/Application/AuthVarTest/Test_KEK.bin
+  }
+
+  FILE FREEFORM = 27A9C9E7-4B7A-4C7E-A8F5-77DB38D7100A {
+    SECTION RAW = Microsoft/Application/AuthVarTest/Test_db.bin
+  }
+!endif
+
 INF MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
 
 [FV.FVMAIN_COMPACT]

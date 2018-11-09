@@ -96,6 +96,12 @@
   DEFINE CONFIG_SECURE_BOOT = TRUE
 !endif
 
+  # Enable building various EFI test apps. Disabled by default. Define as TRUE
+  # in your board DSC file.
+!ifndef CONFIG_EDK_TESTS
+  DEFINE CONFIG_EDK_TESTS = FALSE
+!endif
+
 !endif
 
 [BuildOptions]
@@ -143,4 +149,8 @@
 
 !if $(CONFIG_SECURE_BOOT) == TRUE
   GCC:*_*_*_CC_FLAGS = -DCONFIG_SECURE_BOOT=1
+!endif
+
+!if $(CONFIG_EDK_TESTS) == TRUE
+  GCC:*_*_*_CC_FLAGS = -DCONFIG_EDK_TESTS=1
 !endif
