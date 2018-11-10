@@ -29,7 +29,7 @@
 
   INF ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
   # Timers
-  INF Silicon/NXP/iMX6Pkg/Drivers/TimerDxe/TimerDxe.inf
+  INF iMX6Pkg/Drivers/TimerDxe/TimerDxe.inf
 
   INF MdeModulePkg/Universal/SerialDxe/SerialDxe.inf
   INF MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
@@ -47,14 +47,14 @@
   INF FatBinPkg/EnhancedFatDxe/Fat.inf
   INF MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
   INF Platform/Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf
-  INF Silicon/NXP/iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
+  INF iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
 
   #
   # USB Stack
   #
 !if $(CONFIG_USB) == TRUE
-  INF Silicon/NXP/iMX6Pkg/Drivers/PciEmulation/PciEmulation.inf
-  INF Silicon/NXP/iMX6Pkg/Drivers/EhciDxe/EhciDxeiMX6.inf
+  INF iMX6Pkg/Drivers/PciEmulation/PciEmulation.inf
+  INF iMX6Pkg/Drivers/EhciDxe/EhciDxeiMX6.inf
   INF MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbMouseDxe/UsbMouseDxe.inf
@@ -65,7 +65,7 @@
   #
   # PCIe
   #
-  INF Silicon/NXP/iMX6Pkg/Drivers/PciExpress/iMX6PciExpress.inf
+  INF iMX6Pkg/Drivers/PciExpress/iMX6PciExpress.inf
 
   #
   # Bds

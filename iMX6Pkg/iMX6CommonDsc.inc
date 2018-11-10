@@ -33,7 +33,7 @@
   DEFINE CONFIG_USB = FALSE
 !endif
 
-!include Silicon/NXP/iMX6Pkg/iMX6ConfigDsc.inc
+!include iMX6Pkg/iMX6ConfigDsc.inc
 
 ################################################################################
 #
@@ -89,10 +89,10 @@
   CacheMaintenanceLib|ArmPkg/Library/ArmCacheMaintenanceLib/ArmCacheMaintenanceLib.inf
   ArmDisassemblerLib|ArmPkg/Library/ArmDisassemblerLib/ArmDisassemblerLib.inf
   UefiDecompressLib|MdePkg/Library/BaseUefiDecompressLib/BaseUefiDecompressLib.inf
-  RealTimeClockLib|Silicon/NXP/iMXPlatformPkg/Library/VirtualRealTimeClockLib/VirtualRealTimeClockLib.inf
+  RealTimeClockLib|iMXPlatformPkg/Library/VirtualRealTimeClockLib/VirtualRealTimeClockLib.inf
   DefaultExceptionHandlerLib|ArmPkg/Library/DefaultExceptionHandlerLib/DefaultExceptionHandlerLib.inf
   CpuExceptionHandlerLib|ArmPkg/Library/ArmExceptionLib/ArmExceptionLib.inf
-  TimerLib|Silicon/NXP/iMX6Pkg/Library/TimerLib/TimerLib.inf
+  TimerLib|iMX6Pkg/Library/TimerLib/TimerLib.inf
 
   #
   # Memory
@@ -167,7 +167,7 @@
   # Serial, Console and Debugging
   #
   DebugAgentLib|MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull.inf
-  SerialPortLib|Silicon/NXP/iMXPlatformPkg/Library/UartSerialPortLib/UartSerialPortLib.inf
+  SerialPortLib|iMXPlatformPkg/Library/UartSerialPortLib/UartSerialPortLib.inf
   PrintLib|MdePkg/Library/BasePrintLib/BasePrintLib.inf
 
   # Enable debug prints in both release and debug builds
@@ -185,7 +185,7 @@
   #
   # Display
   #
-  iMXDisplayLib|Silicon/NXP/iMXPlatformPkg/Library/iMXDisplayLib/iMXDisplayLib.inf
+  iMXDisplayLib|iMXPlatformPkg/Library/iMXDisplayLib/iMXDisplayLib.inf
 
   #
   # Security
@@ -197,13 +197,13 @@
   #
   # iMX6 Specifics
   #
-  iMXIoMuxLib|Silicon/NXP/iMX6Pkg/Library/iMX6IoMuxLib/iMX6IoMuxLib.inf
+  iMXIoMuxLib|iMX6Pkg/Library/iMX6IoMuxLib/iMX6IoMuxLib.inf
 !if $(IMX_FAMILY) == IMX6SX
-  iMX6ClkPwrLib|Silicon/NXP/iMX6Pkg/Library/iMX6SxClkPwrLib/iMX6SxClkPwrLib.inf
+  iMX6ClkPwrLib|iMX6Pkg/Library/iMX6SxClkPwrLib/iMX6SxClkPwrLib.inf
 !else
-  iMX6ClkPwrLib|Silicon/NXP/iMX6Pkg/Library/iMX6ClkPwrLib/iMX6ClkPwrLib.inf
+  iMX6ClkPwrLib|iMX6Pkg/Library/iMX6ClkPwrLib/iMX6ClkPwrLib.inf
 !endif
-  iMX6UsbPhyLib|Silicon/NXP/iMX6Pkg/Library/iMX6UsbPhyLib/iMX6UsbPhyLib.inf
+  iMX6UsbPhyLib|iMX6Pkg/Library/iMX6UsbPhyLib/iMX6UsbPhyLib.inf
 
 [LibraryClasses.ARM]
   #
@@ -834,7 +834,7 @@
       NULL|SecurityPkg/Library/DxeImageVerificationLib/DxeImageVerificationLib.inf
       NULL|SecurityPkg/Library/DxeTpm2MeasureBootLib/DxeTpm2MeasureBootLib.inf
   }
-  Silicon/NXP/iMX6Pkg/Drivers/TimerDxe/TimerDxe.inf
+  iMX6Pkg/Drivers/TimerDxe/TimerDxe.inf
   MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
   MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
   ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
@@ -855,14 +855,14 @@
   MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
   FatPkg/EnhancedFatDxe/Fat.inf
   Platform/Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf
-  Silicon/NXP/iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
+  iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
 
   #
   # USB Stack
   #
 !if $(CONFIG_USB) == TRUE
-  Silicon/NXP/iMX6Pkg/Drivers/PciEmulation/PciEmulation.inf
-  Silicon/NXP/iMX6Pkg/Drivers/EhciDxe/EhciDxeiMX6.inf
+  iMX6Pkg/Drivers/PciEmulation/PciEmulation.inf
+  iMX6Pkg/Drivers/EhciDxe/EhciDxeiMX6.inf
   MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
   MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
   MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
@@ -871,7 +871,7 @@
 !endif
 
   # PCIe support
-  Silicon/NXP/iMX6Pkg/Drivers/PciExpress/iMX6PciExpress.inf
+  iMX6Pkg/Drivers/PciExpress/iMX6PciExpress.inf
 
   #
   # Generic Bds (Not Intel's)
@@ -949,7 +949,7 @@ MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
 
   # Applications
   MdeModulePkg/Application/HelloWorld/HelloWorld.inf
-  Silicon/NXP/iMX6Pkg/Application/ImxClkPwr/ImxClkPwr.inf
+  iMX6Pkg/Application/ImxClkPwr/ImxClkPwr.inf
 
 !if $(CONFIG_SECURE_UEFI) == TRUE
   Platform/Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf

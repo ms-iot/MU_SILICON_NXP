@@ -117,14 +117,14 @@ READ_LOCK_STATUS   = TRUE
   INF FatBinPkg/EnhancedFatDxe/Fat.inf
   INF MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
   INF Platform/Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf
-  INF Silicon/NXP/iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
+  INF iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
 
   #
   # USB
   #
 !if $(CONFIG_USB) == TRUE
-  INF Silicon/NXP/iMX7Pkg/Drivers/PciEmulation/PciEmulation.inf
-  INF Silicon/NXP/iMX7Pkg/Drivers/EhciDxe/EhciDxeiMX7.inf
+  INF iMX7Pkg/Drivers/PciEmulation/PciEmulation.inf
+  INF iMX7Pkg/Drivers/EhciDxe/EhciDxeiMX7.inf
   INF MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbMouseDxe/UsbMouseDxe.inf
@@ -135,7 +135,7 @@ READ_LOCK_STATUS   = TRUE
   #
   # PCIe (TODO)
   #
-#  INF Silicon/NXP/iMX7Pkg/Drivers/PciExpress/iMX7PciExpress.inf
+#  INF iMX7Pkg/Drivers/PciExpress/iMX7PciExpress.inf
 
   #
   # ACPI
@@ -148,7 +148,7 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
   INF MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
   INF MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
-  INF Silicon/NXP/iMX7Pkg/Drivers/LcdifGop/LcdifGop.inf
+  INF iMX7Pkg/Drivers/LcdifGop/LcdifGop.inf
 !endif
 
   #

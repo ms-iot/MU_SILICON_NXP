@@ -28,7 +28,7 @@
   BUILD_TARGETS                  = DEBUG|RELEASE
   SKUID_IDENTIFIER               = DEFAULT
 
-!include Silicon/NXP/iMX7Pkg/iMX7ConfigDsc.inc
+!include iMX7Pkg/iMX7ConfigDsc.inc
 
 ################################################################################
 #
@@ -85,7 +85,7 @@
   CacheMaintenanceLib|ArmPkg/Library/ArmCacheMaintenanceLib/ArmCacheMaintenanceLib.inf
   ArmDisassemblerLib|ArmPkg/Library/ArmDisassemblerLib/ArmDisassemblerLib.inf
   UefiDecompressLib|MdePkg/Library/BaseUefiDecompressLib/BaseUefiDecompressLib.inf
-  RealTimeClockLib|Silicon/NXP/iMXPlatformPkg/Library/VirtualRealTimeClockLib/VirtualRealTimeClockLib.inf
+  RealTimeClockLib|iMXPlatformPkg/Library/VirtualRealTimeClockLib/VirtualRealTimeClockLib.inf
   DefaultExceptionHandlerLib|ArmPkg/Library/DefaultExceptionHandlerLib/DefaultExceptionHandlerLib.inf
   CpuExceptionHandlerLib|ArmPkg/Library/ArmExceptionLib/ArmExceptionLib.inf
   ArmGenericTimerCounterLib|ArmPkg/Library/ArmGenericTimerPhyCounterLib/ArmGenericTimerPhyCounterLib.inf
@@ -166,7 +166,7 @@
   # Serial, Console and Debugging
   #
   DebugAgentLib|MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull.inf
-  SerialPortLib|Silicon/NXP/iMXPlatformPkg/Library/UartSerialPortLib/UartSerialPortLib.inf
+  SerialPortLib|iMXPlatformPkg/Library/UartSerialPortLib/UartSerialPortLib.inf
   PrintLib|MdePkg/Library/BasePrintLib/BasePrintLib.inf
 
   # Enable debug prints in both release and debug builds
@@ -184,7 +184,7 @@
   #
   # Display
   #
-  iMXDisplayLib|Silicon/NXP/iMXPlatformPkg/Library/iMXDisplayLib/iMXDisplayLib.inf
+  iMXDisplayLib|iMXPlatformPkg/Library/iMXDisplayLib/iMXDisplayLib.inf
 
   #
   # Security
@@ -195,16 +195,16 @@
 
   # iMX platform
   #
-  iMXI2cLib|Silicon/NXP/iMXPlatformPkg/Library/iMXI2cLib/iMXI2cLib.inf
+  iMXI2cLib|iMXPlatformPkg/Library/iMXI2cLib/iMXI2cLib.inf
 
   #
   # iMX7 Specifics
   #
-  iMXIoMuxLib|Silicon/NXP/iMX7Pkg/Library/iMX7IoMuxLib/iMX7IoMuxLib.inf
-  iMX7ClkPwrLib|Silicon/NXP/iMX7Pkg/Library/iMX7ClkPwrLib/iMX7ClkPwrLib.inf
+  iMXIoMuxLib|iMX7Pkg/Library/iMX7IoMuxLib/iMX7IoMuxLib.inf
+  iMX7ClkPwrLib|iMX7Pkg/Library/iMX7ClkPwrLib/iMX7ClkPwrLib.inf
 
 !if $(CONFIG_USB) == TRUE
-  iMX7UsbPhyLib|Silicon/NXP/iMX7Pkg/Library/iMX7UsbPhyLib/iMX7UsbPhyLib.inf
+  iMX7UsbPhyLib|iMX7Pkg/Library/iMX7UsbPhyLib/iMX7UsbPhyLib.inf
 !endif
 
 [LibraryClasses.ARM]
@@ -740,12 +740,12 @@
   MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
   FatPkg/EnhancedFatDxe/Fat.inf
   Platform/Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf
-  Silicon/NXP/iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
+  iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
 
   # USB
 !if $(CONFIG_USB) == TRUE
-  Silicon/NXP/iMX7Pkg/Drivers/PciEmulation/PciEmulation.inf
-  Silicon/NXP/iMX7Pkg/Drivers/EhciDxe/EhciDxeiMX7.inf
+  iMX7Pkg/Drivers/PciEmulation/PciEmulation.inf
+  iMX7Pkg/Drivers/EhciDxe/EhciDxeiMX7.inf
   iMdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
   MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
   MdeModulePkg/Bus/Usb/UsbMouseDxe/UsbMouseDxe.inf
@@ -754,14 +754,14 @@
 !endif
 
   # PCIe support (TODO)
-#  Silicon/NXP/iMX7Pkg/Drivers/PciExpress/iMX7PciExpress.inf
+#  iMX7Pkg/Drivers/PciExpress/iMX7PciExpress.inf
 
   # Display Support
 !if $(CONFIG_HEADLESS) == FALSE
   MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
   MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
   MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
-  Silicon/NXP/iMX7Pkg/Drivers/LcdifGop/LcdifGop.inf
+  iMX7Pkg/Drivers/LcdifGop/LcdifGop.inf
 !endif
 
   # ACPI Support
@@ -850,7 +850,7 @@ MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
 
   # Applications
   MdeModulePkg/Application/HelloWorld/HelloWorld.inf
-#  Silicon/NXP/iMX7Pkg/Application/ImxClkPwr/ImxClkPwr.inf
+#  iMX7Pkg/Application/ImxClkPwr/ImxClkPwr.inf
 
 !if $(CONFIG_SECURE_UEFI) == TRUE
   Platform/Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf
