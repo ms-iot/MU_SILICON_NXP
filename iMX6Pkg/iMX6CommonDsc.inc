@@ -156,7 +156,7 @@
   # The Standard IO window in the debugger will show load and unload events for symbols.
   #
 !if $(CONFIG_DUMP_SYMBOL_INFO) == TRUE
-  PeCoffExtraActionLib|Platform/Microsoft/Library/LauterbachPeCoffExtraActionLib/LauterbachPeCoffExtraActionLib.inf
+  PeCoffExtraActionLib|Microsoft/Library/LauterbachPeCoffExtraActionLib/LauterbachPeCoffExtraActionLib.inf
 !else
   PeCoffExtraActionLib|MdePkg/Library/BasePeCoffExtraActionLibNull/BasePeCoffExtraActionLibNull.inf
 !endif
@@ -239,9 +239,9 @@
   IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
-  OpteeClientApiLib|Platform/Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
+  OpteeClientApiLib|Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
   HashLib|SecurityPkg/Library/HashLibBaseCryptoRouter/HashLibBaseCryptoRouterDxe.inf
-  Tpm2DeviceLibOptee|Platform/Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
+  Tpm2DeviceLibOptee|Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
   Tpm2CommandLib|SecurityPkg/Library/Tpm2CommandLib/Tpm2CommandLib.inf
 !endif
 
@@ -259,7 +259,7 @@
 !if $(CONFIG_OPTEE) == TRUE
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
-  OpteeClientApiLib|Platform/Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
+  OpteeClientApiLib|Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
 !endif
 
 [LibraryClasses.common.UEFI_DRIVER]
@@ -279,7 +279,7 @@
   PerformanceLib|MdeModulePkg/Library/DxePerformanceLib/DxePerformanceLib.inf
 
 !if $(CONFIG_OPTEE) == TRUE
-  OpteeClientApiLib|Platform/Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
+  OpteeClientApiLib|Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
 !if $(CONFIG_MEASURED_BOOT) == TRUE
   TpmMeasurementLib|SecurityPkg/Library/DxeTpmMeasurementLib/DxeTpmMeasurementLib.inf
 !endif
@@ -834,7 +834,7 @@
   MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
   MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
   FatPkg/EnhancedFatDxe/Fat.inf
-  Platform/Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf
+  Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf
   iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
 
   #
@@ -899,7 +899,7 @@
     <LibraryClasses>
       NULL|SecurityPkg/Library/HashInstanceLibSha1/HashInstanceLibSha1.inf
       NULL|SecurityPkg/Library/HashInstanceLibSha256/HashInstanceLibSha256.inf
-      Tpm2DeviceLib|Platform/Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
+      Tpm2DeviceLib|Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
 
     <PcdsFixedAtBuild>
       !if $(CONFIG_OPTEE_PROFILE) == TRUE
@@ -915,9 +915,9 @@ MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
   # Applications
   MdeModulePkg/Application/HelloWorld/HelloWorld.inf
   iMX6Pkg/Application/ImxClkPwr/ImxClkPwr.inf
-  #Platform/Microsoft/Application/StorageTest/StorageTest.inf
+  #Microsoft/Application/StorageTest/StorageTest.inf
 
-  Platform/Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf
+  Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf
   #SecurityPkg/Application/VariableAuthTestDxe/VariableAuthTestDxe.inf
 
 #

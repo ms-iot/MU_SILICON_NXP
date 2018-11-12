@@ -54,7 +54,7 @@
   INF MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
   INF FatPkg/EnhancedFatDxe/Fat.inf
   INF MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
-  INF Platform/Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf
+  INF Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf
   INF iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
 
   # FV FileSystem
@@ -108,12 +108,12 @@
   #
 
 !if $(CONFIG_OPTEE) == TRUE
-  INF Platform/Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf
+  INF Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf
 #  INF SecurityPkg/Application/VariableAuthTestDxe/VariableAuthTestDxe.inf
 
   # Hello World TA UUID in UEFI format: 8aaaf200-2450-11e4-abe2-0002a5d5c51b
   FILE FREEFORM = 8AAAF200-2450-11E4-ABE2-0002A5D5C51B {
-    SECTION RAW = Platform/Microsoft/OpteeClientPkg/Bin/HelloWorldTa/Arm64/Test/8aaaf200-2450-11e4-abe2-0002a5d5c51b.ta
+    SECTION RAW = Microsoft/OpteeClientPkg/Bin/HelloWorldTa/Arm64/Test/8aaaf200-2450-11e4-abe2-0002a5d5c51b.ta
   }
 !endif
 
@@ -125,7 +125,7 @@
 
   # fTPM Service TA UUID in UEFI format: bc50d971-d4c9-42c4-82cb-343fb7f37896
   FILE FREEFORM = BC50D971-D4C9-42C4-82CB-343FB7F37896 {
-    SECTION RAW = Platform/Microsoft/OpteeClientPkg/Bin/fTpmTa/Arm64/Test/bc50d971-d4c9-42c4-82cb-343fb7f37896.ta
+    SECTION RAW = Microsoft/OpteeClientPkg/Bin/fTpmTa/Arm64/Test/bc50d971-d4c9-42c4-82cb-343fb7f37896.ta
   }
 !endif
 
