@@ -21,35 +21,34 @@ Device (GPIO)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      // GPIO1-7
-      MEMORY32FIXED (ReadWrite, 0x0209C000, 0x1C000, )
+  Name (_CRS, ResourceTemplate () {
+    // GPIO1-7
+    MEMORY32FIXED (ReadWrite, 0x0209C000, 0x1C000, )
 
-      // IOMUXC
-      MEMORY32FIXED (ReadWrite, 0x020E0000, 0x4000, )
+    // IOMUXC
+    MEMORY32FIXED (ReadWrite, 0x020E0000, 0x4000, )
 
-      // GPIO1 0-15, 16-31
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 98, 99 }
+    // GPIO1 0-15, 16-31
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 98, 99 }
 
-      // GPIO2 0-15, 16-31
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 100, 101 }
+    // GPIO2 0-15, 16-31
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 100, 101 }
 
-      // GPIO3 0-15, 16-31
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 102, 103 }
+    // GPIO3 0-15, 16-31
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 102, 103 }
 
-      // GPIO4 0-15, 16-31
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 104, 105 }
+    // GPIO4 0-15, 16-31
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 104, 105 }
 
-      // GPIO5 0-15, 16-31
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 106, 107 }
+    // GPIO5 0-15, 16-31
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 106, 107 }
 
-      // GPIO6 0-15, 16-31
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 108, 109 }
+    // GPIO6 0-15, 16-31
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 108, 109 }
 
-      // GPIO7 0-15, 16-31
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 110, 111 }
-    })
-    Return (RBUF)
-  }
+    // GPIO7 0-15, 16-31
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 110, 111 }
+  })
+
+  OperationRegion (OTGP, GeneralPurposeIO, Zero, One)
 }

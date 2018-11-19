@@ -1,7 +1,7 @@
 #
-# iMX6 Common Configurations Definition
+# iMX8 Common Configurations Definition
 #
-#  Copyright (c) 2018 Microsoft Corporation. All rights reserved.
+#  Copyright (c) 2018, Microsoft Corporation. All rights reserved.
 #
 #  This program and the accompanying materials
 #  are licensed and made available under the terms and conditions of the BSD License
@@ -14,7 +14,7 @@
 
 [Defines]
 
-  # Display surface will not be drawn to.
+  # Display surface will be drawn to.
 !ifndef CONFIG_HEADLESS
   DEFINE CONFIG_HEADLESS = FALSE
 !endif
@@ -22,7 +22,7 @@
   # Useful if working with Lauterbach JTAG. Will dump to console the complete
   # command to copy and past into the Lauterbach command line to load symbols
   # for each module.
-  # Use in conjution with Informational debug messages:
+  # Use in conjunction with Informational debug messages:
   # DEBUG_INFO      0x00000040
 !ifndef CONFIG_DUMP_SYMBOL_INFO
   DEFINE CONFIG_DUMP_SYMBOL_INFO = TRUE
@@ -46,12 +46,8 @@
 
   # States whether OPTEE boot flow is in effect or not. This has the following
   # implications:
-  # - OPTEE owns the SecureWorld and UEFI has to run in NormalWorld.
+  # - OPTEE must have been loaded by ATF.
   # - Specific memory layout that is defined in the platform .dsc file.
-  # - Temp: Running in single-core until PSCI is enabled.
-  # WARNING: Don't set this to FALSE unless you know what you are doing. Running
-  # UEFI in SecureWorld will most likely result in boot failure due to lack of
-  # proper CPU sec configuration. That is by UEFI design.
 !ifndef CONFIG_OPTEE
   DEFINE CONFIG_OPTEE = TRUE
 !endif
@@ -65,37 +61,37 @@
   # Call build with -D CONFIG_NOT_SECURE_UEFI=1 to disable the following security features
 !if $(CONFIG_NOT_SECURE_UEFI) == TRUE
 
-!ifndef CONFIG_AUTH_VAR
-  DEFINE CONFIG_AUTH_VAR = FALSE
-!endif
+  !ifndef CONFIG_AUTH_VAR
+    DEFINE CONFIG_AUTH_VAR = FALSE
+  !endif
 
-!ifndef CONFIG_MEASURED_BOOT
-  DEFINE CONFIG_MEASURED_BOOT = FALSE
-!endif
+  !ifndef CONFIG_MEASURED_BOOT
+    DEFINE CONFIG_MEASURED_BOOT = FALSE
+  !endif
 
-!ifndef CONFIG_SECURE_BOOT
-  DEFINE CONFIG_SECURE_BOOT = FALSE
-!endif
+  !ifndef CONFIG_SECURE_BOOT
+    DEFINE CONFIG_SECURE_BOOT = FALSE
+  !endif
 
 !else
 
   # UEFI authenticated variable runtime services
-!ifndef CONFIG_AUTH_VAR
-  DEFINE CONFIG_AUTH_VAR = TRUE
-!endif
+  !ifndef CONFIG_AUTH_VAR
+    DEFINE CONFIG_AUTH_VAR = TRUE
+  !endif
 
   # TPM stack for the fTPM
-!ifndef CONFIG_MEASURED_BOOT
-  DEFINE CONFIG_MEASURED_BOOT = TRUE
-!endif
+  !ifndef CONFIG_MEASURED_BOOT
+    DEFINE CONFIG_MEASURED_BOOT = TRUE
+  !endif
 
   # If Platform Key (PK) is provisioned, then SecureBoot variables will get
   # updated to reflect that SecureBoot is enabled. Otherwise, SecureBoot
   # variables will indicate that the feature is disabled, and the OS will
   # not boot apply SecureBoot policies
-!ifndef CONFIG_SECURE_BOOT
-  DEFINE CONFIG_SECURE_BOOT = TRUE
-!endif
+  !ifndef CONFIG_SECURE_BOOT
+    DEFINE CONFIG_SECURE_BOOT = TRUE
+  !endif
 
 !endif
 

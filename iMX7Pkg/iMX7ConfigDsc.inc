@@ -62,8 +62,22 @@
   DEFINE CONFIG_OPTEE_PROFILE = FALSE
 !endif
 
-  # Call build with -D CONFIG_SECURE_UEFI=1 to enable the follwing security features
-!if $(CONFIG_SECURE_UEFI) == TRUE
+  # Call build with -D CONFIG_NOT_SECURE_UEFI=1 to disable the following security features
+!if $(CONFIG_NOT_SECURE_UEFI) == TRUE
+
+!ifndef CONFIG_AUTH_VAR
+  DEFINE CONFIG_AUTH_VAR = FALSE
+!endif
+
+!ifndef CONFIG_MEASURED_BOOT
+  DEFINE CONFIG_MEASURED_BOOT = FALSE
+!endif
+
+!ifndef CONFIG_SECURE_BOOT
+  DEFINE CONFIG_SECURE_BOOT = FALSE
+!endif
+
+!else
 
   # UEFI authenticated variable runtime services
 !ifndef CONFIG_AUTH_VAR
@@ -81,23 +95,6 @@
   # not boot apply SecureBoot policies
 !ifndef CONFIG_SECURE_BOOT
   DEFINE CONFIG_SECURE_BOOT = TRUE
-!endif
-
-  # Provison SecureBoot with MS test certs and keys that are baked into the FV
-  # on first UEFI boot if SecureBoot found to be not provisioned
-  DEFINE CONFIG_SECURE_BOOT_AUTO_CONFIG = TRUE
-!else
-
-!ifndef CONFIG_AUTH_VAR
-  DEFINE CONFIG_AUTH_VAR = FALSE
-!endif
-
-!ifndef CONFIG_MEASURED_BOOT
-  DEFINE CONFIG_MEASURED_BOOT = FALSE
-!endif
-
-!ifndef CONFIG_SECURE_BOOT
-  DEFINE CONFIG_SECURE_BOOT = FALSE
 !endif
 
 !endif
@@ -147,8 +144,4 @@
 
 !if $(CONFIG_SECURE_BOOT) == TRUE
   GCC:*_*_*_CC_FLAGS = -DCONFIG_SECURE_BOOT=1
-!endif
-
-!if $(CONFIG_SECURE_BOOT_AUTO_CONFIG) == TRUE
-  GCC:*_*_*_CC_FLAGS = -DCONFIG_SECURE_BOOT_AUTO_CONFIG=1
 !endif

@@ -121,9 +121,12 @@ typedef union {
   } Fields;
 } IMX_IOMUXC_MUX_CTL;
 
-typedef struct {
-  UINT32 DAISY : 3;
-  UINT32 reserved : 29;
+typedef union {
+  UINT32 AsUint32;
+  struct {
+    UINT32 DAISY : 3;
+    UINT32 reserved : 29;
+  } Fields;
 } IMX_IOMUXC_SEL_INP_CTL;
 
 #define _IMX_SEL_INP_VALUE(InpSel) \
@@ -167,6 +170,10 @@ typedef struct {
   SelInpReg - select input register offset div 4
   SelInpVal - select input value
 
+  NOTE: _IMX_MAKE_PADCFG_INPSEL cannot take SelInpValue of 4 or higher otherwise
+  the macro overflows the size of an int.
+  For SelInpValue higher than 4, set SELECT_INPUT register manually using
+  IMX_IOMUXC_SEL_INP_CTL structure.
 **/
 #define _IMX_MAKE_PADCFG_INPSEL(Sre, Dse, Speed, Ode, Pke, Pue, Pus, Hys, Sion, MuxAlt, SelInpReg, SelInpValue) \
           (_IMX_MAKE_PAD_CTL(Sre, Dse, Speed, Ode, Pke, Pue, Pus, Hys) | \

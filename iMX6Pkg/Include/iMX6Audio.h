@@ -12,19 +12,13 @@
 *
 **/
 
-Device (TREE)
-{
-  Name (_HID, "NXP010F")
-  Name (_CID, "TrEECSMP")
-  Name (_UID, 0)
+#ifndef _IMX6_AUDIO_H_
+#define _IMX6_AUDIO_H_
 
-  Method (_STA) {
-    Return (0xf)
-  }
+VOID
+InitializeAudmux (
+  UINT32 SsiPortNumber,
+  UINT32 ExternalPortNumber
+  );
 
-  Name (_CRS, ResourceTemplate () {
-    // OP-TEE Shared memory area.
-    // Needs to match: PcdTrustZoneSharedMemoryBase, PcdTrustZoneSharedMemorySize
-    MEMORY32FIXED (ReadWrite, 0x12800000, 0x00200000, )
-  })
-}
+#endif // _IMX6_AUDIO_H_

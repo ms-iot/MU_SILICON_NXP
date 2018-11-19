@@ -13,8 +13,10 @@
 #
 
 [Defines]
-  SECURE_BOOT_ENABLE    = FALSE
   INCLUDE_TFTP_COMMAND  = FALSE
+
+[BuildOptions]
+  GCC:*_*_ARM_PLATFORM_FLAGS = -march=armv8-a -fno-inline -fno-inline-smallfunctions -fno-inline-functions-called-once
 
 [BuildOptions.common.EDKII.DXE_CORE,BuildOptions.common.EDKII.DXE_DRIVER,BuildOptions.common.EDKII.UEFI_DRIVER,BuildOptions.common.EDKII.UEFI_APPLICATION]
   GCC:*_*_*_DLINK_FLAGS = -z common-page-size=0x1000
@@ -24,16 +26,26 @@
   GCC:*_*_AARCH64_DLINK_FLAGS = -z common-page-size=0x10000
 
 [LibraryClasses.common]
- 
-# enable debug prints in both release and debug builds
-!if $(TARGET) == RELEASE
-  DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
-#  DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
-!else
-  DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
+  ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
+  ArmMmuLib|ArmPkg/Library/ArmMmuLib/ArmMmuBaseLib.inf
+  ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
+
+  BaseBinSecurityLib|MdePkg/Library/BaseBinSecurityLibNull/BaseBinSecurityLibNull.inf
+  DeviceBootManagerLib|iMXPlatformPkg/Library/DeviceBootManagerLib/DeviceBootManagerLib.inf
+  Performance2Lib|MdePkg/Library/BasePerformance2LibNull/BasePerformance2LibNull.inf
+  SecurityLockAuditLib|MdeModulePkg/Library/SecurityLockAuditLibNull/SecurityLockAuditLibNull.inf
+
+  CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
+
+  # USB Requirements
+!if $(CONFIG_USB) == TRUE
+  UefiUsbLib|MdePkg/Library/UefiUsbLib/UefiUsbLib.inf
 !endif
 
-  DebugPrintErrorLevelLib|MdePkg/Library/BaseDebugPrintErrorLevelLib/BaseDebugPrintErrorLevelLib.inf
+!if $(CONFIG_HEADLESS) != TRUE
+  LcdHwLib|ArmPlatformPkg/Library/LcdHwNullLib/LcdHwNullLib.inf
+  LcdPlatformLib|iMX8Pkg/Library/HdLcdiMX8Lib/HdLcdiMX8Lib.inf
+!endif
 
   BaseLib|MdePkg/Library/BaseLib/BaseLib.inf
   SynchronizationLib|MdePkg/Library/BaseSynchronizationLib/BaseSynchronizationLib.inf
@@ -42,21 +54,25 @@
   PeCoffGetEntryPointLib|MdePkg/Library/BasePeCoffGetEntryPointLib/BasePeCoffGetEntryPointLib.inf
   PeCoffLib|MdePkg/Library/BasePeCoffLib/BasePeCoffLib.inf
   IoLib|MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
-  UefiDecompressLib|MdePkg/Library/BaseUefiDecompressLib/BaseUefiDecompressLib.inf
   CpuLib|MdePkg/Library/BaseCpuLib/BaseCpuLib.inf
 
-  UefiLib|MdePkg/Library/UefiLib/UefiLib.inf
-  HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
-  UefiRuntimeServicesTableLib|MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf
   DevicePathLib|MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.inf
-  UefiBootServicesTableLib|MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.inf
   DxeServicesTableLib|MdePkg/Library/DxeServicesTableLib/DxeServicesTableLib.inf
-  UefiDriverEntryPoint|MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint.inf
+  HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
+  ReportStatusCodeLib|MdeModulePkg/Library/DxeReportStatusCodeLib/DxeReportStatusCodeLib.inf
   UefiApplicationEntryPoint|MdePkg/Library/UefiApplicationEntryPoint/UefiApplicationEntryPoint.inf
+  UefiLib|MdePkg/Library/UefiLib/UefiLib.inf
+  UefiBootServicesTableLib|MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.inf
+  UefiDecompressLib|MdePkg/Library/BaseUefiDecompressLib/BaseUefiDecompressLib.inf
+  UefiDriverEntryPoint|MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint.inf
+  UefiRuntimeLib|MdePkg/Library/UefiRuntimeLib/UefiRuntimeLib.inf
+  UefiRuntimeServicesTableLib|MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf
+
+  #
+  # Human Interface Infrastructure (HII)
+  #
   HiiLib|MdeModulePkg/Library/UefiHiiLib/UefiHiiLib.inf
   UefiHiiServicesLib|MdeModulePkg/Library/UefiHiiServicesLib/UefiHiiServicesLib.inf
-
-  UefiRuntimeLib|MdePkg/Library/UefiRuntimeLib/UefiRuntimeLib.inf
 
   #
   # Assume everything is fixed at build
@@ -73,23 +89,32 @@
   ArmGicLib|ArmPkg/Drivers/ArmGic/ArmGicLib.inf
   ArmGicArchLib|ArmPkg/Library/ArmGicArchLib/ArmGicArchLib.inf
   ArmPlatformStackLib|ArmPlatformPkg/Library/ArmPlatformStackLib/ArmPlatformStackLib.inf
-  ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
   ArmGenericTimerCounterLib|ArmPkg/Library/ArmGenericTimerPhyCounterLib/ArmGenericTimerPhyCounterLib.inf
 
   PlatformPeiLib|ArmPlatformPkg/PlatformPei/PlatformPeiLib.inf
-  ResetSystemLib|ArmPkg/Library/ArmSmcPsciResetSystemLib/ArmSmcPsciResetSystemLib.inf
+  HwResetSystemLib|ArmPkg/Library/ArmSmcPsciResetSystemLib/ArmSmcPsciResetSystemLib.inf
 
   # iMX8 specifics
   iMXIoMuxLib|iMX8Pkg/Library/iMX8IoMuxLib/iMX8IoMuxLib.inf
   iMX8ClkPwrLib|iMX8Pkg/Library/iMX8ClkPwrLib/iMX8ClkPwrLib.inf
+  SerialPortLib|iMXPlatformPkg/Library/UartSerialPortLib/UartSerialPortLib.inf
 
   # ARM Real Time Clock
+  RealTimeClockLib|iMXPlatformPkg/Library/VirtualRealTimeClockLib/VirtualRealTimeClockLib.inf
 #  EmbeddedPkg/RealTimeClockRuntimeDxe/RealTimeClockRuntimeDxe.inf
   TimeBaseLib|EmbeddedPkg/Library/TimeBaseLib/TimeBaseLib.inf
   TimerLib|ArmPkg/Library/ArmArchTimerLib/ArmArchTimerLib.inf
 
-  # NXP UART Driver
-  SerialPortLib|iMXPlatformPkg/Library/UartSerialPortLib/UartSerialPortLib.inf
+  #
+  # Serial, Console and Debugging
+  #
+  # enable debug prints in both release and debug builds
+!if $(TARGET) == RELEASE
+  DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
+#  DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+!else
+  DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
+!endif
 
   #
   # Uncomment (and comment out the next line) For RealView Debugger. The Standard IO window
@@ -97,12 +122,17 @@
   # into the command window to load symbols. We should be able to use a script to do this, but
   # the version of RVD I have does not support scripts accessing system memory.
   #
+!if $(CONFIG_DUMP_SYMBOL_INFO) == TRUE
   #PeCoffExtraActionLib|ArmPkg/Library/RvdPeCoffExtraActionLib/RvdPeCoffExtraActionLib.inf
-  PeCoffExtraActionLib|ArmPkg/Library/DebugPeCoffExtraActionLib/DebugPeCoffExtraActionLib.inf
-  #PeCoffExtraActionLib|MdePkg/Library/BasePeCoffExtraActionLibNull/BasePeCoffExtraActionLibNull.inf
+  #PeCoffExtraActionLib|ArmPkg/Library/DebugPeCoffExtraActionLib/DebugPeCoffExtraActionLib.inf
+  PeCoffExtraActionLib|Microsoft/Library/LauterbachPeCoffExtraActionLib/LauterbachPeCoffExtraActionLib.inf
+!else
+  PeCoffExtraActionLib|MdePkg/Library/BasePeCoffExtraActionLibNull/BasePeCoffExtraActionLibNull.inf
+!endif
 
   DebugAgentLib|MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull.inf
   DebugAgentTimerLib|EmbeddedPkg/Library/DebugAgentTimerLibNull/DebugAgentTimerLibNull.inf
+  DebugPrintErrorLevelLib|MdePkg/Library/BaseDebugPrintErrorLevelLib/BaseDebugPrintErrorLevelLib.inf
 
   SemihostLib|ArmPkg/Library/SemihostLib/SemihostLib.inf
 
@@ -110,6 +140,7 @@
   UefiBootManagerLib|MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib.inf
   PlatformBootManagerLib|ArmPkg/Library/PlatformBootManagerLib/PlatformBootManagerLib.inf
   BootLogoLib|MdeModulePkg/Library/BootLogoLib/BootLogoLib.inf
+  CustomizedDisplayLib|MdeModulePkg/Library/CustomizedDisplayLib/CustomizedDisplayLib.inf
 
   AcpiLib|EmbeddedPkg/Library/AcpiLib/AcpiLib.inf
 #  FdtLib|EmbeddedPkg/Library/FdtLib/FdtLib.inf
@@ -121,32 +152,24 @@
   FileHandleLib|MdePkg/Library/UefiFileHandleLib/UefiFileHandleLib.inf
   SortLib|MdeModulePkg/Library/UefiSortLib/UefiSortLib.inf
 
-  #
-  # Secure Boot dependencies
-  #
-!if $(SECURE_BOOT_ENABLE) == TRUE
-  IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
-  OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
-  TpmMeasurementLib|SecurityPkg/Library/DxeTpmMeasurementLib/DxeTpmMeasurementLib.inf
-  AuthVariableLib|SecurityPkg/Library/AuthVariableLib/AuthVariableLib.inf
-  BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
-
-  # re-use the UserPhysicalPresent() dummy implementation from the ovmf tree
-  PlatformSecureLib|OvmfPkg/Library/PlatformSecureLib/PlatformSecureLib.inf
-!else
-  TpmMeasurementLib|MdeModulePkg/Library/TpmMeasurementLibNull/TpmMeasurementLibNull.inf
-  AuthVariableLib|MdeModulePkg/Library/AuthVariableLibNull/AuthVariableLibNull.inf
-!endif
   VarCheckLib|MdeModulePkg/Library/VarCheckLib/VarCheckLib.inf
 
-  CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
-  CustomizedDisplayLib|MdeModulePkg/Library/CustomizedDisplayLib/CustomizedDisplayLib.inf
-
-  ReportStatusCodeLib|MdeModulePkg/Library/DxeReportStatusCodeLib/DxeReportStatusCodeLib.inf
-
 [LibraryClasses.common.SEC]
+  ArmGicArchLib|ArmPkg/Library/ArmGicArchSecLib/ArmGicArchSecLib.inf
   DebugAgentLib|ArmPkg/Library/DebugAgentSymbolsBaseLib/DebugAgentSymbolsBaseLib.inf
   DefaultExceptionHandlerLib|ArmPkg/Library/DefaultExceptionHandlerLib/DefaultExceptionHandlerLibBase.inf
+  ExtractGuidedSectionLib|EmbeddedPkg/Library/PrePiExtractGuidedSectionLib/PrePiExtractGuidedSectionLib.inf
+  HobLib|EmbeddedPkg/Library/PrePiHobLib/PrePiHobLib.inf
+  LzmaDecompressLib|MdeModulePkg/Library/LzmaCustomDecompressLib/LzmaCustomDecompressLib.inf
+  MemoryAllocationLib|EmbeddedPkg/Library/PrePiMemoryAllocationLib/PrePiMemoryAllocationLib.inf
+  PerformanceLib|MdeModulePkg/Library/PeiPerformanceLib/PeiPerformanceLib.inf
+  PlatformPeiLib|ArmPlatformPkg/PlatformPei/PlatformPeiLib.inf
+  PrePiLib|EmbeddedPkg/Library/PrePiLib/PrePiLib.inf
+  PrePiHobListPointerLib|ArmPlatformPkg/Library/PrePiHobListPointerLib/PrePiHobListPointerLib.inf
+
+[LibraryClasses.common.UEFI_DRIVER, LibraryClasses.common.UEFI_APPLICATION, LibraryClasses.common.DXE_RUNTIME_DRIVER, LibraryClasses.common.DXE_DRIVER]
+  PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
+  NonDiscoverableDeviceRegistrationLib|MdeModulePkg/Library/NonDiscoverableDeviceRegistrationLib/NonDiscoverableDeviceRegistrationLib.inf
 
 !ifdef $(EDK2_SKIP_PEICORE)
   PrePiLib|EmbeddedPkg/Library/PrePiLib/PrePiLib.inf
@@ -157,8 +180,6 @@
   PrePiHobListPointerLib|ArmPlatformPkg/Library/PrePiHobListPointerLib/PrePiHobListPointerLib.inf
   PerformanceLib|MdeModulePkg/Library/PeiPerformanceLib/PeiPerformanceLib.inf
 !endif
-
-  ArmGicArchLib|ArmPkg/Library/ArmGicArchSecLib/ArmGicArchSecLib.inf
 
 [LibraryClasses.common.PEI_CORE]
   HobLib|MdePkg/Library/PeiHobLib/PeiHobLib.inf
@@ -182,6 +203,7 @@
   OemHookStatusCodeLib|MdeModulePkg/Library/OemHookStatusCodeLibNull/OemHookStatusCodeLibNull.inf
   PeCoffGetEntryPointLib|MdePkg/Library/BasePeCoffGetEntryPointLib/BasePeCoffGetEntryPointLib.inf
   PeiResourcePublicationLib|MdePkg/Library/PeiResourcePublicationLib/PeiResourcePublicationLib.inf
+#  ResetSystemLib|MdeModulePkg/Library/PeiResetSystemLib/PeiResetSystemLib.inf
   ExtractGuidedSectionLib|MdePkg/Library/PeiExtractGuidedSectionLib/PeiExtractGuidedSectionLib.inf
 
   PeiServicesTablePointerLib|ArmPkg/Library/PeiServicesTablePointerLib/PeiServicesTablePointerLib.inf
@@ -204,6 +226,27 @@
   PerformanceLib|MdeModulePkg/Library/DxePerformanceLib/DxePerformanceLib.inf
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
 
+  #
+  # Security libraries
+  #
+!if $(CONFIG_OPTEE) == TRUE
+  IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
+  OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
+  BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
+  OpteeClientApiLib|Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
+  HashLib|SecurityPkg/Library/HashLibBaseCryptoRouter/HashLibBaseCryptoRouterDxe.inf
+  Tpm2DeviceLibOptee|Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
+  Tpm2CommandLib|SecurityPkg/Library/Tpm2CommandLib/Tpm2CommandLib.inf
+!endif
+
+!if $(CONFIG_MEASURED_BOOT) == TRUE
+  OemTpm2InitLib|SecurityPkg/Library/OemTpm2InitLibNull/OemTpm2InitLib.inf
+  TpmMeasurementLib|SecurityPkg/Library/DxeTpmMeasurementLib/DxeTpmMeasurementLib.inf
+  Tcg2PhysicalPresenceLib|SecurityPkg/Library/DxeTcg2PhysicalPresenceLib/DxeTcg2PhysicalPresenceLib.inf
+  Tcg2PhysicalPresencePromptLib|SecurityPkg/Library/Tcg2PhysicalPresencePromptLib/Tcg2PhysicalPresencePromptLibConsole.inf
+  Tcg2PpVendorLib|SecurityPkg/Library/Tcg2PpVendorLibNull/Tcg2PpVendorLibNull.inf
+!endif
+
 [LibraryClasses.common.UEFI_APPLICATION]
   PerformanceLib|MdeModulePkg/Library/DxePerformanceLib/DxePerformanceLib.inf
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
@@ -213,6 +256,14 @@
   FileExplorerLib|MdeModulePkg/Library/FileExplorerLib/FileExplorerLib.inf
   DxeServicesLib|MdePkg/Library/DxeServicesLib/DxeServicesLib.inf
 
+!if $(CONFIG_OPTEE) == TRUE
+  BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
+  OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
+  OpteeClientApiLib|Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
+!endif
+
+  ShellCEntryLib|ShellPkg/Library/UefiShellCEntryLib/UefiShellCEntryLib.inf
+
 [LibraryClasses.common.UEFI_DRIVER]
   ExtractGuidedSectionLib|MdePkg/Library/DxeExtractGuidedSectionLib/DxeExtractGuidedSectionLib.inf
   PerformanceLib|MdeModulePkg/Library/DxePerformanceLib/DxePerformanceLib.inf
@@ -220,15 +271,21 @@
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
 
 [LibraryClasses.common.DXE_RUNTIME_DRIVER]
-  HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
-  MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
-  ReportStatusCodeLib|MdeModulePkg/Library/RuntimeDxeReportStatusCodeLib/RuntimeDxeReportStatusCodeLib.inf
-!if $(SECURE_BOOT_ENABLE) == TRUE
-  BaseCryptLib|CryptoPkg/Library/BaseCryptLib/RuntimeCryptLib.inf
-!endif
 !if $(TARGET) != RELEASE
   DebugLib|MdePkg/Library/DxeRuntimeDebugLibSerialPort/DxeRuntimeDebugLibSerialPort.inf
+!endif
+  HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
+  HwResetSystemLib|ArmPkg/Library/ArmSmcPsciResetSystemLib/ArmSmcPsciResetSystemLib.inf
+  MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
+  ReportStatusCodeLib|MdeModulePkg/Library/RuntimeDxeReportStatusCodeLib/RuntimeDxeReportStatusCodeLib.inf
+  ResetUtilityLib|MdeModulePkg/Library/ResetUtilityLib/ResetUtilityLib.inf
+  ResetSystemLib|MdeModulePkg/Library/DxeResetSystemLib/DxeResetSystemLib.inf
+!if $(CONFIG_OPTEE) == TRUE
+  OpteeClientApiLib|Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
+  !if $(CONFIG_MEASURED_BOOT) == TRUE
+    TpmMeasurementLib|SecurityPkg/Library/DxeTpmMeasurementLib/DxeTpmMeasurementLib.inf
+  !endif
 !endif
 
 [LibraryClasses.ARM, LibraryClasses.AARCH64]
@@ -314,6 +371,7 @@
   #  DEBUG_BM        0x00000400  // Boot Manager
   #  DEBUG_BLKIO     0x00001000  // BlkIo Driver
   #  DEBUG_NET       0x00004000  // SNP Driver
+  #  DEBUG_OPTEE     0x00008000  // OPTEE Driver
   #  DEBUG_UNDI      0x00010000  // UNDI Driver
   #  DEBUG_LOADFILE  0x00020000  // LoadFile
   #  DEBUG_EVENT     0x00080000  // Event messages
@@ -354,7 +412,7 @@
 ########################
 [PcdsFixedAtBuild.common]
   #
-  # iMX Plaform Memory Layout
+  # iMX8 Plaform Memory Layout
   #                                        PcdSystemMemoryBase
   # +-------------------+===> (0x40000000) PcdArmLcdDdrFrameBufferBase (Frame buffer)
   # | HDMI framebuffer  |  ^
@@ -369,28 +427,60 @@
   # | Memory            |  |
   # |                   |  |
   # |                   |  v
-  # +------------------ +===
+  # +-------------------+===> (0xFE000000) PcdTrustZonePrivateMemoryBase (OPTEE image base address)
+  # | TZ Private Memory |  ^
+  # | (OPTEE)           |  |  (0x01E00000) PcdTrustZonePrivateMemorySize 30MB
+  # |                   |  v
+  # +-------------------+===> (0xFFE00000) PcdTrustZoneSharedMemoryBase (includes mobj bookkeeping page)
+  # | TZ Shared Memory  |  ^
+  # |                   |  |  (0x00200000) PcdTrustZoneSharedMemorySize 2MB
+  # |                   |  v
+  # +-------------------|===>
+
+!if $(CONFIG_OPTEE) == TRUE
+  gOpteeClientPkgTokenSpaceGuid.PcdTrustZonePrivateMemoryBase|0xFE000000
+  gOpteeClientPkgTokenSpaceGuid.PcdTrustZonePrivateMemorySize|0x01E00000
+
+  #
+  # TrustZone shared memory (2Mb)
+  # This memory is managed by the normal world but shared with the OpTEE OS.
+  # It must match OpTEE optee_os/core/arch/arm/plat-imx/platform_config.h:
+  #    CFG_SHMEM_START & CFG_SHMEM_SIZE
+  # NOTE: The first page of the SHMEM is owned by OPTEE for mobj bookkeeping
+  # and we should not touch it. We will skip the first 4K of SHMEM and take that
+  # into account for SHMEM size in PcdTrustZoneSharedMemorySize.
+  #
+  gOpteeClientPkgTokenSpaceGuid.PcdTrustZoneSharedMemoryBase|0xFFE00000
+  gOpteeClientPkgTokenSpaceGuid.PcdTrustZoneSharedMemorySize|0x00200000
+!endif
 
   #
   # iMXPlatformPkg
   #
 
-  # System Memory (3GB of DRAM at the top of the 32bit address space)
+  # System Memory base
   gArmTokenSpaceGuid.PcdSystemMemoryBase|0x40000000
-  gArmTokenSpaceGuid.PcdSystemMemorySize|0xC0000000
 
   # GOP driver memory
-!ifndef CONFIG_HEADLESS
+!if $(CONFIG_HEADLESS) == TRUE
+  # Global data area
+  giMXPlatformTokenSpaceGuid.PcdGlobalDataBaseAddress|0x40000000
+  giMXPlatformTokenSpaceGuid.PcdGlobalDataSize|0x1000
+
+  # Reserved for TPM2 ACPI
+  gOpteeClientPkgTokenSpaceGuid.PcdTpm2AcpiBufferBase|0x40001000
+  gOpteeClientPkgTokenSpaceGuid.PcdTpm2AcpiBufferSize|0x3000
+!else
   gArmPlatformTokenSpaceGuid.PcdArmLcdDdrFrameBufferBase|0x40000000
   gArmPlatformTokenSpaceGuid.PcdArmLcdDdrFrameBufferSize|0x007E9000	# ~8 MB (4 * 1920 * 1080)
 
   # Global data area
   giMXPlatformTokenSpaceGuid.PcdGlobalDataBaseAddress|0x407E9000
   giMXPlatformTokenSpaceGuid.PcdGlobalDataSize|0x1000
-!else
-  # Global data area
-  giMXPlatformTokenSpaceGuid.PcdGlobalDataBaseAddress|0x40000000
-  giMXPlatformTokenSpaceGuid.PcdGlobalDataSize|0x1000
+
+  # Reserved for TPM2 ACPI
+  gOpteeClientPkgTokenSpaceGuid.PcdTpm2AcpiBufferBase|0x407EA000
+  gOpteeClientPkgTokenSpaceGuid.PcdTpm2AcpiBufferSize|0x3000
 !endif
 
   # SDHC memory
@@ -398,13 +488,6 @@
   giMXPlatformTokenSpaceGuid.PcdSdhc2Base|0x30B50000
   giMXPlatformTokenSpaceGuid.PcdSdhc3Base|0x00000000
   giMXPlatformTokenSpaceGuid.PcdSdhc4Base|0x00000000
-
-  #
-  # FileSystem
-  #
-
-  # List of Device Paths that support BootMonFs
-  gArmBootMonFsTokenSpaceGuid.PcdBootMonFsSupportedDevicePaths|L"VenHw(E7223039-5836-41E1-B542-D7EC736C5E59);VenHw(1F15DA3C-37FF-4070-B471-BB4AF12A724A)"
 
   # RunAxf support via Dynamic Shell Command protocol
   # We want to use the Shell Libraries but don't want it to initialise
@@ -416,13 +499,6 @@
 
   # use the TTY terminal type
   gEfiMdePkgTokenSpaceGuid.PcdDefaultTerminalType|4
-
-!if $(SECURE_BOOT_ENABLE) == TRUE
-  # override the default values from SecurityPkg to ensure images from all sources are verified in secure boot
-  gEfiSecurityPkgTokenSpaceGuid.PcdOptionRomImageVerificationPolicy|0x04
-  gEfiSecurityPkgTokenSpaceGuid.PcdFixedMediaImageVerificationPolicy|0x04
-  gEfiSecurityPkgTokenSpaceGuid.PcdRemovableMediaImageVerificationPolicy|0x04
-!endif
 
   # GUID of the UI app
   gEfiMdeModulePkgTokenSpaceGuid.PcdBootManagerMenuFile|{ 0x21, 0xaa, 0x2c, 0x46, 0x14, 0x76, 0x03, 0x45, 0x83, 0x6e, 0x8a, 0xb6, 0xf4, 0x66, 0x23, 0x31 }
@@ -450,14 +526,140 @@
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|10
 !endif
 
+########################
+#
+# MsPkg PCDs
+#
+########################
+[PcdsFixedAtBuild.common]
+
+!if $(CONFIG_SECURE_BOOT) == TRUE
+  gMsPkgTokenSpaceGuid.PcdSecureBootEnable|TRUE
+!else
+  gMsPkgTokenSpaceGuid.PcdSecureBootEnable|FALSE
+!endif
+
+########################
+#
+# SecurityPkg PCDs
+#
+########################
+
+[PcdsFixedAtBuild.common]
+!if $(CONFIG_MEASURED_BOOT) == TRUE
+  #
+  # override the default values from SecurityPkg to ensure images from all sources are verified in secure boot
+  #
+  gEfiSecurityPkgTokenSpaceGuid.PcdOptionRomImageVerificationPolicy|0x04
+  gEfiSecurityPkgTokenSpaceGuid.PcdFixedMediaImageVerificationPolicy|0x04
+  gEfiSecurityPkgTokenSpaceGuid.PcdRemovableMediaImageVerificationPolicy|0x04
+
+  #
+  # PcdTpmInstanceGuid tells the Tcg2 Driver which TPM version is being used.
+  # The below GUID is TPMv2 GUID.
+  #
+  gEfiSecurityPkgTokenSpaceGuid.PcdTpmInstanceGuid|{ 0x5a, 0xf2, 0x6b, 0x28, 0xc3, 0xc2, 0x8c, 0x40, 0xb3, 0xb4, 0x25, 0xe6, 0x75, 0x8b, 0x73, 0x17 }
+
+[PcdsDynamicExDefault.common.DEFAULT]
+  gEfiSecurityPkgTokenSpaceGuid.PcdTcg2HashAlgorithmBitmap|0x0
+!endif
+
+################################################################################
+#
+# Components Section - list of all EDK II Modules needed by this Platform
+#
+################################################################################
 [Components.common]
+  #
+  # PEI Phase modules
+  #
+  ArmPlatformPkg/PrePi/PeiUniCore.inf
+
+  #
+  # DXE
+  #
+  MdeModulePkg/Core/Dxe/DxeMain.inf {
+    <LibraryClasses>
+      PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
+      NULL|MdeModulePkg/Library/DxeCrc32GuidedSectionExtractLib/DxeCrc32GuidedSectionExtractLib.inf
+  }
   MdeModulePkg/Universal/PCD/Dxe/Pcd.inf {
     <LibraryClasses>
       PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
   }
 
-  # Versatile Express FileSystem
-  ARM/Drivers/BootMonFs/BootMonFs.inf
+  #
+  # Architectural Protocols
+  #
+  ArmPkg/Drivers/CpuDxe/CpuDxe.inf
+  MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
+  MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
+  MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
+  MdeModulePkg/Universal/MonotonicCounterRuntimeDxe/MonotonicCounterRuntimeDxe.inf
+  MdeModulePkg/Universal/ResetSystemRuntimeDxe/ResetSystemRuntimeDxe.inf
+  EmbeddedPkg/RealTimeClockRuntimeDxe/RealTimeClockRuntimeDxe.inf
+  EmbeddedPkg/MetronomeDxe/MetronomeDxe.inf
+
+  ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
+  ArmPkg/Drivers/TimerDxe/TimerDxe.inf
+# disable - doesn't seem to be powered on
+#  ArmPkg/Drivers/GenericWatchdogDxe/GenericWatchdogDxe.inf
+  MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
+
+  MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
+  MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
+  MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
+  MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
+  MdeModulePkg/Universal/SerialDxe/SerialDxe.inf
+
+  MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
+  MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
+
+  MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf
+
+  #
+  # FAT filesystem + GPT/MBR partitioning
+  #
+  FatPkg/EnhancedFatDxe/Fat.inf
+  MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf
+  MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
+  Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf
+
+  # FV Filesystem
+  MdeModulePkg/Universal/FvSimpleFileSystemDxe/FvSimpleFileSystemDxe.inf
+
+  # Unicode support (required)
+  MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
+
+  #
+  # iMX8 platform driver
+  #
+  iMX8Pkg/Drivers/iMX8Dxe/iMX8Dxe.inf
+  iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
+
+  #
+  # GOP driver
+  #
+!if $(CONFIG_HEADLESS) != TRUE
+  ArmPlatformPkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
+!endif
+
+  #
+  # Bds
+  #
+  MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf
+  MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf
+  MdeModulePkg/Universal/SetupBrowserDxe/SetupBrowserDxe.inf
+  MdeModulePkg/Universal/BdsDxe/BdsDxe.inf {
+    <LibraryClasses>
+      PlatformBootManagerLib|MsCorePkg/Library/PlatformBootManagerLib/PlatformBootManagerLib.inf
+  }
+  MdeModulePkg/Application/UiApp/UiApp.inf {
+    <LibraryClasses>
+      NULL|MdeModulePkg/Library/DeviceManagerUiLib/DeviceManagerUiLib.inf
+      NULL|MdeModulePkg/Library/BootManagerUiLib/BootManagerUiLib.inf
+      NULL|MdeModulePkg/Library/BootMaintenanceManagerUiLib/BootMaintenanceManagerUiLib.inf
+  }
 
 !if TRUE == FALSE
   #
@@ -479,15 +681,14 @@
   #
   # Usb Support
   #
+!if $(CONFIG_USB) == TRUE
   MdeModulePkg/Bus/Pci/XhciDxe/XhciDxe.inf
   MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
   MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
   MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
   MdeModulePkg/Bus/Usb/UsbMouseDxe/UsbMouseDxe.inf
   MdeModulePkg/Bus/Pci/NonDiscoverablePciDeviceDxe/NonDiscoverablePciDeviceDxe.inf
-
-  # FV Filesystem
-  MdeModulePkg/Universal/FvSimpleFileSystemDxe/FvSimpleFileSystemDxe.inf
+!endif
 
   #
   # UEFI application (Shell Embedded Boot Loader)
@@ -506,7 +707,37 @@
       PrintLib|MdePkg/Library/BasePrintLib/BasePrintLib.inf
       BcfgCommandLib|ShellPkg/Library/UefiShellBcfgCommandLib/UefiShellBcfgCommandLib.inf
   }
+
 !if $(INCLUDE_TFTP_COMMAND) == TRUE
   ShellPkg/DynamicCommand/TftpDynamicCommand/TftpDynamicCommand.inf
 !endif
 
+!if $(CONFIG_OPTEE) == TRUE
+  Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf
+# SecurityPkg/Application/VariableAuthTestDxe/VariableAuthTestDxe.inf
+!endif
+
+!if $(CONFIG_MEASURED_BOOT) == TRUE
+  #
+  # FTPM
+  #
+  SecurityPkg/Tcg/Tcg2Dxe/Tcg2Dxe.inf {
+    <LibraryClasses>
+      NULL|SecurityPkg/Library/HashInstanceLibSha1/HashInstanceLibSha1.inf
+      NULL|SecurityPkg/Library/HashInstanceLibSha256/HashInstanceLibSha256.inf
+      Tpm2DeviceLib|Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
+
+    <PcdsFixedAtBuild>
+      !if $(CONFIG_OPTEE_PROFILE) == TRUE
+        gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|1
+      !else
+        gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0
+      !endif
+  }
+!endif
+
+[Components.AARCH64]
+  #
+  # EBC
+  #
+  MdeModulePkg/Universal/EbcDxe/EbcDxe.inf

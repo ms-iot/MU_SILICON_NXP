@@ -61,16 +61,14 @@
 
 #define IMX_SERIAL_DBG_PORT_SUBTYPE     0x000C
 
-#define SERIAL_DEBUG_PORT_INIT_MSG "\nUEFI Debug Serial Port Init\n"
+#define SERIAL_DEBUG_PORT_INIT_MSG "\r\nUEFI Debug Serial Port Init\r\n"
 
 //
 // Clock Source
 //
 #define SOC_OSC_FREQUENCY_REF_HZ  25000000  // Oscillator frequency 25Mhz
 
-//
-// General Purpose Timer
-//
+// General Purpose Timers
 
 #define GPT1_BASE_ADDRESS   0x302D0000
 #define GPT2_BASE_ADDRESS   0x302E0000
@@ -84,7 +82,8 @@
 #define GPT2_IRQ    DEFINE_IMX8_INTERRUPT(54)
 #define GPT3_IRQ    DEFINE_IMX8_INTERRUPT(53)
 
-// TODO: still imx7
+// Clock Source Select definitions
+
 #define GPT_CLOCK_NONE          0x00
 #define GPT_CLOCK_PERIPHERAL    0x01
 #define GPT_CLOCK_HIGH_FREQ     0x02
@@ -104,6 +103,12 @@
 // a 24Mhz reference clock divided by 12.
 //
 #define GPT_TIMER_DEFAULT_PRESCALER         (2 - 1)
+
+// SDMA (Smart DMA) controllers
+#define SDMA1_BASE_ADDRESS      0x30BD0000
+#define SDMA2_BASE_ADDRESS      0x302C0000
+#define SDMA1_IRQ               34
+#define SDMA2_IRQ               135
 
 #pragma pack(push, 1)
 typedef union {

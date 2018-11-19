@@ -21,18 +21,15 @@ Device (VPU0)
     Return (0x0)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      MEMORY32FIXED (ReadWrite, 0x02040000, 0x3C000, )
+  Name (_CRS, ResourceTemplate () {
+    MEMORY32FIXED (ReadWrite, 0x02040000, 0x3C000, )
 
-      // JPEG codec interrupt request
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 35 }
+    // JPEG codec interrupt request
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 35 }
 
-      // VPU interrupt request
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 44 }
-    })
-    Return (RBUF)
-  }
+    // VPU interrupt request
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 44 }
+  })
 }
 
 // Description: Graphics Processing Unit (GPU)
@@ -46,29 +43,26 @@ Device (GPU0)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      // GPU 3D (GC2000)
-      MEMORY32FIXED (ReadWrite, 0x00130000, 0x4000, )
+  Name (_CRS, ResourceTemplate () {
+    // GPU 3D (GC2000)
+    MEMORY32FIXED (ReadWrite, 0x00130000, 0x4000, )
 
-      // GPU 2D (GC320)
-      MEMORY32FIXED (ReadWrite, 0x00134000, 0x4000, )
+    // GPU 2D (GC320)
+    MEMORY32FIXED (ReadWrite, 0x00134000, 0x4000, )
 
-      // IPU Base
-      MEMORY32FIXED (ReadWrite, 0x02600000, 0x400000, )
+    // IPU Base
+    MEMORY32FIXED (ReadWrite, 0x02600000, 0x400000, )
 
-      // HDMI PHY
-      MEMORY32FIXED (ReadWrite, 0x00120000, 0x9000, )
+    // HDMI PHY
+    MEMORY32FIXED (ReadWrite, 0x00120000, 0x9000, )
 
-      // GC2000
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 41 }
+    // GC2000
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 41 }
 
-      // GC320
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 42 }
+    // GC320
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 42 }
 
-      // IPU1 sync interrupt request
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 38 }
-    })
-    Return (RBUF)
-  }
+    // IPU1 sync interrupt request
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 38 }
+  })
 }

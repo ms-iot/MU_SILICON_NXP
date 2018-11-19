@@ -18,7 +18,6 @@
 #include <Library/SerialPortLib.h>
 #include <iMXUart.h>
 
-
 /**
   Initialize the serial device hardware.
 
@@ -37,12 +36,11 @@ SerialPortInitialize (
   )
 {
   MX6UART_REGISTERS   *UartBase;
-  UINT32              Ucr1;
+  UINT32              Data;
 
   UartBase = (MX6UART_REGISTERS*)FixedPcdGet32 (PcdSerialRegisterBase);
-
-  Ucr1 = MmioRead32 ((UINTN)&UartBase->Ucr1);
-  if ((Ucr1 & MX6UART_UCR1_UARTEN) == 0) {
+  Data = MmioRead32 ((UINTN)&UartBase->Ucr1);
+  if ((Data & MX6UART_UCR1_UARTEN) == 0) {
     // UART should have been initialized by previous boot stage
     return RETURN_DEVICE_ERROR;
   }
@@ -116,17 +114,17 @@ SerialPortRead (
 {
   MX6UART_REGISTERS   *UartBase;
   UINTN               BytesRead;
-  UINT32              Rxd;
+  UINT32              Data;
 
   UartBase = (MX6UART_REGISTERS*)FixedPcdGet32 (PcdSerialRegisterBase);
   BytesRead = 0;
   while (BytesRead < NumberOfBytes) {
-    Rxd = MmioRead32 ((UINTN)&UartBase->Rxd);
-    if ((Rxd & MX6UART_RXD_CHARRDY) == 0) {
+    Data = MmioRead32 ((UINTN)&UartBase->Rxd);
+    if ((Data & MX6UART_RXD_CHARRDY) == 0) {
       break;
     }
 
-    Buffer[BytesRead] = (UINT8) (Rxd & MX6UART_RXD_RX_DATA_MASK);
+    Buffer[BytesRead] = (UINT8) (Data & MX6UART_RXD_RX_DATA_MASK);
     BytesRead++;
   }
 
@@ -153,11 +151,12 @@ SerialPortPoll (
   )
 {
   MX6UART_REGISTERS *UartBase;
-  UINT32 Usr2;
+  UINT32 Data;
 
   UartBase = (MX6UART_REGISTERS*)FixedPcdGet32 (PcdSerialRegisterBase);
-  Usr2 = MmioRead32 ((UINTN)&UartBase->Usr2);
-  return (Usr2 & MX6UART_USR2_RDR) != 0;
+  Data = MmioRead32 ((UINTN)&UartBase->Usr2);
+
+  return (Data & MX6UART_USR2_RDR) != 0;
 }
 
 /**

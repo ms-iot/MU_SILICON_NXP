@@ -33,28 +33,7 @@
   DEFINE CONFIG_USB = FALSE
 !endif
 
-!include Silicon/NXP/iMX6Pkg/iMX6ConfigDsc.inc
-
-################################################################################
-#
-# [BuildOptions] Section
-#
-################################################################################
-[BuildOptions]
-  GCC:*_*_*_CC_FLAGS = -D$(BOARD_NAME) -DCPU_$(IMX_FAMILY) -DSOCTYPE_$(IMX_CHIP_TYPE) -Wno-unused-local-typedefs
-  GCC:*_*_*_OBJCOPY_PATH = noop
-  GCC:*_*_*_SYMRENAME_PATH = noop
-  *_*_*_ASL_PATH == asl.exe
-  *_*_*_ASL_FLAGS == /MsftInternal
-  *_*_*_ASL_OUTFLAGS == /Fo=
-
-# CPU_* compiler flag is used to select constants for iMX6.h
-
-[BuildOptions.common.EDKII.DXE_CORE,BuildOptions.common.EDKII.DXE_DRIVER,BuildOptions.common.EDKII.UEFI_DRIVER,BuildOptions.common.EDKII.UEFI_APPLICATION]
-  GCC:*_*_*_DLINK_FLAGS = -z common-page-size=0x1000
-
-[BuildOptions.common.EDKII.DXE_RUNTIME_DRIVER]
-  GCC:*_*_ARM_DLINK_FLAGS = -z common-page-size=0x1000
+!include iMX6Pkg/iMX6ConfigDsc.inc
 
 ################################################################################
 #
@@ -89,10 +68,10 @@
   CacheMaintenanceLib|ArmPkg/Library/ArmCacheMaintenanceLib/ArmCacheMaintenanceLib.inf
   ArmDisassemblerLib|ArmPkg/Library/ArmDisassemblerLib/ArmDisassemblerLib.inf
   UefiDecompressLib|MdePkg/Library/BaseUefiDecompressLib/BaseUefiDecompressLib.inf
-  RealTimeClockLib|Silicon/NXP/iMXPlatformPkg/Library/VirtualRealTimeClockLib/VirtualRealTimeClockLib.inf
+  RealTimeClockLib|iMXPlatformPkg/Library/VirtualRealTimeClockLib/VirtualRealTimeClockLib.inf
   DefaultExceptionHandlerLib|ArmPkg/Library/DefaultExceptionHandlerLib/DefaultExceptionHandlerLib.inf
   CpuExceptionHandlerLib|ArmPkg/Library/ArmExceptionLib/ArmExceptionLib.inf
-  TimerLib|Silicon/NXP/iMX6Pkg/Library/TimerLib/TimerLib.inf
+  TimerLib|iMX6Pkg/Library/TimerLib/TimerLib.inf
 
   #
   # Memory
@@ -167,7 +146,7 @@
   # Serial, Console and Debugging
   #
   DebugAgentLib|MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull.inf
-  SerialPortLib|Silicon/NXP/iMXPlatformPkg/Library/UartSerialPortLib/UartSerialPortLib.inf
+  SerialPortLib|iMXPlatformPkg/Library/UartSerialPortLib/UartSerialPortLib.inf
   PrintLib|MdePkg/Library/BasePrintLib/BasePrintLib.inf
 
   # Enable debug prints in both release and debug builds
@@ -177,7 +156,7 @@
   # The Standard IO window in the debugger will show load and unload events for symbols.
   #
 !if $(CONFIG_DUMP_SYMBOL_INFO) == TRUE
-  PeCoffExtraActionLib|Platform/Microsoft/Library/LauterbachPeCoffExtraActionLib/LauterbachPeCoffExtraActionLib.inf
+  PeCoffExtraActionLib|Microsoft/Library/LauterbachPeCoffExtraActionLib/LauterbachPeCoffExtraActionLib.inf
 !else
   PeCoffExtraActionLib|MdePkg/Library/BasePeCoffExtraActionLibNull/BasePeCoffExtraActionLibNull.inf
 !endif
@@ -185,7 +164,7 @@
   #
   # Display
   #
-  iMXDisplayLib|Silicon/NXP/iMXPlatformPkg/Library/iMXDisplayLib/iMXDisplayLib.inf
+  iMXDisplayLib|iMXPlatformPkg/Library/iMXDisplayLib/iMXDisplayLib.inf
 
   #
   # Security
@@ -197,13 +176,14 @@
   #
   # iMX6 Specifics
   #
-  iMXIoMuxLib|Silicon/NXP/iMX6Pkg/Library/iMX6IoMuxLib/iMX6IoMuxLib.inf
+  iMXIoMuxLib|iMX6Pkg/Library/iMX6IoMuxLib/iMX6IoMuxLib.inf
+  iMX6AudioLib|iMX6Pkg/Library/iMX6AudioLib/iMX6AudioLib.inf
 !if $(IMX_FAMILY) == IMX6SX
-  iMX6ClkPwrLib|Silicon/NXP/iMX6Pkg/Library/iMX6SxClkPwrLib/iMX6SxClkPwrLib.inf
+  iMX6ClkPwrLib|iMX6Pkg/Library/iMX6SxClkPwrLib/iMX6SxClkPwrLib.inf
 !else
-  iMX6ClkPwrLib|Silicon/NXP/iMX6Pkg/Library/iMX6ClkPwrLib/iMX6ClkPwrLib.inf
+  iMX6ClkPwrLib|iMX6Pkg/Library/iMX6ClkPwrLib/iMX6ClkPwrLib.inf
 !endif
-  iMX6UsbPhyLib|Silicon/NXP/iMX6Pkg/Library/iMX6UsbPhyLib/iMX6UsbPhyLib.inf
+  iMX6UsbPhyLib|iMX6Pkg/Library/iMX6UsbPhyLib/iMX6UsbPhyLib.inf
 
 [LibraryClasses.ARM]
   #
@@ -259,9 +239,9 @@
   IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
-  OpteeClientApiLib|Platform/Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
+  OpteeClientApiLib|Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
   HashLib|SecurityPkg/Library/HashLibBaseCryptoRouter/HashLibBaseCryptoRouterDxe.inf
-  Tpm2DeviceLibOptee|Platform/Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
+  Tpm2DeviceLibOptee|Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
   Tpm2CommandLib|SecurityPkg/Library/Tpm2CommandLib/Tpm2CommandLib.inf
 !endif
 
@@ -279,7 +259,7 @@
 !if $(CONFIG_OPTEE) == TRUE
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
-  OpteeClientApiLib|Platform/Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
+  OpteeClientApiLib|Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
 !endif
 
 [LibraryClasses.common.UEFI_DRIVER]
@@ -299,7 +279,7 @@
   PerformanceLib|MdeModulePkg/Library/DxePerformanceLib/DxePerformanceLib.inf
 
 !if $(CONFIG_OPTEE) == TRUE
-  OpteeClientApiLib|Platform/Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
+  OpteeClientApiLib|Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
 !if $(CONFIG_MEASURED_BOOT) == TRUE
   TpmMeasurementLib|SecurityPkg/Library/DxeTpmMeasurementLib/DxeTpmMeasurementLib.inf
 !endif
@@ -834,7 +814,7 @@
       NULL|SecurityPkg/Library/DxeImageVerificationLib/DxeImageVerificationLib.inf
       NULL|SecurityPkg/Library/DxeTpm2MeasureBootLib/DxeTpm2MeasureBootLib.inf
   }
-  Silicon/NXP/iMX6Pkg/Drivers/TimerDxe/TimerDxe.inf
+  iMX6Pkg/Drivers/TimerDxe/TimerDxe.inf
   MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
   MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
   ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
@@ -854,15 +834,15 @@
   MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
   MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
   FatPkg/EnhancedFatDxe/Fat.inf
-  Platform/Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf
-  Silicon/NXP/iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
+  Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf
+  iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
 
   #
   # USB Stack
   #
 !if $(CONFIG_USB) == TRUE
-  Silicon/NXP/iMX6Pkg/Drivers/PciEmulation/PciEmulation.inf
-  Silicon/NXP/iMX6Pkg/Drivers/EhciDxe/EhciDxeiMX6.inf
+  iMX6Pkg/Drivers/PciEmulation/PciEmulation.inf
+  iMX6Pkg/Drivers/EhciDxe/EhciDxeiMX6.inf
   MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
   MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
   MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
@@ -871,7 +851,7 @@
 !endif
 
   # PCIe support
-  Silicon/NXP/iMX6Pkg/Drivers/PciExpress/iMX6PciExpress.inf
+  iMX6Pkg/Drivers/PciExpress/iMX6PciExpress.inf
 
   #
   # Generic Bds (Not Intel's)
@@ -911,8 +891,6 @@
       gEfiMdePkgTokenSpaceGuid.PcdUefiLibMaxPrintBufferSize|8000
   }
 
-!if $(CONFIG_SECURE_UEFI) == TRUE
-
 !if $(CONFIG_MEASURED_BOOT) == TRUE
   #
   # FTPM
@@ -921,7 +899,7 @@
     <LibraryClasses>
       NULL|SecurityPkg/Library/HashInstanceLibSha1/HashInstanceLibSha1.inf
       NULL|SecurityPkg/Library/HashInstanceLibSha256/HashInstanceLibSha256.inf
-      Tpm2DeviceLib|Platform/Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
+      Tpm2DeviceLib|Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
 
     <PcdsFixedAtBuild>
       !if $(CONFIG_OPTEE_PROFILE) == TRUE
@@ -932,29 +910,15 @@
   }
 !endif
 
-!if $(CONFIG_SECURE_BOOT_AUTO_CONFIG) == TRUE
-  Platform/Microsoft/Drivers/SecureBootAutoConfigDxe/SecureBootAutoConfigDxe.inf {
-    <PcdsFixedAtBuild>
-      !if $(CONFIG_OPTEE_PROFILE) == TRUE
-        gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|1
-      !else
-        gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0
-      !endif
-   }
-!endif
-
-!endif
-
 MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
 
   # Applications
   MdeModulePkg/Application/HelloWorld/HelloWorld.inf
-  Silicon/NXP/iMX6Pkg/Application/ImxClkPwr/ImxClkPwr.inf
+  iMX6Pkg/Application/ImxClkPwr/ImxClkPwr.inf
+  #Microsoft/Application/StorageTest/StorageTest.inf
 
-!if $(CONFIG_SECURE_UEFI) == TRUE
-  Platform/Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf
+  Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf
   #SecurityPkg/Application/VariableAuthTestDxe/VariableAuthTestDxe.inf
-!endif
 
 #
 # Boilerplate for compiling UEFI applications and UEFI drivers with the

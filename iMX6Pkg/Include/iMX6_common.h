@@ -1345,6 +1345,75 @@ typedef struct {
   UINT32 USB_ANALOG_DIGPROG;                // 0xC0 Chip Silicon Version
 } IMX_USBANA_REGISTERS;
 
+// Audmux memory map structures
+#define AUDMUX_BASE                   0x021d8000
+#define AUDMUX_ASYNCHRONOUS_MODE      0
+#define AUDMUX_SYNCHRONOUS_MODE       1
+#define AUDMUX_INPUT                  0
+#define AUDMUX_OUTPUT                 1
+#define AUDMUX_NORMAL_MODE            0
+#define AUDMUX_INTERNAL_NETWORK_MODE  1
+#define AUDMUX_TRSE_NOSWITCH          0
+#define AUDMUX_TRSE_SWITCH            1
+
+// Port numbers are 0-based
+typedef enum
+{
+  AUDMUX_PORT1,
+  AUDMUX_PORT2,
+  AUDMUX_PORT3,
+  AUDMUX_PORT4,
+  AUDMUX_PORT5,
+  AUDMUX_PORT6,
+  AUDMUX_PORT7,
+  AUDMUX_PORT_MAX
+} AUDMUX_PORT_NUMBERS;
+
+typedef union {
+  UINT32 AsUint32;
+  struct {
+    UINT32 reserved : 11;   // 0-10
+    UINT32 SYN : 1;         // 11
+    UINT32 RCSEL : 4;       // 12-15
+    UINT32 RCLKDIR : 1;     // 16
+    UINT32 RFSEL : 4;       // 17-20
+    UINT32 RFS_DIR : 1;     // 21
+    UINT32 TCSEL : 4;       // 22-25
+    UINT32 TCLKDIR : 1;     // 26
+    UINT32 TFSEL : 4;       // 27-30
+    UINT32 TFS_DIR : 1;     // 31
+  };
+} AUDMUX_PTCR_REG;
+
+typedef union {
+  UINT32 AsUint32;
+  struct {
+    UINT32 INMMASK : 8;     // 0-7
+    UINT32 MODE : 1;        // 8
+    UINT32 reserved1 : 3;   // 9-11
+    UINT32 TXRXEN : 1;      // 12
+    UINT32 RXDSEL : 3;      // 13-15
+    UINT32 reserved2 : 16;  // 16-31
+  };
+} AUDMUX_PDCR_REG;
+
+typedef struct {
+  UINT32 Audmux_Ptcr1;
+  UINT32 Audmux_Pdcr1;
+  UINT32 Audmux_Ptcr2;
+  UINT32 Audmux_Pdcr2;
+  UINT32 Audmux_Ptcr3;
+  UINT32 Audmux_Pdcr3;
+  UINT32 Audmux_Ptcr4;
+  UINT32 Audmux_Pdcr4;
+  UINT32 Audmux_Ptcr5;
+  UINT32 Audmux_Pdcr5;
+  UINT32 Audmux_Ptcr6;
+  UINT32 Audmux_Pdcr6;
+  UINT32 Audmux_Ptcr7;
+  UINT32 Audmux_Pdcr7;
+} AUDMUX_REGISTERS;
+
 #pragma pack(pop)
 
 #endif // __IMX6_COMMON_H__

@@ -34,7 +34,7 @@ ImxPadConfig (
 
     UINTN baseAddress;
 
-    if(_IMX_PAD_MUX_OFFSET(Pad) <= _IMX_PAD_MUX_OFFSET(IMX_PAD_GPIO1_IO07)) {
+    if(_IMX_PAD_CTL_OFFSET(Pad) < _IMX_PAD_CTL_OFFSET(IMX_PAD_GPIO1_IO08)) {
         baseAddress = IOMUXC_LPSR_SW_MUX_PAD_BASE_ADDRESS;
     } else {
         baseAddress = IOMUXC_SW_MUX_PAD_BASE_ADDRESS;
@@ -68,7 +68,7 @@ ImxPadDumpConfig (
     IMX_IOMUXC_MUX_CTL muxCtl;
     UINTN baseAddress;
 
-    if(_IMX_PAD_MUX_OFFSET(Pad) <= _IMX_PAD_MUX_OFFSET(IMX_PAD_GPIO1_IO07)) {
+    if(_IMX_PAD_CTL_OFFSET(Pad) < _IMX_PAD_CTL_OFFSET(IMX_PAD_GPIO1_IO08)) {
         baseAddress = IOMUXC_LPSR_SW_MUX_PAD_BASE_ADDRESS;
     } else {
         baseAddress = IOMUXC_SW_MUX_PAD_BASE_ADDRESS;

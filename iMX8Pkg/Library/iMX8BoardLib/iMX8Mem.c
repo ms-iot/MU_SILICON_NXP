@@ -49,6 +49,14 @@ ARM_MEMORY_REGION_DESCRIPTOR iMX8MemoryDescriptor[] =
     MEMORY_ATTRIBUTES_PCDCACHEENABLE,
   },
 #endif
+#ifdef CONFIG_OPTEE
+  {
+    FixedPcdGet64 (PcdTrustZoneSharedMemoryBase),
+    FixedPcdGet64 (PcdTrustZoneSharedMemoryBase),
+    FixedPcdGet64 (PcdTrustZoneSharedMemorySize),
+	MEMORY_ATTRIBUTES_PCDCACHEENABLE,
+  },
+#endif
   {
     ARM_PERIPHERALS_REGISTERS_PHYSICAL,
     ARM_PERIPHERALS_REGISTERS_PHYSICAL,
@@ -164,27 +172,28 @@ ArmPlatformGetVirtualMemoryMap (
     FixedPcdGet64 (PcdArmLcdDdrFrameBufferSize));
 #endif
 
-#if 0
+#ifdef CONFIG_OPTEE
   // Reserve OP-TEE private memory
   BuildResourceDescriptorHob (
-                              EFI_RESOURCE_MEMORY_RESERVED,
-                              EFI_RESOURCE_ATTRIBUTE_PRESENT |
-                              EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
-                              EFI_RESOURCE_ATTRIBUTE_TESTED,
-                              FixedPcdGet32 (PcdTrustZonePrivateMemoryBase),
-                              FixedPcdGet32 (PcdTrustZonePrivateMemorySize)
-                              );
+    EFI_RESOURCE_MEMORY_RESERVED,
+    EFI_RESOURCE_ATTRIBUTE_PRESENT |
+    EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
+    EFI_RESOURCE_ATTRIBUTE_TESTED,
+    FixedPcdGet32 (PcdTrustZonePrivateMemoryBase),
+    FixedPcdGet32 (PcdTrustZonePrivateMemorySize)
+    );
+#endif
 
   // Reserve TPM2 Control Area
   BuildResourceDescriptorHob (
-                              EFI_RESOURCE_MEMORY_RESERVED,
-                              EFI_RESOURCE_ATTRIBUTE_PRESENT |
-                              EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
-                              EFI_RESOURCE_ATTRIBUTE_TESTED,
-                              FixedPcdGet32 (PcdTpm2AcpiBufferBase),
-                              FixedPcdGet32 (PcdTpm2AcpiBufferSize)
-                              );
-#endif
+    EFI_RESOURCE_MEMORY_RESERVED,
+    EFI_RESOURCE_ATTRIBUTE_PRESENT |
+    EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
+    EFI_RESOURCE_ATTRIBUTE_TESTED,
+    FixedPcdGet32 (PcdTpm2AcpiBufferBase),
+    FixedPcdGet32 (PcdTpm2AcpiBufferSize)
+    );
+
   // Reserve Global Data area
   BuildResourceDescriptorHob (
     EFI_RESOURCE_MEMORY_RESERVED,
@@ -196,4 +205,3 @@ ArmPlatformGetVirtualMemoryMap (
     );
   *VirtualMemoryMap = virtualMemoryTable;
 }
-

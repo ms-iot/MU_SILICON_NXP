@@ -56,6 +56,7 @@ PLL_MPLL_CONFIG PllMpllGenericConfigSetting[] = {
   {  27000000, 4, 10, {{1, 2, 3, 1, 0, 0, 1, 0,}}, {{4, 3, 4, 4, 0,}}, {{2, 0, 0,}}, },
   {  27000000, 4, 12, {{2, 2, 3, 1, 0, 0, 2, 0,}}, {{4, 3, 3, 3, 0,}}, {{2, 0, 0,}}, },
   {  27000000, 4, 16, {{3, 2, 2, 0, 0, 0, 3, 0,}}, {{4, 3, 4, 4, 0,}}, {{3, 1, 0,}}, },
+  {  32000000, 1,  8, {{0, 0, 3, 3, 0, 0, 0, 0,}}, {{4, 3, 4, 4, 0,}}, {{1, 1, 0,}}, },
   {  36000000, 1,  8, {{0, 0, 3, 3, 0, 0, 0, 0,}}, {{4, 3, 4, 4, 0,}}, {{0, 0, 0,}}, },
   {  36000000, 1, 16, {{3, 0, 2, 2, 0, 0, 3, 0,}}, {{4, 3, 4, 4, 0,}}, {{1, 1, 0,}}, },
   {  50350000, 1,  8, {{0, 0, 2, 2, 0, 0, 0, 0,}}, {{4, 3, 4, 4, 0,}}, {{1, 1, 0,}}, },
@@ -694,7 +695,6 @@ HdmiDdcRead (
   );
 
   for (AddrCount = 0; AddrCount < ReadSize; ++AddrCount) {
-    I2cRetryCount = 1000;
 
     MmioWrite8 (
       (UINT32)HdmiDisplayContextPtr->MmioBasePtr + HDMI_I2CM_ADDRESS,
@@ -714,7 +714,7 @@ HdmiDdcRead (
                       (UINT32)HdmiDisplayContextPtr->MmioBasePtr +
                       HDMI_IH_I2CM_STAT0
                     );
-    for (I2cRetryCount = 1000; I2cRetryCount > 0; I2cRetryCount--) {
+    for (I2cRetryCount = 10; I2cRetryCount > 0; I2cRetryCount--) {
       I2cmIntStatus = MmioRead8 (
                         (UINT32)HdmiDisplayContextPtr->MmioBasePtr +
                         HDMI_IH_I2CM_STAT0
@@ -722,6 +722,7 @@ HdmiDdcRead (
       if (I2cmIntStatus != 0) {
         break;
       }
+      gBS->Stall (2000);
     }
 
     if (I2cRetryCount == 0) {

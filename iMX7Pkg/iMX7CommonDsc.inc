@@ -28,7 +28,7 @@
   BUILD_TARGETS                  = DEBUG|RELEASE
   SKUID_IDENTIFIER               = DEFAULT
 
-!include Silicon/NXP/iMX7Pkg/iMX7ConfigDsc.inc
+!include iMX7Pkg/iMX7ConfigDsc.inc
 
 ################################################################################
 #
@@ -37,11 +37,6 @@
 ################################################################################
 [BuildOptions]
   GCC:*_*_*_CC_FLAGS = -D$(BOARD_NAME) -DCPU_$(IMX_FAMILY) -Wno-unused-local-typedefs
-  GCC:*_*_*_OBJCOPY_PATH = noop
-  GCC:*_*_*_SYMRENAME_PATH = noop
-  *_*_*_ASL_PATH == asl.exe
-  *_*_*_ASL_FLAGS == /MsftInternal
-  *_*_*_ASL_OUTFLAGS == /Fo=
 
 # CPU_* compiler flag is used to select constants for iMX7.h
 
@@ -85,7 +80,7 @@
   CacheMaintenanceLib|ArmPkg/Library/ArmCacheMaintenanceLib/ArmCacheMaintenanceLib.inf
   ArmDisassemblerLib|ArmPkg/Library/ArmDisassemblerLib/ArmDisassemblerLib.inf
   UefiDecompressLib|MdePkg/Library/BaseUefiDecompressLib/BaseUefiDecompressLib.inf
-  RealTimeClockLib|Silicon/NXP/iMXPlatformPkg/Library/VirtualRealTimeClockLib/VirtualRealTimeClockLib.inf
+  RealTimeClockLib|iMXPlatformPkg/Library/VirtualRealTimeClockLib/VirtualRealTimeClockLib.inf
   DefaultExceptionHandlerLib|ArmPkg/Library/DefaultExceptionHandlerLib/DefaultExceptionHandlerLib.inf
   CpuExceptionHandlerLib|ArmPkg/Library/ArmExceptionLib/ArmExceptionLib.inf
   ArmGenericTimerCounterLib|ArmPkg/Library/ArmGenericTimerPhyCounterLib/ArmGenericTimerPhyCounterLib.inf
@@ -166,7 +161,7 @@
   # Serial, Console and Debugging
   #
   DebugAgentLib|MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull.inf
-  SerialPortLib|Silicon/NXP/iMXPlatformPkg/Library/UartSerialPortLib/UartSerialPortLib.inf
+  SerialPortLib|iMXPlatformPkg/Library/UartSerialPortLib/UartSerialPortLib.inf
   PrintLib|MdePkg/Library/BasePrintLib/BasePrintLib.inf
 
   # Enable debug prints in both release and debug builds
@@ -176,7 +171,7 @@
   # The Standard IO window in the debugger will show load and unload events for symbols.
   #
 !if $(CONFIG_DUMP_SYMBOL_INFO) == TRUE
-  PeCoffExtraActionLib|Platform/Microsoft/Library/LauterbachPeCoffExtraActionLib/LauterbachPeCoffExtraActionLib.inf
+  PeCoffExtraActionLib|Microsoft/Library/LauterbachPeCoffExtraActionLib/LauterbachPeCoffExtraActionLib.inf
 !else
   PeCoffExtraActionLib|MdePkg/Library/BasePeCoffExtraActionLibNull/BasePeCoffExtraActionLibNull.inf
 !endif
@@ -184,7 +179,7 @@
   #
   # Display
   #
-  iMXDisplayLib|Silicon/NXP/iMXPlatformPkg/Library/iMXDisplayLib/iMXDisplayLib.inf
+  iMXDisplayLib|iMXPlatformPkg/Library/iMXDisplayLib/iMXDisplayLib.inf
 
   #
   # Security
@@ -195,16 +190,16 @@
 
   # iMX platform
   #
-  iMXI2cLib|Silicon/NXP/iMXPlatformPkg/Library/iMXI2cLib/iMXI2cLib.inf
+  iMXI2cLib|iMXPlatformPkg/Library/iMXI2cLib/iMXI2cLib.inf
 
   #
   # iMX7 Specifics
   #
-  iMXIoMuxLib|Silicon/NXP/iMX7Pkg/Library/iMX7IoMuxLib/iMX7IoMuxLib.inf
-  iMX7ClkPwrLib|Silicon/NXP/iMX7Pkg/Library/iMX7ClkPwrLib/iMX7ClkPwrLib.inf
+  iMXIoMuxLib|iMX7Pkg/Library/iMX7IoMuxLib/iMX7IoMuxLib.inf
+  iMX7ClkPwrLib|iMX7Pkg/Library/iMX7ClkPwrLib/iMX7ClkPwrLib.inf
 
 !if $(CONFIG_USB) == TRUE
-  iMX7UsbPhyLib|Silicon/NXP/iMX7Pkg/Library/iMX7UsbPhyLib/iMX7UsbPhyLib.inf
+  iMX7UsbPhyLib|iMX7Pkg/Library/iMX7UsbPhyLib/iMX7UsbPhyLib.inf
 !endif
 
 [LibraryClasses.ARM]
@@ -261,9 +256,9 @@
   IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
-  OpteeClientApiLib|Platform/Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
+  OpteeClientApiLib|Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
   HashLib|SecurityPkg/Library/HashLibBaseCryptoRouter/HashLibBaseCryptoRouterDxe.inf
-  Tpm2DeviceLibOptee|Platform/Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
+  Tpm2DeviceLibOptee|Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
   Tpm2CommandLib|SecurityPkg/Library/Tpm2CommandLib/Tpm2CommandLib.inf
 !endif
 
@@ -281,7 +276,7 @@
   ArmSoftFloatLib|ArmPkg/Library/ArmSoftFloatLib/ArmSoftFloatLib.inf
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
-  OpteeClientApiLib|Platform/Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
+  OpteeClientApiLib|Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
 !endif
 
 [LibraryClasses.common.UEFI_DRIVER]
@@ -301,7 +296,7 @@
 !if $(CONFIG_OPTEE) == TRUE
   PerformanceLib|MdeModulePkg/Library/DxePerformanceLib/DxePerformanceLib.inf
   DxeServicesLib|MdePkg/Library/DxeServicesLib/DxeServicesLib.inf
-  OpteeClientApiLib|Platform/Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
+  OpteeClientApiLib|Microsoft/OpteeClientPkg/Library/OpteeClientApiLib/OpteeClientApiLib.inf
 !if $(CONFIG_MEASURED_BOOT) == TRUE
   TpmMeasurementLib|SecurityPkg/Library/DxeTpmMeasurementLib/DxeTpmMeasurementLib.inf
 !endif
@@ -739,13 +734,13 @@
   MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
   MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
   FatPkg/EnhancedFatDxe/Fat.inf
-  Platform/Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf
-  Silicon/NXP/iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
+  Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf
+  iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
 
   # USB
 !if $(CONFIG_USB) == TRUE
-  Silicon/NXP/iMX7Pkg/Drivers/PciEmulation/PciEmulation.inf
-  Silicon/NXP/iMX7Pkg/Drivers/EhciDxe/EhciDxeiMX7.inf
+  iMX7Pkg/Drivers/PciEmulation/PciEmulation.inf
+  iMX7Pkg/Drivers/EhciDxe/EhciDxeiMX7.inf
   iMdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
   MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
   MdeModulePkg/Bus/Usb/UsbMouseDxe/UsbMouseDxe.inf
@@ -754,14 +749,14 @@
 !endif
 
   # PCIe support (TODO)
-#  Silicon/NXP/iMX7Pkg/Drivers/PciExpress/iMX7PciExpress.inf
+#  iMX7Pkg/Drivers/PciExpress/iMX7PciExpress.inf
 
   # Display Support
 !if $(CONFIG_HEADLESS) == FALSE
   MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
   MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
   MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
-  Silicon/NXP/iMX7Pkg/Drivers/LcdifGop/LcdifGop.inf
+  iMX7Pkg/Drivers/LcdifGop/LcdifGop.inf
 !endif
 
   # ACPI Support
@@ -811,8 +806,6 @@
       gEfiMdePkgTokenSpaceGuid.PcdUefiLibMaxPrintBufferSize|8000
   }
 
-!if $(CONFIG_SECURE_UEFI) == TRUE
-
 !if $(CONFIG_MEASURED_BOOT) == TRUE
   #
   # FTPM
@@ -821,7 +814,7 @@
     <LibraryClasses>
       NULL|SecurityPkg/Library/HashInstanceLibSha1/HashInstanceLibSha1.inf
       NULL|SecurityPkg/Library/HashInstanceLibSha256/HashInstanceLibSha256.inf
-      Tpm2DeviceLib|Platform/Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
+      Tpm2DeviceLib|Microsoft/OpteeClientPkg/Library/Tpm2DeviceLibOptee/Tpm2DeviceLibOptee.inf
 
     <PcdsFixedAtBuild>
       !if $(CONFIG_OPTEE_PROFILE) == TRUE
@@ -832,34 +825,19 @@
   }
 !endif
 
-!if $(CONFIG_SECURE_BOOT_AUTO_CONFIG) == TRUE
-  Platform/Microsoft/Drivers/SecureBootAutoConfigDxe/SecureBootAutoConfigDxe.inf {
-    <PcdsFixedAtBuild>
-      !if $(CONFIG_OPTEE_PROFILE) == TRUE
-        gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|1
-      !else
-        gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0
-      !endif
-   }
-!endif
-
-!endif
-
 MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
 
 
   # Applications
   MdeModulePkg/Application/HelloWorld/HelloWorld.inf
-#  Silicon/NXP/iMX7Pkg/Application/ImxClkPwr/ImxClkPwr.inf
+  #Microsoft/Application/StorageTest/StorageTest.inf
+#  iMX7Pkg/Application/ImxClkPwr/ImxClkPwr.inf
 
-!if $(CONFIG_SECURE_UEFI) == TRUE
-  Platform/Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf
+  Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf
   #SecurityPkg/Application/VariableAuthTestDxe/VariableAuthTestDxe.inf
-!endif
 
 #
 # Boilerplate for compiling UEFI applications and UEFI drivers with the
 # standard library.
 #
 !include StdLib/StdLib.inc
-

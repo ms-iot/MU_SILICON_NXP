@@ -21,13 +21,10 @@ Device (SPI1)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      MEMORY32FIXED (ReadWrite, 0x02008000, 0x4000, )
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 63 }
-    })
-    Return (RBUF)
-  }
+  Name (_CRS, ResourceTemplate () {
+    MEMORY32FIXED (ReadWrite, 0x02008000, 0x4000, )
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 63 }
+  })
 }
 
 Device (SPI2)
@@ -39,13 +36,10 @@ Device (SPI2)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      MEMORY32FIXED (ReadWrite, 0x0200C000, 0x4000, )
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 64 }
-    })
-    Return (RBUF)
-  }
+  Name (_CRS, ResourceTemplate () {
+    MEMORY32FIXED (ReadWrite, 0x0200C000, 0x4000, )
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 64 }
+  })
 }
 
 Device (SPI3)
@@ -57,13 +51,10 @@ Device (SPI3)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      MEMORY32FIXED (ReadWrite, 0x02010000, 0x4000, )
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 65 }
-    })
-    Return (RBUF)
-  }
+  Name (_CRS, ResourceTemplate () {
+    MEMORY32FIXED (ReadWrite, 0x02010000, 0x4000, )
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 65 }
+  })
 }
 
 Device (SPI4)
@@ -75,13 +66,10 @@ Device (SPI4)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      MEMORY32FIXED (ReadWrite, 0x02014000, 0x4000, )
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 66 }
-    })
-    Return (RBUF)
-  }
+  Name (_CRS, ResourceTemplate () {
+    MEMORY32FIXED (ReadWrite, 0x02014000, 0x4000, )
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 66 }
+  })
 }
 
 Device (SPI5)
@@ -93,11 +81,8 @@ Device (SPI5)
     Return (0xf)
   }
 
-  Method (_CRS, 0x0, NotSerialized) {
-    Name (RBUF, ResourceTemplate () {
-      MEMORY32FIXED (ReadWrite, 0x02018000, 0x4000, )
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 67 }
-    })
-    Return (RBUF)
-  }
+  Name (_CRS, ResourceTemplate () {
+    MEMORY32FIXED (ReadWrite, 0x02018000, 0x4000, )
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 67 }
+  })
 }

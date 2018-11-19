@@ -28,12 +28,13 @@
 ################################################################################
 [Includes.common]
   Include                        # Root include for the package
-  Silicon/NXP/iMXPlatformPkg/Include      # Root include for the iMXPlatform package
+  iMXPlatformPkg/Include      # Root include for the iMXPlatform package
 
 [LibraryClasses]
-  iMXIoMuxLib|Silicon/NXP/iMX6Pkg/Include/iMXIoMux.h
-  iMX6ClkPwrLib|Silicon/NXP/iMX6Pkg/Include/iMX6ClkPwr.h
-  iMX6UsbPhyLib|Silicon/NXP/iMX6Pkg/Include/iMX6UsbPhy.h
+  iMXIoMuxLib|iMX6Pkg/Include/iMX6IoMux.h
+  iMX6AudioLib|iMX6Pkg/Include/iMX6Audio.h
+  iMX6ClkPwrLib|iMX6Pkg/Include/iMX6ClkPwr.h
+  iMX6UsbPhyLib|iMX6Pkg/Include/iMX6UsbPhy.h
 
 [Protocols.common]
   gEfiSdhcProtocolGuid = { 0x46055b0f, 0x992a, 0x4ad7, { 0x8f, 0x81, 0x14, 0x81, 0x86, 0xff, 0xdf, 0x72 } }

@@ -114,17 +114,17 @@ READ_LOCK_STATUS   = TRUE
   #
   INF MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf
   INF MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
-  INF FatBinPkg/EnhancedFatDxe/Fat.inf
+  INF FatPkg/EnhancedFatDxe/Fat.inf
   INF MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
-  INF Platform/Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf
-  INF Silicon/NXP/iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
+  INF Microsoft/Drivers/SdMmcDxe/SdMmcDxe.inf
+  INF iMXPlatformPkg/Drivers/SdhcDxe/SdhcDxe.inf
 
   #
   # USB
   #
 !if $(CONFIG_USB) == TRUE
-  INF Silicon/NXP/iMX7Pkg/Drivers/PciEmulation/PciEmulation.inf
-  INF Silicon/NXP/iMX7Pkg/Drivers/EhciDxe/EhciDxeiMX7.inf
+  INF iMX7Pkg/Drivers/PciEmulation/PciEmulation.inf
+  INF iMX7Pkg/Drivers/EhciDxe/EhciDxeiMX7.inf
   INF MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbMouseDxe/UsbMouseDxe.inf
@@ -135,7 +135,7 @@ READ_LOCK_STATUS   = TRUE
   #
   # PCIe (TODO)
   #
-#  INF Silicon/NXP/iMX7Pkg/Drivers/PciExpress/iMX7PciExpress.inf
+#  INF iMX7Pkg/Drivers/PciExpress/iMX7PciExpress.inf
 
   #
   # ACPI
@@ -148,7 +148,7 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
   INF MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
   INF MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
-  INF Silicon/NXP/iMX7Pkg/Drivers/LcdifGop/LcdifGop.inf
+  INF iMX7Pkg/Drivers/LcdifGop/LcdifGop.inf
 !endif
 
   #
@@ -172,8 +172,6 @@ READ_LOCK_STATUS   = TRUE
   #
   INF ShellPkg/Application/Shell/Shell.inf
 
-!if $(CONFIG_SECURE_UEFI) == TRUE
-
   #
   # Authenticated Variables and OPTEE TAs
   #
@@ -185,38 +183,16 @@ READ_LOCK_STATUS   = TRUE
   INF SecurityPkg/Tcg/Tcg2Dxe/Tcg2Dxe.inf
 !endif
 
-!if $(CONFIG_SECURE_BOOT_AUTO_CONFIG) == TRUE
-  INF Platform/Microsoft/Drivers/SecureBootAutoConfigDxe/SecureBootAutoConfigDxe.inf
-
-  #
-  # In the debug (pre-release) version of UEFI we include the Microsoft pre-release OS
-  # version of the secure boot configuration files.
-  #
-  FILE FREEFORM = 442FF1AA-7891-4A79-88E3-75EC4409B059 {
-    SECTION RAW = Platform/Microsoft/Binary/SecureBoot/Test/PK.bin
-  }
-
-  FILE FREEFORM = 33630B18-7705-468B-92BD-FEBE27799EDB {
-    SECTION RAW = Platform/Microsoft/Binary/SecureBoot/Test/KEK.bin
-  }
-
-  FILE FREEFORM = 27A9C9E7-4B7A-4C7E-A8F5-77DB38D7100A {
-    SECTION RAW = Platform/Microsoft/Binary/SecureBoot/Test/db.bin
-  }
-!endif
-
   # Hello World TA UUID in UEFI format: 8aaaf200-2450-11e4-abe2-0002a5d5c51b
   FILE FREEFORM = 8AAAF200-2450-11E4-ABE2-0002A5D5C51B {
-   SECTION RAW = Platform/Microsoft/OpteeClientPkg/Bin/HelloWorldTa/Arm/Test/8aaaf200-2450-11e4-abe2-0002a5d5c51b.ta
+   SECTION RAW = Microsoft/OpteeClientPkg/Bin/HelloWorldTa/Arm/Test/8aaaf200-2450-11e4-abe2-0002a5d5c51b.ta
   }
 
 !if $(CONFIG_MEASURED_BOOT) == TRUE
   # fTPM Service TA UUID in UEFI format: bc50d971-d4c9-42c4-82cb-343fb7f37896
   FILE FREEFORM = BC50D971-D4C9-42C4-82CB-343FB7F37896 {
-    SECTION RAW = Platform/Microsoft/OpteeClientPkg/Bin/fTpmTa/Arm/Test/bc50d971-d4c9-42c4-82cb-343fb7f37896.ta
+    SECTION RAW = Microsoft/OpteeClientPkg/Bin/fTpmTa/Arm/Test/bc50d971-d4c9-42c4-82cb-343fb7f37896.ta
   }
-!endif
-
 !endif
 
 INF MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
@@ -435,5 +411,3 @@ READ_LOCK_STATUS   = TRUE
     UI        STRING="$(MODULE_NAME)" Optional
     VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
   }
-
-

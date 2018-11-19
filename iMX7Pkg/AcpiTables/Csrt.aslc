@@ -28,7 +28,7 @@ Revision History:
 
 #include <Platform.h>
 
-#include "iMx7.h"
+#include "iMX7.h"
 
 #pragma pack(push, 1)
 
