@@ -4,7 +4,7 @@
 #%HEADER%
 /** @file
   
- Copyright (c) 2009 Apple, Inc.  All rights reserved.                                                
+ Copyright (c) 2009 Apple, Inc.  All rights reserved.
 
  This document is the property of Apple, Inc.
  It is considered confidential and proprietary.
@@ -24,33 +24,19 @@
   ENTRY_POINT                     = PciEmulationEntryPoint
 
 [Sources.common]
-  PciRootBridgeIo.c
   PciEmulation.c
 
 [Packages]
-  MdePkg/MdePkg.dec
-  MdeModulePkg/MdeModulePkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
-  ArmPkg/ArmPkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
   iMX6Pkg/iMX6Pkg.dec
 
 [LibraryClasses]
-  BaseLib
-  DxeServicesTableLib
-  UefiLib
-  UefiBootServicesTableLib
+  NonDiscoverableDeviceRegistrationLib
   UefiDriverEntryPoint
-  UefiRuntimeServicesTableLib
-  IoLib
-  DmaLib
 
 [Protocols]
-  gEfiPciRootBridgeIoProtocolGuid
-  gEfiDevicePathProtocolGuid
-  gEfiPciHostBridgeResourceAllocationProtocolGuid
-  gEfiCpuArchProtocolGuid
-  gEfiPciIoProtocolGuid
 
 [Pcd]
   giMX6TokenSpaceGuid.PcdEHCIBase
@@ -59,6 +45,4 @@
   giMX6TokenSpaceGuid.PcdUSBOTGBase
 
 [Depex]
-  gEfiMetronomeArchProtocolGuid AND 
-  gEfiCpuArchProtocolGuid
-  
+  TRUE

@@ -33,10 +33,9 @@
   DEFINE CONFIG_MPCORE = TRUE
 !endif
 
-  # Disable the USB stack by default. It currently has issues and need to be
-  # taken care of
+  # Enable USB by default
 !ifndef CONFIG_USB
-  DEFINE CONFIG_USB = FALSE
+  DEFINE CONFIG_USB = TRUE
 !endif
 
   # Disable the PCIexpress stack by default. Enable on demand.
