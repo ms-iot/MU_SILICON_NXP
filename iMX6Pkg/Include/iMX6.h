@@ -29,6 +29,8 @@
 #include "iMX6_SDL.h"
 #elif defined(CPU_IMX6SX)
 #include "iMX6_SX.h"
+#elif defined(CPU_IMX6ULL)
+#include "iMX6_ULL.h"
 #else
 #error iMX6 CPU Type Not Defined! (Preprocessor Flag)
 #endif

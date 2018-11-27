@@ -31,6 +31,8 @@
 #include "iMX6IoMux_SX.h"
 #elif defined(CPU_IMX6SDL)
 #include "iMX6IoMux_SDL.h"
+#elif defined(CPU_IMX6ULL)
+#include "iMX6IoMux_ULL.h"
 #else
 #error CPU Preprocessor Flag Not Defined
 #endif

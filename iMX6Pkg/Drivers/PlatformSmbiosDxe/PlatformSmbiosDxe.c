@@ -1121,6 +1121,9 @@ ProcessorInfoUpdateSmbiosType4 (
 #elif defined(CPU_IMX6SDL) || defined(CPU_IMX6SX)
   mProcessorInfoType4.MaxSpeed = 1000;
   mProcessorInfoType4.CurrentSpeed = 1000;
+#elif defined(CPU_IMX6ULL)
+  mProcessorInfoType4.MaxSpeed = 528;
+  mProcessorInfoType4.CurrentSpeed = 528;
 #else
   #error iMX6 CPU Type not defined
 #endif
@@ -1378,6 +1381,9 @@ CacheInfoUpdateSmbiosType7L2U (
 #elif defined(CPU_IMX6SX)
   mCacheInfoType7L2U.MaximumCacheSize = 0x100; // 256KB
   mCacheInfoType7L2U.InstalledSize = 0x100; // 256KB
+#elif defined(CPU_IMX6ULL)
+  mCacheInfoType7L2U.MaximumCacheSize = 0x80; // 128KB
+  mCacheInfoType7L2U.InstalledSize = 0x80; // 128KB
 #else
   #error iMX6 CPU Type not defined
 #endif
@@ -1521,7 +1527,7 @@ MemoryDeviceInfoUpdateSmbiosType17 (
 #if defined(CPU_IMX6DQ) || defined(CPU_IMX6DQP) || defined(SOCTYPE_DUALLITE)
   mMemoryDeviceInfoType17.TotalWidth = 64;
   mMemoryDeviceInfoType17.DataWidth = 64;
-#elif defined(CPU_IMX6SX) || defined(SOCTYPE_SOLO)
+#elif defined(CPU_IMX6SX) || defined(SOCTYPE_SOLO) || defined(CPU_IMX6ULL)
   mMemoryDeviceInfoType17.TotalWidth = 32;
   mMemoryDeviceInfoType17.DataWidth = 32;
 #else
@@ -1561,7 +1567,7 @@ MemoryDeviceInfoUpdateSmbiosType17 (
   // 15h - Speed
 #if defined(CPU_IMX6DQ) || defined(CPU_IMX6DQP)
   mMemoryDeviceInfoType17.Speed = 533; // 533 MHz DDR3
-#elif defined(CPU_IMX6SDL) || defined(CPU_IMX6SX)
+#elif defined(CPU_IMX6SDL) || defined(CPU_IMX6SX) || defined(CPU_IMX6ULL)
   mMemoryDeviceInfoType17.Speed = 400; // 400 MHz DDR3
 #else
   #error iMX6 CPU Type not defined

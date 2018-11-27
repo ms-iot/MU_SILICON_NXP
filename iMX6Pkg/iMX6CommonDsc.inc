@@ -304,6 +304,11 @@
   #
   # ARM General Interrupt Controller settings
   #
+!if $(IMX_FAMILY) == IMX6ULL
+  gArmTokenSpaceGuid.PcdGicDistributorBase|0x00A01000
+  gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase|0x00A02000
+  gArmTokenSpaceGuid.PcdArmPrimaryCore|0x000
+!else
   gArmTokenSpaceGuid.PcdGicDistributorBase|0x00A01000
   gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase|0x00A00100
   gArmTokenSpaceGuid.PcdArmPrimaryCore|0x000
@@ -312,6 +317,7 @@
   # ARM L2x0 PCDs
   #
   #gArmTokenSpaceGuid.PcdL2x0ControllerBase|0x00A02000
+!endif
 
   #
   # GPT Timer Frequency
@@ -327,8 +333,21 @@
 [PcdsFixedAtBuild.common]
   # Size of the region used by UEFI in permanent memory (Reserved 16MB)
   gArmPlatformTokenSpaceGuid.PcdSystemMemoryUefiRegionSize|0x01000000
-
-!if $(IMX_FAMILY) == IMX6SX
+!if $(IMX_FAMILY) == IMX6ULL
+  #
+  # Refer to the detailed memory map at OpteeClientPkg PCDs section below
+  #
+  giMX6TokenSpaceGuid.PcdMemoryStartAddress|0x80000000
+  gArmTokenSpaceGuid.PcdSystemMemoryBase|0x82A00000
+  !if $(DRAM_SIZE) == DRAM_512MB
+  #
+  # Board DDR starts at 0x80000000 and ends 0x9FFF0000 (512MB)
+  # SystemMemorySize is 0x9DFF0000 - PcdSystemMemoryBase
+  #
+  giMX6TokenSpaceGuid.PcdMemoryEndAddress|0x9FFF0000
+  gArmTokenSpaceGuid.PcdSystemMemorySize|0x1B5F0000
+  !endif
+!elseif $(IMX_FAMILY) == IMX6SX
   #
   # Refer to the detailed memory map at OpteeClientPkg PCDs section below
   #
@@ -550,7 +569,81 @@
 #
 ########################
 [PcdsFixedAtBuild.common]
-!if $(IMX_FAMILY) == IMX6SX
+!if $(IMX_FAMILY) == IMX6ULL
+  #
+  # Reserved for TPM2 ACPI
+  # 0x80814000 - 0x80816FFF
+  #
+  gOpteeClientPkgTokenSpaceGuid.PcdTpm2AcpiBufferBase|0x80814000
+  gOpteeClientPkgTokenSpaceGuid.PcdTpm2AcpiBufferSize|0x3000
+
+  #
+  # iMX Plaform Memory Layout
+  #
+  # +-------------------+===> (0x80000000) PcdFrameBufferBase (DDR Start Address)
+  # |Frame Buffer       |  ^
+  # |                   |  |  (0x00800000) PcdFrameBufferSize 8MB
+  # |                   |  v
+  # +-------------------+===
+  # |                   |     Gap
+  # +-------------------|===> (0x80814000) PcdTpm2AcpiBufferBase
+  # |TPM2 Control Area  |  ^
+  # |                   |  |  (0x3000) 12KB
+  # |                   |  v
+  # +-------------------+===> (0x80817000) PcdGlobalDataBaseAddress
+  # | Global Data       |  ^
+  # |                   |  |  (0x1000) PcdGlobalDataSize 4KB
+  # |                   |  v
+  # +-------------------+===
+  # | Gap               |
+  # +-------------------+===> (0x80820000) UEFI Load Address
+  # | UEFI              |  ^
+  # |                   |  |  (0x1D0000) 1920KB
+  # |                   |  v
+  # +-------------------+===> (0x80A00000) PcdTrustZonePrivateMemoryBase (OPTEE image base address)
+  # | TZ Private Memory |  ^
+  # | (OPTEE)           |  |  (0x1E00000) 30MB
+  # |                   |  v
+  # +-------------------+===> (0x82800000) PcdTrustZoneSharedMemoryBase (includes mobj bookkeeping page)
+  # | TZ Shared Memory  |  ^
+  # |                   |  |  (0x200000) 2MB
+  # |                   |  v
+  # +-------------------+===> (0x82A00000) PcdSystemMemoryBase
+  # | Operating System  |  ^
+  # | Memory            |  |
+  # |                   |  |  (0x1B5F0000) 437MB for 512MB DRAM
+  # |                   |  |
+  # |                   |  v
+  # +------------------ +===> 0x8DFFFFFF/0x9DFFFFFF
+  #
+  # Reserved for Optee private memory (31M)
+  # 0x80A00000 - 0x827FFFFF
+  #
+  # TrustZone private memory (?Mb OPTEE + ?Mb PSCI)
+  # 0x8E000000 - 8FFFFFFF  (256MB)          0x9E000000 - 9FFFFFFF    (512MB)
+  # This memory is managed privately by the OpTEE OS.
+  #    CFG_DDR_TEETZ_RESERVED_START & CFG_DDR_TEETZ_RESERVED_START
+  #
+
+  DEFINE GLOBAL_DATA_BASE_ADDRESS = 0x80817000
+
+  gOpteeClientPkgTokenSpaceGuid.PcdTrustZonePrivateMemoryBase|0x80A00000
+  gOpteeClientPkgTokenSpaceGuid.PcdTrustZonePrivateMemorySize|0x01E00000
+
+  #
+  # TrustZone shared memory (2Mb)
+  # 0x12800000 - 0x129FFFFF
+  # This memory is managed by the normal world but shared with the OpTEE OS.
+  # It must match OpTEE optee_os/core/arch/arm/plat-imx/platform_config.h:
+  #    CFG_SHMEM_START & CFG_SHMEM_SIZE
+  # NOTE: The first page of the SHMEM is owned by OPTEE for mobj bookkeeping
+  # and we should not touch it. We will skip the first 4K of SHMEM and take that
+  # into account for SHMEM size in PcdTrustZoneSharedMemorySize.
+  #
+  gOpteeClientPkgTokenSpaceGuid.PcdTrustZoneSharedMemoryBase|0x82800000
+  gOpteeClientPkgTokenSpaceGuid.PcdTrustZoneSharedMemorySize|0x00200000
+  giMX6TokenSpaceGuid.PcdFrameBufferBase|0x80000000
+!elseif $(IMX_FAMILY) == IMX6SX
   #
   # Reserved for TPM2 ACPI
   # 0x82000000 - 0x82002FFF
@@ -844,8 +937,10 @@
   MdeModulePkg/Bus/Usb/UsbMouseDxe/UsbMouseDxe.inf
 !endif
 
+!if $(CONFIG_PCIE) == TRUE
   # PCIe support
   iMX6Pkg/Drivers/PciExpress/iMX6PciExpress.inf
+!endif
 
   #
   # Generic Bds (Not Intel's)
@@ -861,7 +956,6 @@
       NULL|MdeModulePkg/Library/BootManagerUiLib/BootManagerUiLib.inf
       NULL|MdeModulePkg/Library/BootMaintenanceManagerUiLib/BootMaintenanceManagerUiLib.inf
   }
-
   #
   # Shell
   #
@@ -915,9 +1009,10 @@ MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
   Microsoft/Application/AuthVarTest/AuthVarTest.inf
 !endif
 
+!if $(CONFIG_OPTEE) == TRUE
   Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf
   #SecurityPkg/Application/VariableAuthTestDxe/VariableAuthTestDxe.inf
-
+!endif
 #
 # Boilerplate for compiling UEFI applications and UEFI drivers with the
 # standard library.

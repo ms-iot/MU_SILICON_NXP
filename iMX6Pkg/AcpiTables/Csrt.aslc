@@ -37,7 +37,7 @@ typedef enum {
 #if defined(CPU_IMX6DQ) || defined (CPU_IMX6DQP)
   GPT_CLOCK_OSC_DIV_8   = 5,
   GPT_CLOCK_OSC         = 7,
-#elif (defined(CPU_IMX6SDL) || defined(CPU_IMX6SX))
+#elif (defined(CPU_IMX6SDL) || defined(CPU_IMX6SX)) || defined(CPU_IMX6ULL)
   GPT_CLOCK_OSC         = 5,
 #else
 #error iMX6 CPU Type Not Defined (Preprocessor Flag)
@@ -216,7 +216,7 @@ EFI_ACPI_CSRT_TABLE Csrt = {
         },
         TIMER_CAP_READABLE | TIMER_CAP_UP_COUNTER, // Capabilities
         32,                                 // Timer width (bits)
-        GPT_CLOCK_OSC,                      // Source is 111b for QD, 101b for SDL
+        GPT_CLOCK_OSC,                      // Source is 111b for QD, 101b for SDL/ULL
         SOC_OSC_FREQUENCY_REF_HZ,           // Frequency 24 MHz
         24,                                 // divider to make 1 MHz
         CSP_BASE_REG_PA_GPT,                // 32 bit Physical address
