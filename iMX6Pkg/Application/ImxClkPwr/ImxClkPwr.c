@@ -58,6 +58,7 @@ typedef enum {
                               IMX_SION_DISABLED,
                               IMX_IOMUXC_GPIO1_IO11_ALT3_CCM_CLKO1)
 } IMX_CCM_PADCFG;
+#elif defined(CPU_IMX6ULL)
 #else
 #error iMX6ClkPwr - iMX6 CPU type not defined!
 #endif
@@ -105,6 +106,7 @@ EFI_STATUS PinOutClock (IMX_CLK Clock)
   ImxPadConfig(IMX_PAD_GPIO_0, IMX_PAD_CFG_GPIO_0_CCM_CLKO1);
 #elif defined(CPU_IMX6SX)
   ImxPadConfig (IMX_PAD_GPIO1_IO11, IMX_PAD_CFG_GPIO1_IO11_CCM_CLKO1);
+#elif defined(CPU_IMX6ULL)
 #else
 #error iMX6 CPU Type not defined
 #endif

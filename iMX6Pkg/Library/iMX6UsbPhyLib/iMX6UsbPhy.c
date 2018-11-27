@@ -201,6 +201,21 @@ ImxUsbEhciResetController (
     ASSERT (UsbModeReg.CM == IMX_USBMODE_HOST);
   }
 
+#if defined(CPU_IMX6ULL)
+  if (ImxUsbPhyId == IMX_USBPHY1) {
+    volatile USB_USBMODE_REG* UsbModeRegPtr;
+    USB_USBMODE_REG UsbModeReg;
+    DEBUG ((DEBUG_INFO, "Switching USB OTG Port to Host\n"));
+    UsbModeRegPtr = (USB_USBMODE_REG*)(IMX_USBCORE_BASE + IMX_USBCORE_LENGTH + IMX_USBMODE_OFFSET);
+    UsbModeReg.AsUint32 = MmioRead32 ((UINTN)UsbModeRegPtr);
+    UsbModeReg.CM = IMX_USBMODE_HOST;
+    MmioWrite32 ((UINTN)UsbModeRegPtr, UsbModeReg.AsUint32);
+    DEBUG_CODE_BEGIN();
+    UsbModeReg.AsUint32 = MmioRead32 ((UINTN)UsbModeRegPtr);
+    ASSERT (UsbModeReg.CM == IMX_USBMODE_HOST);
+    DEBUG_CODE_END();
+  }
+#endif
   return EFI_SUCCESS;
 }
 
@@ -247,7 +262,9 @@ ImxUsbPhyInit (
   // Set power polarity
   UsbNcHcCtrlReg.AsUint32 = MmioRead32 ((UINTN)UsbNcUhCtrlRegPtr);
   UsbNcHcCtrlReg.PWR_POL = 1;
+  #if !defined(CPU_IMX6ULL)
   UsbNcHcCtrlReg.AsUint32 |= 0x2;     // Reserved bit
+  #endif
   MmioWrite32 ((UINTN)UsbNcUhCtrlRegPtr, UsbNcHcCtrlReg.AsUint32);
 
   // Disable external USB charger detector
@@ -310,7 +327,7 @@ ImxUsbPhyInit (
   // Apply PHY configuration:
   // - Enable low/full speed devices.
   UsbPhyCtrlReg.AsUint32 = 0;
-#if defined(CPU_IMX6DQ)
+#if defined(CPU_IMX6DQ) || defined(CPU_IMX6ULL)
   UsbPhyCtrlReg.ENAUTOSET_USBCLKS = 1;
   UsbPhyCtrlReg.ENAUTOCLR_USBCLKGATE = 1;
   UsbPhyCtrlReg.ENAUTO_PWRON_PLL = 1;
@@ -320,7 +337,7 @@ ImxUsbPhyInit (
   UsbPhyCtrlReg.ENUTMILEVEL2 = 1;
   UsbPhyCtrlReg.ENUTMILEVEL3 = 1;
   MmioWrite32 ((UINTN)&UsbPhyRegsPtr->USBPHY_CTRL_SET, UsbPhyCtrlReg.AsUint32);
-#if defined(CPU_IMX6DQ)
+#if defined(CPU_IMX6DQ) || defined(CPU_IMX6ULL)
   MmioWrite32 ((UINTN)&UsbPhyRegsPtr->USBPHY_IP_SET, IMX_USBPHY_IP_FIX);
 #endif
 

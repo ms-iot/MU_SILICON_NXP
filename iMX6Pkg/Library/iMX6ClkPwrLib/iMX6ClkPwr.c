@@ -129,7 +129,7 @@ STATIC IMX_CLOCK_CONTEXT ExpectedClocks[] = {
   {IMX_AXI_CLK_ROOT, {264000000, IMX_PERIPH_CLK}},
   {IMX_MMDC_CH0_CLK_ROOT, {528000000, IMX_PERIPH_CLK}},
 };
-#elif defined(CPU_IMX6SDL)
+#elif defined(CPU_IMX6SDL) || defined(CPU_IMX6ULL)
 STATIC IMX_CLOCK_CONTEXT ExpectedClocks[] = {
   {IMX_OSC_CLK, {24000000, IMX_CLK_NONE}},
   {IMX_PLL1_MAIN_CLK, {792000000, IMX_OSC_CLK}},
@@ -1072,6 +1072,7 @@ ImxpGetClockInfo (
   return EFI_SUCCESS;
 }
 
+#if !defined(CPU_IMX6ULL)
 /**
   Power on and clock the GPU2D/GPU3D blocks.
 
@@ -1134,6 +1135,7 @@ ImxClkPwrIpuDIxEnable (
   ImxSetPll5ReferenceRate (65000000);
   return EFI_SUCCESS;
 }
+#endif
 
 #if defined(CPU_IMX6DQ) || defined(CPU_IMX6DQP)
 /**
@@ -1216,17 +1218,21 @@ ImxSetPll5ReferenceRate (
 
   pCcmRegisters = (IMX_CCM_REGISTERS *) IMX_CCM_BASE;
   ChscddrReg.AsUint32 = MmioRead32 ((UINTN)&pCcmRegisters->CHSCCDR);
+#if !defined(CPU_IMX6ULL)
   ImxClkPwrSetClockGate (IMX_IPU1_DI0_CLK_ENABLE, IMX_CCM_CCGR_OFF);
   ImxClkPwrSetClockGate (IMX_IPU1_DI1_CLK_ENABLE, IMX_CCM_CCGR_OFF);
 #if defined(CPU_IMX6DQ) || defined(CPU_IMX6DQP)
   ImxClkPwrSetClockGate (IMX_IPU2_DI0_CLK_ENABLE, IMX_CCM_CCGR_OFF);
   ImxClkPwrSetClockGate (IMX_IPU2_DI1_CLK_ENABLE, IMX_CCM_CCGR_OFF);
 #endif
+#endif
   ChscddrReg.ipu1_di0_podf = DxPodfDivider - 1;
   ChscddrReg.ipu1_di1_podf = DxPodfDivider - 1;
   MmioWrite32 ((UINTN)&pCcmRegisters->CHSCCDR, ChscddrReg.AsUint32);
 
+#if !defined(CPU_IMX6ULL)
   ImxClkPwrSetClockGate (IMX_IPU1_DI0_CLK_ENABLE, IMX_CCM_CCGR_ON);
+#endif
   ImxSetClockRatePLL5 (TargetFreq, postDivSelect[PostDivSelectCount]);
   return EFI_SUCCESS;
 }

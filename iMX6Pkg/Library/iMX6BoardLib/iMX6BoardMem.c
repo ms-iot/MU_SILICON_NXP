@@ -55,7 +55,21 @@ ArmPlatformGetVirtualMemoryMap (
 
   CacheAttributes = DDR_ATTRIBUTES_CACHED;
   DEBUG ((DEBUG_VERBOSE, "CacheAttributes=0x%d\n", CacheAttributes));
+#if defined(CPU_IMX6ULL)
+  VirtualMemoryTable[Index].PhysicalBase   = SOC_REGISTERS_PHYSICAL_BASE1;
+  VirtualMemoryTable[Index].VirtualBase    = SOC_REGISTERS_PHYSICAL_BASE1;
+  VirtualMemoryTable[Index].Length         = SOC_REGISTERS_PHYSICAL_LENGTH1;
+  VirtualMemoryTable[Index].Attributes     = SOC_REGISTERS_ATTRIBUTES;
 
+  VirtualMemoryTable[++Index].PhysicalBase = APBH_DMA_REGISTERS_PHYSICAL_BASE;
+  VirtualMemoryTable[Index].VirtualBase    = APBH_DMA_REGISTERS_PHYSICAL_BASE;
+  VirtualMemoryTable[Index].Length         = APBH_DMA_REGISTERS_PHYSICAL_LENGTH;
+  VirtualMemoryTable[Index].Attributes     = SOC_REGISTERS_ATTRIBUTES;
+  VirtualMemoryTable[++Index].PhysicalBase = GIC_REGISTERS_PHYSICAL_BASE;
+  VirtualMemoryTable[Index].VirtualBase    = GIC_REGISTERS_PHYSICAL_BASE;
+  VirtualMemoryTable[Index].Length         = GIC_REGISTERS_PHYSICAL_LENGTH;
+  VirtualMemoryTable[Index].Attributes     = SOC_REGISTERS_ATTRIBUTES;
+#else
   // SOC registers region 1 (0x00100000 size 0x00C00000)
   VirtualMemoryTable[Index].PhysicalBase   = SOC_REGISTERS_PHYSICAL_BASE1;
   VirtualMemoryTable[Index].VirtualBase    = SOC_REGISTERS_PHYSICAL_BASE1;
@@ -73,6 +87,7 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryTable[Index].VirtualBase    = SOC_REGISTERS_PHYSICAL_BASE2;
   VirtualMemoryTable[Index].Length         = SOC_REGISTERS_PHYSICAL_LENGTH2;
   VirtualMemoryTable[Index].Attributes     = SOC_REGISTERS_ATTRIBUTES;
+#endif
 
   // Framebuffer
   VirtualMemoryTable[++Index].PhysicalBase = FixedPcdGet32 (PcdFrameBufferBase);

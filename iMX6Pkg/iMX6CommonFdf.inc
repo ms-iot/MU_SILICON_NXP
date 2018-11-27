@@ -61,10 +61,12 @@
   INF MdeModulePkg/Bus/Usb/UsbMouseDxe/UsbMouseDxe.inf
 !endif
 
+!if $(CONFIG_PCIE) == TRUE
   #
   # PCIe
   #
   INF iMX6Pkg/Drivers/PciExpress/iMX6PciExpress.inf
+!endif
 
   #
   # Bds

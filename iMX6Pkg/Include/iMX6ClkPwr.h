@@ -27,6 +27,8 @@
 #include "iMX6ClkPwr_SDL.h"
 #elif defined(CPU_IMX6SX)
 #include "iMX6ClkPwr_SX.h"
+#elif defined(CPU_IMX6ULL)
+#include "iMX6ClkPwr_ULL.h"
 #else
 #error iMX6 CPU Type Not Defined!
 #endif

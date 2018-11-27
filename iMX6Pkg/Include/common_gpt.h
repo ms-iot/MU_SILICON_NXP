@@ -51,7 +51,7 @@ typedef struct {
 #define GPT_CR_STOPEN_LSH      5
 #define GPT_CR_CLKSRC_LSH      6
 #define GPT_CR_FRR_LSH         9
-#if defined(CPU_IMX6SX) || defined(CPU_IMX6SDL)
+#if defined(CPU_IMX6SX) || defined(CPU_IMX6SDL) || defined(CPU_IMX6ULL)
 #define GPT_CR_EN_24M_LSH      10
 #endif
 #define GPT_CR_SWR_LSH         15
@@ -176,6 +176,13 @@ typedef struct {
 #define GPT_CR_CLKSRC_EXTCLK            3 // External Clock (CLKIN)
 #define GPT_CR_CLKSRC_LOWFREQ           4 // Low Frequency Reference Clock
 #define GPT_CR_CLKSRC_CLK24M            5 // Crystal oscillator as Reference Clock
+#elif defined(CPU_IMX6ULL)
+#define GPT_CR_CLKSRC_NOCLK             0 // No clock to GPT
+#define GPT_CR_CLKSRC_IPGCLK            1 // ipg_clk is the clock source
+#define GPT_CR_CLKSRC_HIGHFREQ          2 // ipg_clk_highfreq
+#define GPT_CR_CLKSRC_EXTCLK            3 // ipp_gpt_clkin (external clock
+#define GPT_CR_CLKSRC_CLK32K            4 // ipg_clk_32k is clock source
+#define GPT_CR_CLKSRC_CLK24M            5 // crystal oscillator (24 Mhz) is clock source
 #else
 #error CPU Preprocessor Flag Not Defined
 #endif
@@ -184,7 +191,7 @@ typedef struct {
                                           //   continues after compare)
 #define GPT_CR_FRR_RESTART              0 // Restart mode (counter set
                                           //   to zero after compare)
-#if defined(CPU_IMX6SX) || defined(CPU_IMX6SDL)
+#if defined(CPU_IMX6SX) || defined(CPU_IMX6SDL) || defined(CPU_IMX6ULL)
 #define GPT_CR_EN_24M_DISABLE           0  // 24M clock disabled
 #define GPT_CR_EN_24M_ENABLE            1  // 24M clock enabled
 #endif
