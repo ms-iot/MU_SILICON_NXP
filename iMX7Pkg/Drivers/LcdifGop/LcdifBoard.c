@@ -24,7 +24,7 @@
 //
 // SiI 164 PanelLink Transmitter
 //
-IMX_I2C_CONFIG i2c4SIL164Config = {
+IMX_I2C_CONTEXT i2c4SIL164Config = {
     0x30A50000,     // I2C4 ControllerAddress;
     0x7F,           // ControllerSlaveAddress
     64000000,       // ReferenceFreq;
@@ -79,7 +79,7 @@ IMX_I2C_CONFIG i2c4SIL164Config = {
 //
 // PCA9555 16-bit I2C-bus and SMBus I/O port with interrupt
 //
-IMX_I2C_CONFIG i2c4PCA9555Config = {
+IMX_I2C_CONTEXT i2c4PCA9555Config = {
     0x30A50000,     // I2C4 ControllerAddress;
     0x7F,           // ControllerSlaveAddress
     64000000,       // ReferenceFreq;
@@ -88,7 +88,7 @@ IMX_I2C_CONFIG i2c4PCA9555Config = {
     1000,           // TimeoutInUs
     };
 
-IMX_I2C_CONFIG i2c2EDIDConfig = {
+IMX_I2C_CONTEXT i2c2EDIDConfig = {
     0x30A40000,     // I2C3 ControllerAddress;
     0x7F,           // ControllerSlaveAddress
     64000000,       // ReferenceFreq;
@@ -195,7 +195,7 @@ VOID LcdifBoardConfigureDisplay (
     ASSERT (!RETURN_ERROR(status));
 
     //
-    // DK = 100 – 5 step -> default (recommended setting)
+    // DK = 100 - 5 step -> default (recommended setting)
     //
     i2cData = (0x04 << 5);
     status = iMXI2cWrite(&i2c4SIL164Config, SIL164_REG_CONTROL1, &i2cData, 1);
@@ -203,7 +203,7 @@ VOID LcdifBoardConfigureDisplay (
 
     //
     // PFEN - Enable
-    // PLFF = 100 – Recommended value
+    // PLFF = 100 - Recommended value
     // SCNT - Enable
     //
     i2cData = SIL164_REG_CONTROL2_PFEN_ENABLE | 0x04 << 1 | SIL164_REG_CONTROL2_SCNT_ENABLE;

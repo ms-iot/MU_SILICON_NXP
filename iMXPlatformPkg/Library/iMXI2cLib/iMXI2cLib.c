@@ -23,76 +23,78 @@
 
 #include <iMXI2cLib.h>
 
-IMX_I2C_DIVIDER DividerValue[] = {
-  { 22, 0x20, },
-  { 24, 0x21, },
-  { 26, 0x22, },
-  { 28, 0x23, },
-  { 30, 0x00, },
-  { 32, 0x24, },
-  { 36, 0x25, },
-  { 40, 0x26, },
-  { 42, 0x03, },
-  { 44, 0x27, },
-  { 48, 0x28, },
-  { 52, 0x05, },
-  { 56, 0x29, },
-  { 60, 0x06, },
-  { 64, 0x2A, },
-  { 72, 0x2B, },
-  { 80, 0x2C, },
-  { 88, 0x09, },
-  { 96, 0x2D, },
-  { 104, 0x0A, },
-  { 112, 0x2E, },
-  { 128, 0x2F, },
-  { 144, 0x0C, },
-  { 160, 0x30, },
-  { 192, 0x31, },
-  { 224, 0x32, },
-  { 240, 0x0F, },
-  { 256, 0x33, },
-  { 288, 0x10, },
-  { 320, 0x34, },
-  { 384, 0x35, },
-  { 448, 0x36, },
-  { 480, 0x13, },
-  { 512, 0x37, },
-  { 576, 0x14, },
-  { 640, 0x38, },
-  { 768, 0x39, },
-  { 896, 0x3A, },
-  { 960, 0x17, },
-  { 1024, 0x3B, },
-  { 1152, 0x18, },
-  { 1280, 0x3C, },
-  { 1536, 0x3D, },
-  { 1792, 0x3E, },
-  { 1920, 0x1B, },
-  { 2048, 0x3F, },
-  { 2304, 0x1C, },
-  { 2560, 0x1D, },
-  { 3072, 0x1E, },
-  { 3840, 0x1F, },
+// Table of I2C Frequency Divider values (Table 35-3 in iMX6DQRM)
+// Used to identify the proper I2C Clock Rate value in the I2C_IFDR register.
+// First value is the Divider value and second value is the corresponding
+// I2C Clock Rate.
+static IMX_I2C_DIVIDER mDividerValue[] = {
+  {22, 0x20},
+  {24, 0x21},
+  {26, 0x22},
+  {28, 0x23},
+  {30, 0x00},
+  {32, 0x24},
+  {36, 0x25},
+  {40, 0x26},
+  {42, 0x03},
+  {44, 0x27},
+  {48, 0x28},
+  {52, 0x05},
+  {56, 0x29},
+  {60, 0x06},
+  {64, 0x2A},
+  {72, 0x2B},
+  {80, 0x2C},
+  {88, 0x09},
+  {96, 0x2D},
+  {104, 0x0A},
+  {112, 0x2E},
+  {128, 0x2F},
+  {144, 0x0C},
+  {160, 0x30},
+  {192, 0x31},
+  {224, 0x32},
+  {240, 0x0F},
+  {256, 0x33},
+  {288, 0x10},
+  {320, 0x34},
+  {384, 0x35},
+  {448, 0x36},
+  {480, 0x13},
+  {512, 0x37},
+  {576, 0x14},
+  {640, 0x38},
+  {768, 0x39},
+  {896, 0x3A},
+  {960, 0x17},
+  {1024, 0x3B},
+  {1152, 0x18},
+  {1280, 0x3C},
+  {1536, 0x3D},
+  {1792, 0x3E},
+  {1920, 0x1B},
+  {2048, 0x3F},
+  {2304, 0x1C},
+  {2560, 0x1D},
+  {3072, 0x1E},
+  {3840, 0x1F},
 };
-
-#define DIVIDER_VALUE_TOTAL (sizeof(DividerValue) / sizeof(DividerValue[0]))
 
 BOOLEAN
 iMXI2cWaitStatusSet (
-  IN  IMX_I2C_CONFIG   *I2cConfigPtr,
-  IN  UINT16           StatusBits
+  IN  IMX_I2C_CONTEXT   *I2cContext,
+  IN  UINT16            StatusBits
   )
 {
-  IMX_I2C_REGS      *I2cRegsPtr;
-  UINT32            Counter;
-  IMX_I2C_I2SR_REG  I2srReg;
+  IMX_I2C_REGISTERS       *BaseAddress;
+  UINT32                  Counter;
+  IMX_I2C_I2SR_REGISTER   Data;
 
-  Counter = I2cConfigPtr->TimeoutInUs;
-  I2cRegsPtr = (IMX_I2C_REGS*)I2cConfigPtr->ControllerAddress;
+  Counter = I2cContext->TimeoutInUs;
+  BaseAddress = (IMX_I2C_REGISTERS*)I2cContext->ControllerAddress;
   while (Counter) {
-    I2srReg = (IMX_I2C_I2SR_REG)MmioRead16 ((UINTN)&I2cRegsPtr->I2SR);
-    if ((I2srReg.AsUint16 & StatusBits) == StatusBits) {
+    Data = (IMX_I2C_I2SR_REGISTER)MmioRead16 ((UINTN)&BaseAddress->I2SR);
+    if ((Data.Raw & StatusBits) == StatusBits) {
       return TRUE;
     }
     MicroSecondDelay (1);
@@ -103,20 +105,20 @@ iMXI2cWaitStatusSet (
 }
 
 BOOLEAN
-iMXI2cWaitStatusUnSet (
-  IN  IMX_I2C_CONFIG   *I2cConfigPtr,
-  IN  UINT16           StatusBits
+iMXI2cWaitStatusClear (
+  IN  IMX_I2C_CONTEXT   *I2cContext,
+  IN  UINT16            StatusBits
   )
 {
-  IMX_I2C_REGS      *I2cRegsPtr;
-  UINT32            Counter;
-  IMX_I2C_I2SR_REG  I2srReg;
+  IMX_I2C_REGISTERS       *BaseAddress;
+  UINT32                  Counter;
+  IMX_I2C_I2SR_REGISTER   Data;
 
-  Counter = I2cConfigPtr->TimeoutInUs;
-  I2cRegsPtr = (IMX_I2C_REGS*)I2cConfigPtr->ControllerAddress;
+  Counter = I2cContext->TimeoutInUs;
+  BaseAddress = (IMX_I2C_REGISTERS*)I2cContext->ControllerAddress;
   while (Counter) {
-    I2srReg = (IMX_I2C_I2SR_REG)MmioRead16 ((UINTN)&I2cRegsPtr->I2SR);
-    if ((I2srReg.AsUint16 & StatusBits) == 0) {
+    Data = (IMX_I2C_I2SR_REGISTER)MmioRead16 ((UINTN)&BaseAddress->I2SR);
+    if ((Data.Raw & StatusBits) == 0) {
       return TRUE;
     }
     MicroSecondDelay (1);
@@ -128,111 +130,138 @@ iMXI2cWaitStatusUnSet (
 
 BOOLEAN
 iMXI2cSendByte (
-  IN  IMX_I2C_CONFIG  *I2cConfigPtr,
-  IN  UINT8           Data
+  IN  IMX_I2C_CONTEXT   *I2cContext,
+  IN  UINT8             Data
   )
 {
-  IMX_I2C_REGS      *I2cRegsPtr;
-  UINT32            Counter;
-  IMX_I2C_I2SR_REG  I2srReg;
-  UINT16            SendData;
+  IMX_I2C_REGISTERS       *BaseAddress;
+  UINT32                  Counter;
+  UINT16                  SendData;
+  IMX_I2C_I2SR_REGISTER   StatusData;
 
   SendData = Data;
-  Counter = I2cConfigPtr->TimeoutInUs;
-  I2cRegsPtr = (IMX_I2C_REGS*)I2cConfigPtr->ControllerAddress;
+  Counter = I2cContext->TimeoutInUs;
+  BaseAddress = (IMX_I2C_REGISTERS*)I2cContext->ControllerAddress;
 
-  // Clear status and transfer byte
-  MmioWrite16 ((UINTN)&I2cRegsPtr->I2SR, 0);
-  MmioWrite16 ((UINTN)&I2cRegsPtr->I2DR, SendData);
+  // Clear Interrupt status bits
+  MmioWrite16 ((UINTN)&BaseAddress->I2SR, 0);
+  // Transfer byte
+  MmioWrite16 ((UINTN)&BaseAddress->I2DR, SendData);
 
   while (Counter) {
-    I2srReg = (IMX_I2C_I2SR_REG)MmioRead16 ((UINTN)&I2cRegsPtr->I2SR);
-    if (I2srReg.IIF == 1) {
+    StatusData = (IMX_I2C_I2SR_REGISTER)MmioRead16 ((UINTN)&BaseAddress->I2SR);
+    if (StatusData.IIF == IMX_I2C_I2SR_IIF_INTERRUPT_PENDING) {
       return TRUE;
-    } else if (I2srReg.IAL == 1) {
-      DEBUG ((DEBUG_ERROR, "iMXI2cSendByte: fail 0x%04x\n", I2srReg.AsUint16));
+    } else if (StatusData.IAL == IMX_I2C_I2SR_IAL_ARBITRATION_LOST) {
+      DEBUG ((DEBUG_ERROR, "%a: fail 0x%04x\n", __FUNCTION__, StatusData.Raw));
       return FALSE;
     }
     MicroSecondDelay (1);
     --Counter;
   }
 
-  DEBUG ((DEBUG_ERROR, "iMXI2cSendByte: Fail timeout\n"));
+  DEBUG ((DEBUG_ERROR, "%a: Fail timeout\n", __FUNCTION__));
   return FALSE;
 }
 
 RETURN_STATUS
 iMXI2cSetupController (
-  IN  IMX_I2C_CONFIG *I2cConfigPtr
+  IN  IMX_I2C_CONTEXT   *I2cContext
   )
 {
-  IMX_I2C_REGS      *I2cRegsPtr;
-  UINT32            Divider;
-  UINT32            DividerCount;
-  UINT32            IfdrDiv;
-  IMX_I2C_I2CR_REG  I2crReg;
+  IMX_I2C_REGISTERS       *BaseAddress;
+  IMX_I2C_IADR_REGISTER   AddressData;
+  IMX_I2C_I2CR_REGISTER   ControlData;
+  UINT32                  Divider;
+  UINT32                  DividerCount;
+  IMX_I2C_IFDR_REGISTER   DividerData;
 
-  I2cRegsPtr = (IMX_I2C_REGS *)I2cConfigPtr->ControllerAddress;
+  BaseAddress = (IMX_I2C_REGISTERS *)I2cContext->ControllerAddress;
 
-  // Disable controller and clear any pending interrupt
-  MmioWrite16 ((UINTN)&I2cRegsPtr->I2CR, 0);
-  MmioWrite16 ((UINTN)&I2cRegsPtr->I2SR, 0);
+  // Disable controller
+  MmioWrite16 ((UINTN)&BaseAddress->I2CR, 0);
+  // Clear any pending interrupt status
+  MmioWrite16 ((UINTN)&BaseAddress->I2SR, 0);
 
-  // Setup Divider if reference freq is provided. If no, use value setup by
-  // 1st boot loader
-  if (I2cConfigPtr->ReferenceFreq != 0) {
-    IfdrDiv = 0;
-    Divider = I2cConfigPtr->ReferenceFreq / I2cConfigPtr->TargetFreq;
-
-    for (DividerCount = 0; DividerCount < DIVIDER_VALUE_TOTAL; ++DividerCount) {
-      if (DividerValue[DividerCount].Divider >= Divider) {
-        DEBUG ((
-                 DEBUG_INFO,
-                 "iMXI2cSetupController: Divider %d IC 0x%02x\n",
-                 DividerValue[DividerCount].Divider,
-                 DividerValue[DividerCount].IC));
-        IfdrDiv = DividerValue[DividerCount].IC;
+  // Setup Divider if reference frequency is provided.
+  // If no reference frequency is provided, fall through and use value setup
+  // by first boot loader
+  if (I2cContext->ReferenceFrequency != 0) {
+    DividerData.Raw = 0;
+    Divider = I2cContext->ReferenceFrequency / I2cContext->TargetFrequency;
+    for (DividerCount = 0; DividerCount < ARRAY_SIZE(mDividerValue); ++DividerCount) {
+      if (mDividerValue[DividerCount].Divider >= Divider) {
+        DEBUG ((DEBUG_INFO,
+                "%a: Divider %d I2cClockRate 0x%02x\n",
+                __FUNCTION__,
+                mDividerValue[DividerCount].Divider,
+                mDividerValue[DividerCount].I2cClockRate));
+        DividerData.IC = mDividerValue[DividerCount].I2cClockRate;
         break;
       }
     }
-
-    if (IfdrDiv == 0) {
-      DEBUG ((
-               DEBUG_ERROR,
-               "iMXI2cSetupController: could not find Divider for %d\n",
-               Divider));
-      return RETURN_INVALID_PARAMETER;
-    }
-
-    MmioWrite16 ((UINTN)&I2cRegsPtr->IFDR, IfdrDiv);
+    MmioWrite16 ((UINTN)&BaseAddress->IFDR, DividerData.Raw);
   }
 
   // Setup slave address
-  MmioWrite16 ((UINTN)&I2cRegsPtr->IADR,
-               (I2cConfigPtr->ControllerSlaveAddress << 1));
+  AddressData.Raw = 0;
+  AddressData.ADR = I2cContext->ControllerSlaveAddress;
+  MmioWrite16 ((UINTN)&BaseAddress->IADR, AddressData.Raw);
 
-  // Enable controller and set to master mode.
-  I2crReg = (IMX_I2C_I2CR_REG)MmioRead16 ((UINTN)&I2cRegsPtr->I2CR);
-
-  // This bit must be set before any other I2C_I2CR bits have an effect
-  I2crReg.IEN = 1;
-  MmioWrite16 ((UINTN)&I2cRegsPtr->I2CR, I2crReg.AsUint16);
+  // Enable controller
+  ControlData = (IMX_I2C_I2CR_REGISTER)MmioRead16 ((UINTN)&BaseAddress->I2CR);
+  ControlData.IEN = IMX_I2C_I2CR_IEN_INTERRUPT_ENABLED;
+  MmioWrite16 ((UINTN)&BaseAddress->I2CR, ControlData.Raw);
   MicroSecondDelay (100);
 
-  MmioWrite16 ((UINTN)&I2cRegsPtr->I2SR, 0);
+  // Clear pending interrupt status bits
+  MmioWrite16 ((UINTN)&BaseAddress->I2SR, 0);
 
   // Wait for bus to be idle
-  if (iMXI2cWaitStatusUnSet (I2cConfigPtr, IMX_I2C_I2SR_IBB) == FALSE) {
-    DEBUG ((DEBUG_ERROR, "iMXI2cGenerateStart: Controller remains busy\n"));
+  if (iMXI2cWaitStatusClear (I2cContext, IMX_I2C_I2SR_IBB) == FALSE) {
+    DEBUG ((DEBUG_ERROR, "%a: Controller remains busy\n", __FUNCTION__));
     return RETURN_DEVICE_ERROR;
   }
 
-  I2crReg.MSTA = 1;
-  MmioWrite16 ((UINTN)&I2cRegsPtr->I2CR, I2crReg.AsUint16);
+  // Select master mode and transmit mode.
+  // Note: STOP must have been called prior to this (i.e. MTX = 0)
+  ControlData.MTX = IMX_I2C_I2CR_MTX_TRANSMIT_MODE;
+  ControlData.MSTA = IMX_I2C_I2CR_MSTA_MASTER_MODE;
+  MmioWrite16 ((UINTN)&BaseAddress->I2CR, ControlData.Raw);
 
   // Now wait for bus to be busy
-  if (iMXI2cWaitStatusSet (I2cConfigPtr, IMX_I2C_I2SR_IBB) == FALSE) {
-    DEBUG ((DEBUG_ERROR, "iMXI2cGenerateStart: Controller remains idle\n"));
+  if (iMXI2cWaitStatusSet (I2cContext, IMX_I2C_I2SR_IBB) == FALSE) {
+    DEBUG ((DEBUG_ERROR, "%a: Controller remains idle\n", __FUNCTION__));
+    return RETURN_DEVICE_ERROR;
+  }
+
+  return RETURN_SUCCESS;
+}
+
+RETURN_STATUS
+iMXI2cSendDeviceAddress (
+  IN  IMX_I2C_CONTEXT   *I2cContext,
+  IN  UINT8             DeviceAddress,
+  IN  UINT8             Direction
+  )
+{
+  IMX_I2C_REGISTERS               *BaseAddress;
+  IMX_I2C_DEVICE_ADDRESS_PACKET   Data;
+  BOOLEAN                         Result;
+
+  if ((DeviceAddress < 0) || (DeviceAddress > 0x7F)) {
+    return RETURN_DEVICE_ERROR;
+  }
+
+  // Send slave address packet
+  Data.DeviceAddress = DeviceAddress;
+  Data.Direction = Direction;
+  Result = iMXI2cSendByte (I2cContext, Data.Raw);
+  if (Result == FALSE) {
+    DEBUG ((DEBUG_ERROR,
+            "%a: Slave address transfer fail 0x%04x\n",
+            __FUNCTION__,
+            MmioRead16 ((UINTN)&BaseAddress->I2SR)));
     return RETURN_DEVICE_ERROR;
   }
 
@@ -241,67 +270,58 @@ iMXI2cSetupController (
 
 RETURN_STATUS
 iMXI2cGenerateStart (
-  IN  IMX_I2C_CONFIG  *I2cConfigPtr,
-  IN  UINT8           RegisterAddress
+  IN  IMX_I2C_CONTEXT   *I2cContext,
+  IN  UINT8             Direction
   )
 {
-  IMX_I2C_REGS      *I2cRegsPtr;
-  IMX_I2C_I2CR_REG  I2crReg;
-  BOOLEAN           Result;
   RETURN_STATUS     Status;
 
-  I2cRegsPtr = (IMX_I2C_REGS*)I2cConfigPtr->ControllerAddress;
-  Status = iMXI2cSetupController (I2cConfigPtr);
-  if (RETURN_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "iMXI2cGenerateStart: Fail to setup controller %r\n",
-            Status));
-    return Status;
-  }
+  // START sequence occurs when Device Address is sent
+  Status = iMXI2cSendDeviceAddress (I2cContext, I2cContext->SlaveAddress, Direction);
+  return Status;
+}
 
-  // Set controller to transmit mode
-  I2crReg = (IMX_I2C_I2CR_REG)MmioRead16 ((UINTN)&I2cRegsPtr->I2CR);
-  I2crReg.MTX = 1;
-  MmioWrite16 ((UINTN)&I2cRegsPtr->I2CR, I2crReg.AsUint16);
+RETURN_STATUS
+iMXI2cConfigureRepeatStart (
+  IN  IMX_I2C_CONTEXT   *I2cContext
+  )
+{
+  IMX_I2C_REGISTERS      *BaseAddress;
+  IMX_I2C_I2CR_REGISTER  Data;
 
-  Result = iMXI2cSendByte (I2cConfigPtr, (I2cConfigPtr->SlaveAddress << 1));
-  if (Result == FALSE) {
-    DEBUG ((
-             DEBUG_ERROR,
-             "iMXI2cGenerateStart: Slave address transfer fail 0x%04x\n",
-             MmioRead16 ((UINTN)&I2cRegsPtr->I2SR)));
-    return RETURN_DEVICE_ERROR;
-  }
+  BaseAddress = (IMX_I2C_REGISTERS*)I2cContext->ControllerAddress;
 
-  // Send slave register address
-  Result = iMXI2cSendByte (I2cConfigPtr, RegisterAddress);
-  if (Result == FALSE) {
-    DEBUG ((
-             DEBUG_ERROR,
-             "iMXI2cGenerateStart: Slave register address transfer fail 0x%04x\n",
-             MmioRead16 ((UINTN)&I2cRegsPtr->I2SR)));
-    return RETURN_DEVICE_ERROR;
-  }
+  // Enable Repeated Start for the controller
+  Data = (IMX_I2C_I2CR_REGISTER)MmioRead16 ((UINTN)&BaseAddress->I2CR);
+  Data.RSTA = IMX_I2C_I2CR_RSTA_REPEAT_START_ENABLE;
+  MmioWrite16 ((UINTN)&BaseAddress->I2CR, Data.Raw);
+
+  // Spec mandates a delay of at least 2 module clock cycles (78ns) after
+  // setting RSTA
+  MicroSecondDelay (1);
 
   return RETURN_SUCCESS;
 }
 
 RETURN_STATUS
 iMXI2cGenerateStop (
-  IN  IMX_I2C_CONFIG *I2cConfigPtr
+  IN  IMX_I2C_CONTEXT   *I2cContext
   )
 {
-  IMX_I2C_REGS      *I2cRegsPtr;
-  IMX_I2C_I2CR_REG  I2crReg;
+  IMX_I2C_REGISTERS       *BaseAddress;
+  IMX_I2C_I2CR_REGISTER   Data;
 
-  I2cRegsPtr = (IMX_I2C_REGS*)I2cConfigPtr->ControllerAddress;
-  I2crReg = (IMX_I2C_I2CR_REG)MmioRead16 ((UINTN)&I2cRegsPtr->I2CR);
-  I2crReg.MSTA = 0;
-  I2crReg.MTX = 0;
-  MmioWrite16 ((UINTN)&I2cRegsPtr->I2CR, I2crReg.AsUint16);
+  // Turn off master mode, disable repeat start, and set to RX mode
+  BaseAddress = (IMX_I2C_REGISTERS*)I2cContext->ControllerAddress;
+  Data = (IMX_I2C_I2CR_REGISTER)MmioRead16 ((UINTN)&BaseAddress->I2CR);
+  Data.MSTA = IMX_I2C_I2CR_MSTA_SLAVE_MODE;
+  Data.MTX = IMX_I2C_I2CR_MTX_RECEIVE_MODE;
+  Data.RSTA = IMX_I2C_I2CR_RSTA_REPEAT_START_DISABLE;
+  MmioWrite16 ((UINTN)&BaseAddress->I2CR, Data.Raw);
 
-  // Bus should go idle
-  if (iMXI2cWaitStatusUnSet (I2cConfigPtr, IMX_I2C_I2SR_IBB) == FALSE) {
-    DEBUG ((DEBUG_ERROR, "iMXI2cGenerateStop: Controller remains busy\n"));
+  // Wait for bus to go idle
+  if (iMXI2cWaitStatusClear (I2cContext, IMX_I2C_I2SR_IBB) == FALSE) {
+    DEBUG ((DEBUG_ERROR, "%a: Controller remains busy\n", __FUNCTION__));
     return RETURN_DEVICE_ERROR;
   }
 
@@ -314,7 +334,7 @@ iMXI2cGenerateStop (
   The iMXI2cRead perform I2C read operation by programming the I2C controller.
   The caller is responsible to provide I2C controller configuration.
 
-  @param[in]    IMX_I2C_CONFIG    Pointer to structure containing the targeted
+  @param[in]    I2cContext        Pointer to structure containing the targeted
                                   I2C controller to be used for I2C operation.
   @param[in]    RegisterAddress   Targeted device register address to start read.
   @param[out]   ReadBufferPtr     Caller supplied buffer that would be written
@@ -327,101 +347,110 @@ iMXI2cGenerateStop (
 **/
 RETURN_STATUS
 iMXI2cRead (
-  IN IMX_I2C_CONFIG  *I2cConfigPtr,
+  IN IMX_I2C_CONTEXT  *I2cContext,
   IN UINT8            RegisterAddress,
-  OUT UINT8          *ReadBufferPtr,
-  IN UINT32           ReadBufferSize
+  OUT UINT8           *ReadBufferPtr,
+IN UINT32             ReadBufferSize
   )
 {
-  IMX_I2C_REGS      *I2cRegsPtr;
-  IMX_I2C_I2CR_REG  I2crReg;
-  BOOLEAN           Result;
-  RETURN_STATUS     Status;
+  IMX_I2C_REGISTERS       *BaseAddress;
+  IMX_I2C_I2CR_REGISTER   Data;
+  BOOLEAN                 Result;
+  RETURN_STATUS           Status;
 
-  I2cRegsPtr = (IMX_I2C_REGS*)I2cConfigPtr->ControllerAddress;
-  Status = iMXI2cGenerateStart (I2cConfigPtr, RegisterAddress);
+  BaseAddress = (IMX_I2C_REGISTERS*)I2cContext->ControllerAddress;
+
+  // Initialize controller
+  Status = iMXI2cSetupController (I2cContext);
   if (RETURN_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "iMXI2cRead: iMXI2cGenerateStart failed %r\n", Status));
+    DEBUG ((DEBUG_ERROR, "%a: Fail to setup controller %r\n", __FUNCTION__, Status));
+    return Status;
+  }
+
+  // Generate Start signal and send slave device address
+  Status = iMXI2cGenerateStart (I2cContext, IMX_I2C_TX);
+  if (RETURN_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "%a: iMXI2cGenerateStart failed %r\n", __FUNCTION__, Status));
     goto Exit;
   }
 
-  // Send slave address again to begin read
-  I2crReg = (IMX_I2C_I2CR_REG)MmioRead16 ((UINTN)&I2cRegsPtr->I2CR);
-  I2crReg.RSTA = 1; // Repeated start
-  MmioWrite16 ((UINTN)&I2cRegsPtr->I2CR, I2crReg.AsUint16);
-  Result = iMXI2cSendByte (
-              I2cConfigPtr,
-              (I2cConfigPtr->SlaveAddress << 1 | 1));
+  // Send target register address
+  Result = iMXI2cSendByte (I2cContext, RegisterAddress);
   if (Result == FALSE) {
-    DEBUG ((
-              DEBUG_ERROR,
-              "iMXI2cRead: 2nd Slave address transfer failed 0x%04x\n",
-              MmioRead16 ((UINTN)&I2cRegsPtr->I2SR)));
+    DEBUG ((DEBUG_ERROR,
+            "%a: Slave register address transfer fail 0x%04x\n",
+            __FUNCTION__,
+            MmioRead16 ((UINTN)&BaseAddress->I2SR)));
     Status = RETURN_DEVICE_ERROR;
     goto Exit;
   }
 
-  // Disable master mode
-  I2crReg = (IMX_I2C_I2CR_REG)MmioRead16 ((UINTN)&I2cRegsPtr->I2CR);
+  // Configure Repeated Start in order to indicate read
+  Status = iMXI2cConfigureRepeatStart(I2cContext);
 
-  // NXP application note AN4481 - Only one byte so do not send acknowledge
-  if (ReadBufferSize == 1) {
-    I2crReg.TXAK = 1;
-  } else {
-    I2crReg.TXAK = 0;
+  // Generate Start condition for the read
+  Status = iMXI2cGenerateStart (I2cContext, IMX_I2C_RX);
+  if (RETURN_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "%a: iMXI2cGenerateStart failed %r\n", __FUNCTION__, Status));
+    goto Exit;
   }
 
-  I2crReg.MTX = 0;
-  MmioWrite16 ((UINTN)&I2cRegsPtr->I2CR, I2crReg.AsUint16);
+  // Change controller to Master Receive Mode
+  Data = (IMX_I2C_I2CR_REGISTER)MmioRead16 ((UINTN)&BaseAddress->I2CR);
+  Data.MTX = IMX_I2C_I2CR_MTX_RECEIVE_MODE;
+  MmioWrite16 ((UINTN)&BaseAddress->I2CR, Data.Raw);
 
-  // A data transfer can now be initiated by a read from I2C_I2DR in Slave
-  // Receive mode.
-  MmioWrite16 ((UINTN)&I2cRegsPtr->I2SR, 0);
-  MmioRead16 ((UINTN)&I2cRegsPtr->I2DR);
+  // Clear controller status bits
+  MmioWrite16 ((UINTN)&BaseAddress->I2SR, 0);
+  // Spec indicates to perform a dummy read to kick off Data Receive flow
+  MmioRead16 ((UINTN)&BaseAddress->I2DR);
 
   do {
-    // Wait for transfer to complete
-    if (iMXI2cWaitStatusSet (I2cConfigPtr, IMX_I2C_I2SR_IIF) == FALSE) {
-      DEBUG ((DEBUG_ERROR, "iMXI2cRead: waiting for read fail\n"));
+    // Wait for read transfer to complete
+    if (iMXI2cWaitStatusSet (I2cContext, IMX_I2C_I2SR_IIF) == FALSE) {
+      DEBUG ((DEBUG_ERROR, "%a: waiting for read fail\n", __FUNCTION__));
       Status = RETURN_DEVICE_ERROR;
       goto Exit;
     }
 
-    if (iMXI2cWaitStatusSet (I2cConfigPtr, IMX_I2C_I2SR_ICF) == FALSE) {
-      DEBUG ((DEBUG_ERROR, "iMXI2cRead: waiting for read fail\n"));
+    if (iMXI2cWaitStatusSet (I2cContext, IMX_I2C_I2SR_ICF) == FALSE) {
+      DEBUG ((DEBUG_ERROR, "%a: waiting for read fail\n", __FUNCTION__));
       Status = RETURN_DEVICE_ERROR;
       goto Exit;
     }
 
     // Before the last byte is read, a Stop signal must be generated
     if (ReadBufferSize == 1) {
-      Status = iMXI2cGenerateStop (
-                 I2cConfigPtr);
+      Status = iMXI2cGenerateStop (I2cContext);
       if (RETURN_ERROR (Status)) {
-        DEBUG ((DEBUG_ERROR, "iMXI2cRead: iMXI2cGenerateStop fail %r\n", Status));
+        DEBUG ((DEBUG_ERROR, "%a: iMXI2cGenerateStop fail %r\n", __FUNCTION__, Status));
         goto Exit;
       }
     }
 
+    // For second to last byte to read, inform controller to not send transmit ack.
+    // This will inform the slave to stop sending more data after the next byte.
     if (ReadBufferSize == 2) {
-      I2crReg = (IMX_I2C_I2CR_REG)MmioRead16 ((UINTN)&I2cRegsPtr->I2CR);
-      I2crReg.TXAK = 1;
-      MmioWrite16 ((UINTN)&I2cRegsPtr->I2CR, I2crReg.AsUint16);
+      Data = (IMX_I2C_I2CR_REGISTER)MmioRead16 ((UINTN)&BaseAddress->I2CR);
+      Data.TXAK = IMX_I2C_I2CR_TXAK_NO_TRANSMIT_ACK;
+      MmioWrite16 ((UINTN)&BaseAddress->I2CR, Data.Raw);
     }
 
-    MmioWrite16 ((UINTN)&I2cRegsPtr->I2SR, 0);
+    // Clear controller status bits
+    MmioWrite16 ((UINTN)&BaseAddress->I2SR, 0);
 
-    *ReadBufferPtr = MmioRead8 ((UINTN)&I2cRegsPtr->I2DR);
+    *ReadBufferPtr = MmioRead8 ((UINTN)&BaseAddress->I2DR);
     ++ReadBufferPtr;
     --ReadBufferSize;
   } while (ReadBufferSize > 0);
 
-Exit:
-  Status = iMXI2cGenerateStop (I2cConfigPtr);
+  // Generate Stop signal and idle controller
+  Status = iMXI2cGenerateStop (I2cContext);
   if (RETURN_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "iMXI2cRead: Final iMXI2cGenerateStop fail %r\n", Status));
+    DEBUG ((DEBUG_ERROR, "%a: Final iMXI2cGenerateStop fail %r\n", __FUNCTION__, Status));
   }
 
+Exit:
   return Status;
 }
 
@@ -432,7 +461,7 @@ Exit:
   controller. The caller is responsible to provide I2C controller
   configuration.
 
-  @param[in]    IMX_I2C_CONFIG    Pointer to structure containing the targeted
+  @param[in]    I2cContext        Pointer to structure containing the targeted
                                   I2C controller to be used for I2C operation.
   @param[in]    RegisterAddress   Targeted device register address to start write.
   @param[out]   WriteBufferPtr    Caller supplied buffer that contained data that
@@ -445,30 +474,51 @@ Exit:
 **/
 RETURN_STATUS
 iMXI2cWrite (
-  IN IMX_I2C_CONFIG  *I2cConfigPtr,
+  IN IMX_I2C_CONTEXT  *I2cContext,
   IN UINT8            RegisterAddress,
-  IN UINT8           *WriteBufferPtr,
+  IN UINT8            *WriteBufferPtr,
   IN UINT32           WriteBufferSize
   )
 {
-  IMX_I2C_REGS    *I2cRegsPtr;
-  BOOLEAN         Result;
-  RETURN_STATUS   Status;
+  IMX_I2C_REGISTERS     *BaseAddress;
+  BOOLEAN               Result;
+  RETURN_STATUS         Status;
 
-  I2cRegsPtr = (IMX_I2C_REGS*)I2cConfigPtr->ControllerAddress;
-  Status = iMXI2cGenerateStart (I2cConfigPtr, RegisterAddress);
+  BaseAddress = (IMX_I2C_REGISTERS*)I2cContext->ControllerAddress;
+
+  // Initialize controller
+  Status = iMXI2cSetupController (I2cContext);
   if (RETURN_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "iMXI2cWrite: iMXI2cGenerateStart fail %r\n", Status));
+    DEBUG ((DEBUG_ERROR, "%a: Fail to setup controller %r\n", __FUNCTION__, Status));
+    return Status;
+  }
+
+  // Generate Start signal and send slave device address
+  Status = iMXI2cGenerateStart (I2cContext, IMX_I2C_TX);
+  if (RETURN_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "%a: iMXI2cGenerateStart fail %r\n", __FUNCTION__, Status));
     goto Exit;
   }
 
+  // Send target register address to indicate where to start write
+  Result = iMXI2cSendByte (I2cContext, RegisterAddress);
+  if (Result == FALSE) {
+    DEBUG ((DEBUG_ERROR,
+            "%a: Slave register address transfer fail 0x%04x\n",
+            __FUNCTION__,
+            MmioRead16 ((UINTN)&BaseAddress->I2SR)));
+    Status = RETURN_DEVICE_ERROR;
+    goto Exit;
+  }
+
+  // Write data
   while (WriteBufferSize > 0) {
-    Result = iMXI2cSendByte (I2cConfigPtr, *WriteBufferPtr);
+    Result = iMXI2cSendByte (I2cContext, *WriteBufferPtr);
     if (Result == FALSE) {
-      DEBUG ((
-               DEBUG_ERROR,
-               "iMXI2cWrite: Slave address transfer fail 0x%04x\n",
-               MmioRead16 ((UINTN)&I2cRegsPtr->I2SR)));
+      DEBUG ((DEBUG_ERROR,
+              "%a: Slave address transfer fail 0x%04x\n",
+              __FUNCTION__,
+              MmioRead16 ((UINTN)&BaseAddress->I2SR)));
       Status = RETURN_DEVICE_ERROR;
       goto Exit;
     }
@@ -477,11 +527,12 @@ iMXI2cWrite (
     --WriteBufferSize;
   }
 
-Exit:
-  Status = iMXI2cGenerateStop (I2cConfigPtr);
+  // Generate Stop signal and idle controller
+  Status = iMXI2cGenerateStop (I2cContext);
   if (RETURN_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "iMXI2cWrite: iMXI2cGenerateStop fail %r\n", Status));
+    DEBUG ((DEBUG_ERROR, "%a: iMXI2cGenerateStop fail %r\n", __FUNCTION__, Status));
   }
 
+Exit:
   return Status;
 }
