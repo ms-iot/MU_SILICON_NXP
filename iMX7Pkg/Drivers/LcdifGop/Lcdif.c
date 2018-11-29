@@ -26,13 +26,13 @@
 // Board specific implementation
 //
 VOID LcdifBoardConfigureDisplay (
-    DISPLAY_TIMING* Timing,
+    IMX_DISPLAY_TIMING* Timing,
     VOID* FrameBuffer
     );
 
 EFI_STATUS
 LcdifInitDisplay (
-    DISPLAY_TIMING* Timing,
+    IMX_DISPLAY_TIMING* Timing,
     VOID* FrameBuffer,
     UINT32 LcdifBase
     )
@@ -159,7 +159,7 @@ LcdifInitDisplay (
             { MmioRead32(LcdifBase + IMX_LCDIF_OFFSET_CTRL2) };
 
         lcdifCtrl2Reg.BURST_LEN_8 = 0; // Burst of 16
-        lcdifCtrl2Reg.OUTSTANDING_REQS = 0x02; // REQ_4 —
+        lcdifCtrl2Reg.OUTSTANDING_REQS = 0x02; // REQ_4 ï¿½
 
         MmioWrite32(
             LcdifBase + IMX_LCDIF_OFFSET_CTRL2, lcdifCtrl2Reg.AsUint32);
@@ -220,7 +220,7 @@ LcdifInitDisplay (
 
 EFI_STATUS
 LcdifConfigureDisplay (
-    DISPLAY_TIMING* Timing,
+    IMX_DISPLAY_TIMING* Timing,
     VOID* FrameBuffer
     )
 {

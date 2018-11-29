@@ -93,14 +93,14 @@ IMX_I2C_CONTEXT i2c2EDIDConfig = {
     0x7F,           // ControllerSlaveAddress
     64000000,       // ReferenceFreq;
     100000,         // TargetFreq;
-    EDID_I2C_ADDRESS,
+    IMX_EDID_I2C_ADDRESS,
     10000,          // TimeoutInUs
     };
 
 //
 // EDID read buffer
 //
-UINT8 edidBuffer[EDID_MIN_SIZE];
+UINT8 edidBuffer[IMX_EDID_MIN_SIZE];
 
 #define PCA955_REG_INPUT_PORT0      0x00
 #define PCA955_REG_INPUT_PORT1      0x01
@@ -173,7 +173,7 @@ VOID LcdifBoardInitialize ()
 }
 
 VOID LcdifBoardConfigureDisplay (
-    DISPLAY_TIMING* Timing,
+    IMX_DISPLAY_TIMING* Timing,
     VOID* FrameBuffer
     )
 {
@@ -258,7 +258,7 @@ typedef enum {
 } IMX_I2C3_PADCFG;
 
 RETURN_STATUS LcdifBoardQueryEdidTiming (
-    OUT DISPLAY_TIMING* PreferredTiming
+    OUT IMX_DISPLAY_TIMING* PreferredTiming
     )
 {
     RETURN_STATUS status;
@@ -282,7 +282,7 @@ RETURN_STATUS LcdifBoardQueryEdidTiming (
     DEBUG((DEBUG_INIT, "EDID dump\n"));
     DEBUG((DEBUG_INIT, "=================================================\n"));
 
-    for (index = 0; index < EDID_MIN_SIZE; ++index) {
+    for (index = 0; index < IMX_EDID_MIN_SIZE; ++index) {
         DEBUG((
             DEBUG_INIT,
             "EDID 0x%02x: 0x%02x\n",
@@ -292,19 +292,19 @@ RETURN_STATUS LcdifBoardQueryEdidTiming (
     DEBUG((DEBUG_INIT, "=================================================\n"));
     DEBUG_CODE_END();
 
-    status = ValidateEdidData(edidDataReadPtr);
+    status = ImxValidateEdidData(edidDataReadPtr);
     if (EFI_ERROR(status)) {
         DEBUG((DEBUG_INIT, "EDID data not valid\n"));
         goto End;
     }
 
     {
-        DETAILED_TIMING_DESCRIPTOR* edidPreferredTiming;
+        IMX_DETAILED_TIMING_DESCRIPTOR* edidPreferredTiming;
 
         edidPreferredTiming =
-            (DETAILED_TIMING_DESCRIPTOR*)&edidDataReadPtr[EDID_DTD_1_OFFSET];
+            (IMX_DETAILED_TIMING_DESCRIPTOR*)&edidDataReadPtr[IMX_EDID_DTD_1_OFFSET];
 
-        status = ConvertDTDToDisplayTiming(
+        status = ImxConvertDTDToDisplayTiming(
             edidPreferredTiming,
             PreferredTiming);
         if (status != EFI_SUCCESS) {

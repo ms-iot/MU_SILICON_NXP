@@ -46,7 +46,7 @@ typedef struct {
   EFI_DEVICE_PATH End;
 } VID_DEVICE_PATH;
 
-DISPLAY_TIMING CONST FullHDTiming = {
+IMX_DISPLAY_TIMING CONST FullHDTiming = {
   148500000,  // Full 1080p HD PixelClock
   1920,       // HActive
   280,        // HBlank
@@ -221,7 +221,7 @@ GopDxeInitialize (
     CopyMem (
       &DisplayContextPtr->DiContext[DisplayDevice].PreferredTiming,
       &FullHDTiming,
-      sizeof (DISPLAY_TIMING)
+      sizeof (IMX_DISPLAY_TIMING)
     );
   }
 

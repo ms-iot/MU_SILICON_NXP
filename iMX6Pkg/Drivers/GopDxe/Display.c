@@ -38,7 +38,7 @@
 #include "Ipu.h"
 #include "IoMux.h"
 
-DISPLAY_TIMING DefaultTiming = {
+IMX_DISPLAY_TIMING DefaultTiming = {
   65000000,   // PixelClock
   1024,       // HActive
   320,        // HBlank
@@ -59,7 +59,7 @@ DISPLAY_TIMING DefaultTiming = {
   PIXEL_FORMAT_BGRA32,       // PixelFormat
 };
 
-DISPLAY_TIMING Hannstar_XGA = {
+IMX_DISPLAY_TIMING Hannstar_XGA = {
   65000000,   // PixelClock
   1024,       // HActive
   320,        // HBlank
@@ -82,9 +82,9 @@ DISPLAY_TIMING Hannstar_XGA = {
 
 EFI_STATUS
 GetPreferredTiming (
-  IN  UINT8           *EdidDataPtr,
-  IN  UINT32          EdidDataSize,
-  IN  DISPLAY_TIMING  *PreferredTimingPtr
+  IN  UINT8               *EdidDataPtr,
+  IN  UINT32              EdidDataSize,
+  IN  IMX_DISPLAY_TIMING  *PreferredTimingPtr
   )
 {
   EFI_STATUS Status;
@@ -110,7 +110,7 @@ GetPreferredTiming (
   PreferredTimingPtr->Bpp = 32;
 
 #ifdef DEBUG
-  PrintDisplayTiming ("Preferred Timing", PreferredTimingPtr);
+  ImxPrintDisplayTiming ("Preferred Timing", PreferredTimingPtr);
 #endif /* DEBUG */
   DEBUG ((DEBUG_WARN, "%a: --GetPreferredTiming\n", __FUNCTION__));
   return Status;
@@ -286,7 +286,7 @@ ApplyDisplayConfig (
   IN      DISPLAY_INTERFACE_TYPE   *DiOrder
   )
 {
-  DISPLAY_TIMING              *pCurrentDisplayTiming;
+  IMX_DISPLAY_TIMING          *pCurrentDisplayTiming;
   DISPLAY_CONFIG              *pDisplayConfig;
   DISPLAY_INTERFACE_CONTEXT   *pDisplayInterfaceContext;
   UINT32                      CurrentDisplayInterface;
@@ -436,7 +436,7 @@ Exit:
 
 UINT32
 GetColorDepth (
-  IN  PIXEL_FORMAT  PixelFormat
+  IN  IMX_PIXEL_FORMAT  PixelFormat
   )
 {
   UINT32  BitDepth;

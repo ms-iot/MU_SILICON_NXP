@@ -513,7 +513,7 @@ SetHdmiPower (
 EFI_STATUS
 SetHdmiDisplay (
   IN  DISPLAY_INTERFACE_CONTEXT   *HdmiDisplayContextPtr,
-  IN  DISPLAY_TIMING              *Timings
+  IN  IMX_DISPLAY_TIMING          *Timings
   );
 
 EFI_STATUS
