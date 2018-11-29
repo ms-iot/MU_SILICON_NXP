@@ -61,7 +61,7 @@ SetLvdsPower (
 EFI_STATUS
 SetLvdsDisplay (
   IN  DISPLAY_INTERFACE_CONTEXT   *LvdsDisplayContextPtr,
-  IN  DISPLAY_TIMING              *Timings
+  IN  IMX_DISPLAY_TIMING          *Timings
   );
 
 #endif  /* _LVDS_H_ */

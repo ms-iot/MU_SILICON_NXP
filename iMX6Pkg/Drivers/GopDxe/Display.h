@@ -52,7 +52,7 @@ typedef struct _SURFACE_INFO {
   UINT32 Height;
   UINT32 Pitch;
   UINT32 Bpp;
-  PIXEL_FORMAT PixelFormat;
+  IMX_PIXEL_FORMAT PixelFormat;
 } SURFACE_INFO, *PSURFACE_INFO;
 
 typedef struct _IPU_DIx_REGS {
@@ -103,14 +103,14 @@ typedef struct _DISPLAY_INTERFACE_CONTEXT {
   IPU_DIx_REGS *IpuDiRegsPtr;
   UINT32 EdidDataSize;
   UINT8 EdidData[256];
-  DISPLAY_TIMING PreferredTiming;
+  IMX_DISPLAY_TIMING PreferredTiming;
 } DISPLAY_INTERFACE_CONTEXT, *PDISPLAY_INTERFACE_CONTEXT;
 
 typedef struct _DISPLAY_CONFIG {
   DISPLAY_MODE DisplayMode;
   DISPLAY_INTERFACE_TYPE DiOrder[DisplayTypeMax];
   SURFACE_INFO DisplaySurface[DisplayTypeMax];
-  DISPLAY_TIMING DisplayTiming[DisplayTypeMax];
+  IMX_DISPLAY_TIMING DisplayTiming[DisplayTypeMax];
   UINT32 OsHandle[DisplayTypeMax];
 } DISPLAY_CONFIG, *PDISPLAY_CONFIG;
 
@@ -121,13 +121,13 @@ typedef struct _DISPLAY_CONTEXT {
   DISPLAY_INTERFACE_CONTEXT DiContext[DisplayTypeMax];
 } DISPLAY_CONTEXT, *PDISPLAY_CONTEXT;
 
-extern DISPLAY_TIMING DefaultTiming;
+extern IMX_DISPLAY_TIMING DefaultTiming;
 
 EFI_STATUS
 GetPreferredTiming (
-  IN  UINT8           *EdidDataPtr,
-  IN  UINT32          EdidDataSize,
-  IN  DISPLAY_TIMING  *PreferredTimingPtr
+  IN  UINT8               *EdidDataPtr,
+  IN  UINT32              EdidDataSize,
+  IN  IMX_DISPLAY_TIMING  *PreferredTimingPtr
   );
 
 EFI_STATUS
@@ -169,7 +169,7 @@ ConfigureFrameBuffer (
 
 UINT32
 GetColorDepth (
-  IN  PIXEL_FORMAT  PixelFormat
+  IN  IMX_PIXEL_FORMAT  PixelFormat
   );
 
 #endif  /* _DISPLAY_H_ */

@@ -193,7 +193,7 @@ EFI_STATUS
 ConfigureDisplayInterface (
   IN  DISPLAY_INTERFACE_CONTEXT   *DisplayInterfaceContextPtr,
   IN  UINT32                      DisplayIndex,
-  IN  DISPLAY_TIMING              *DisplayTimingPtr
+  IN  IMX_DISPLAY_TIMING          *DisplayTimingPtr
   )
 {
   IPU_DIx_REGS              *pIpuDiRegs;

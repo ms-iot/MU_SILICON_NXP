@@ -41,16 +41,16 @@ ReadEdid (
   Status = Imx6DdcRead (
              DisplayContextPtr,
              DisplayInterface,
-             EDID_I2C_ADDRESS,
+             IMX_EDID_I2C_ADDRESS,
              0,
-             EDID_MIN_SIZE,
+             IMX_EDID_MIN_SIZE,
              EdidDataPtr
            );
   if (Status != EFI_SUCCESS) {
     goto Exit;
   }
 
-  Status = ValidateEdidData (
+  Status = ImxValidateEdidData (
              EdidDataPtr
            );
   if (Status != EFI_SUCCESS) {
@@ -60,7 +60,7 @@ ReadEdid (
 
   DEBUG ((DEBUG_INFO, "%a: EDID initialized\n", __FUNCTION__));
 
-  *EdidDataSizePtr = EDID_MIN_SIZE;
+  *EdidDataSizePtr = IMX_EDID_MIN_SIZE;
 
 Exit:
   return Status;
@@ -68,22 +68,22 @@ Exit:
 
 EFI_STATUS
 GetEdidPreferredTiming (
-  IN  UINT8           *EdidDataPtr,
-  IN  UINT32          EdidDataSizePtr,
-  OUT DISPLAY_TIMING  *PreferredTiming
+  IN  UINT8               *EdidDataPtr,
+  IN  UINT32              EdidDataSizePtr,
+  OUT IMX_DISPLAY_TIMING  *PreferredTiming
   )
 {
-  DETAILED_TIMING_DESCRIPTOR  *pEdidPreferredTiming;
-  EFI_STATUS                  Status;
+  IMX_DETAILED_TIMING_DESCRIPTOR  *pEdidPreferredTiming;
+  EFI_STATUS                      Status;
 
-  if (EdidDataSizePtr < EDID_MIN_SIZE) {
+  if (EdidDataSizePtr < IMX_EDID_MIN_SIZE) {
     DEBUG ((DEBUG_WARN, "%a: Insufficient EDID data\n", __FUNCTION__));
     Status = EFI_INVALID_PARAMETER;
     goto Exit;
   }
 
-  pEdidPreferredTiming = (DETAILED_TIMING_DESCRIPTOR *)&EdidDataPtr[EDID_DTD_1_OFFSET];
-  Status = ConvertDTDToDisplayTiming (pEdidPreferredTiming, PreferredTiming);
+  pEdidPreferredTiming = (IMX_DETAILED_TIMING_DESCRIPTOR *)&EdidDataPtr[IMX_EDID_DTD_1_OFFSET];
+  Status = ImxConvertDTDToDisplayTiming (pEdidPreferredTiming, PreferredTiming);
   if (Status != EFI_SUCCESS) {
     DEBUG ((DEBUG_ERROR, "%a: Conversion to display timing failed\n",
       __FUNCTION__));

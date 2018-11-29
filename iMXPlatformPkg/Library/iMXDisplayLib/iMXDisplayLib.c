@@ -28,17 +28,17 @@
 
 **/
 EFI_STATUS
-ConvertDTDToDisplayTiming (
-  IN DETAILED_TIMING_DESCRIPTOR   *DTDPtr,
-  OUT DISPLAY_TIMING              *DisplayTimingPtr
+ImxConvertDTDToDisplayTiming (
+  IN IMX_DETAILED_TIMING_DESCRIPTOR   *DTDPtr,
+  OUT IMX_DISPLAY_TIMING              *DisplayTimingPtr
   )
 {
-  UINT32  edidPixelClock;
+  UINT32  EdidPixelClock;
 
-  DEBUG ((DEBUG_INFO, "++ConvertDTDToDisplayTiming()\r\n"));
+  DEBUG ((DEBUG_INFO, "%a: Start DTD conversion\r\n", __FUNCTION__));
   // Refer to 3.10.2 VESA EDID spec
-  edidPixelClock = (DTDPtr->PixelClock[0] | (DTDPtr->PixelClock[1] << 8));
-  DisplayTimingPtr->PixelClock = edidPixelClock * 10000;
+  EdidPixelClock = (DTDPtr->PixelClock[0] | (DTDPtr->PixelClock[1] << 8));
+  DisplayTimingPtr->PixelClock = EdidPixelClock * 10000;
   DisplayTimingPtr->HActive = (DTDPtr->HActiveBlank & 0xF0);
   DisplayTimingPtr->HActive = (DisplayTimingPtr->HActive << 4) | DTDPtr->HActive;
   DisplayTimingPtr->HBlank = (DTDPtr->HActiveBlank & 0x0F);
@@ -65,9 +65,9 @@ ConvertDTDToDisplayTiming (
   DisplayTimingPtr->HBorder = DTDPtr->HBorder;
   DisplayTimingPtr->VBorder = DTDPtr->VBorder;
   DisplayTimingPtr->EdidFlags = DTDPtr->EdidFlags;
-  DisplayTimingPtr->Flags = 0;
+  DisplayTimingPtr->Flags = IMX_DISPLAY_TIMING_NO_FLAGS;
 
-  DEBUG ((DEBUG_INFO, "--ConvertDTDToDisplayTiming()=ok\r\n"));
+  DEBUG ((DEBUG_INFO, "%a: DTD conversion complete\r\n", __FUNCTION__));
   return EFI_SUCCESS;
 }
 
@@ -78,9 +78,9 @@ ConvertDTDToDisplayTiming (
   @param[in]    DisplayTimingPtr      Pointer to display timing structure.
 **/
 VOID
-PrintDisplayTiming (
-  IN CHAR8            *DisplayTimingNamePtr,
-  IN DISPLAY_TIMING   *DisplayTimingPtr
+ImxPrintDisplayTiming (
+  IN CHAR8                *DisplayTimingNamePtr,
+  IN IMX_DISPLAY_TIMING   *DisplayTimingPtr
   )
 {
   DEBUG ((DEBUG_INFO, "**********************\n"));
@@ -115,14 +115,14 @@ PrintDisplayTiming (
 
 **/
 EFI_STATUS
-ValidateEdidData (
+ImxValidateEdidData (
   IN UINT8 *EdidDataPtr
   )
 {
   UINT8   Checksum;
   UINT8   Index;
 
-  DEBUG ((DEBUG_INFO, "++ValidateEdidData()\r\n"));
+  DEBUG ((DEBUG_INFO, "%a: Enter\r\n", __FUNCTION__));
 
   if (EdidDataPtr[0] != 0x00 ||
       EdidDataPtr[1] != 0xFF ||
@@ -132,21 +132,21 @@ ValidateEdidData (
       EdidDataPtr[5] != 0xFF ||
       EdidDataPtr[6] != 0xFF ||
       EdidDataPtr[7] != 0x00) {
-    DEBUG ((DEBUG_ERROR, "Invalid EDID header\n"));
+    DEBUG ((DEBUG_ERROR, "%a: Invalid EDID header\n", __FUNCTION__));
     return EFI_INVALID_PARAMETER;
   }
 
   // Validate EDID checksum
   Checksum = 0;
-  for (Index = 0; Index < EDID_MIN_SIZE; Index++) {
+  for (Index = 0; Index < IMX_EDID_MIN_SIZE; Index++) {
     Checksum += EdidDataPtr[Index];
   }
 
   if (Checksum != 0) {
-    DEBUG ((DEBUG_ERROR, "Invalid EDID checksum\n"));
+    DEBUG ((DEBUG_ERROR, "%a: Invalid EDID checksum\n", __FUNCTION__));
     return EFI_INVALID_PARAMETER;
   }
 
-  DEBUG ((DEBUG_INFO, "--ValidateEdidData()=ok\r\n"));
+  DEBUG ((DEBUG_INFO, "%a: Success\r\n", __FUNCTION__));
   return EFI_SUCCESS;
 }

@@ -86,7 +86,7 @@ SetLvdsPower (
 EFI_STATUS
 SetLvdsDisplay (
   IN  DISPLAY_INTERFACE_CONTEXT   *pLvdsDisplayContext,
-  IN  DISPLAY_TIMING              *Timings
+  IN  IMX_DISPLAY_TIMING          *Timings
   )
 {
   return EFI_UNSUPPORTED;

@@ -17,7 +17,7 @@
 
 EFI_STATUS
 LcdifConfigureDisplay (
-    DISPLAY_TIMING* Timing,
+    IMX_DISPLAY_TIMING* Timing,
     VOID* FrameBuffer
     );
 

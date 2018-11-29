@@ -25,9 +25,9 @@ ReadEdid (
 
 EFI_STATUS
 GetEdidPreferredTiming (
-  IN  UINT8           *EdidDataPtr,
-  IN  UINT32          EdidDataSizePtr,
-  OUT DISPLAY_TIMING  *PreferredTiming
+  IN  UINT8               *EdidDataPtr,
+  IN  UINT32              EdidDataSizePtr,
+  OUT IMX_DISPLAY_TIMING  *PreferredTiming
   );
 
 #endif  /* _EDID_H_ */

@@ -37,7 +37,7 @@ typedef struct _LCDIF_DISPLAY_CONTEXT {
     //
     // Display configuration
     //
-    DISPLAY_TIMING PreferedTiming;
+    IMX_DISPLAY_TIMING PreferedTiming;
 
     //
     // Frame buffer
@@ -121,7 +121,7 @@ static EFI_GRAPHICS_OUTPUT_PROTOCOL LcdifGopProtocol =
     &LcdifGopProtocolMode   // Mode
 };
 
-DISPLAY_TIMING DefaultTiming = {
+IMX_DISPLAY_TIMING DefaultTiming = {
     65000000,   // PixelClock
     1024,       // HActive
     320,        // HBlank
@@ -149,7 +149,7 @@ VOID LcdifBoardInitialize (
     );
 
 RETURN_STATUS LcdifBoardQueryEdidTiming (
-    OUT DISPLAY_TIMING* PreferredTiming
+    OUT IMX_DISPLAY_TIMING* PreferredTiming
     );
 
 //
@@ -157,7 +157,7 @@ RETURN_STATUS LcdifBoardQueryEdidTiming (
 //
 VOID
 GetPreferredTiming (
-    OUT DISPLAY_TIMING* PreferredTiming
+    OUT IMX_DISPLAY_TIMING* PreferredTiming
     )
 {
     EFI_STATUS status;
@@ -176,7 +176,7 @@ GetPreferredTiming (
     PreferredTiming->PixelFormat = PIXEL_FORMAT_BGRA32;
     PreferredTiming->Bpp = 32;
 
-    PrintDisplayTiming(
+    ImxPrintDisplayTiming(
         "Preferred Timing",
         PreferredTiming);
 

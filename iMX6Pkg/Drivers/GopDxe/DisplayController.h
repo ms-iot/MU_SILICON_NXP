@@ -323,9 +323,9 @@ SetDisplayControllerChannelState (
 EFI_STATUS
 ConfigureDisplayControllerChannel (
   IN  DISPLAY_INTERFACE_CONTEXT   *DisplayInterfaceContextPtr,
-  IN  DISPLAY_INTERFACE_TYPE           DisplayInterface,
+  IN  DISPLAY_INTERFACE_TYPE      DisplayInterface,
   IN  UINT32                      DisplayIndex,
-  IN  DISPLAY_TIMING              *DisplayTimingPtr
+  IN  IMX_DISPLAY_TIMING          *DisplayTimingPtr
   );
 
 #endif  /* _DISPLAY_CONTROLLER_H_ */

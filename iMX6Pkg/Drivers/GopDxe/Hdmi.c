@@ -247,8 +247,8 @@ HdmiPhyI2cWrite (
 
 BOOLEAN
 GetGenericConfigSetting (
-  IN  DISPLAY_TIMING    *DisplayTimingPtr,
-  OUT PLL_MPLL_CONFIG   **ConfigGenericSettingPPtr
+  IN  IMX_DISPLAY_TIMING    *DisplayTimingPtr,
+  OUT PLL_MPLL_CONFIG       **ConfigGenericSettingPPtr
   )
 {
   UINT32    ColorDepth;
@@ -384,7 +384,7 @@ SetHdmiPower (
 EFI_STATUS
 SetHdmiPhy (
   IN  DISPLAY_INTERFACE_CONTEXT   *HdmiDisplayContextPtr,
-  IN  DISPLAY_TIMING              *Timings
+  IN  IMX_DISPLAY_TIMING          *Timings
   )
 {
   PLL_MPLL_CONFIG           *pPllMpllConfig;
@@ -640,7 +640,7 @@ Exit:
 EFI_STATUS
 SetHdmiDisplay (
   IN  DISPLAY_INTERFACE_CONTEXT   *HdmiDisplayContextPtr,
-  IN  DISPLAY_TIMING              *Timings
+  IN  IMX_DISPLAY_TIMING          *Timings
   )
 {
   EFI_STATUS  Status;

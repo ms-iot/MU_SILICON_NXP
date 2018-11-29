@@ -15,21 +15,23 @@
 #ifndef __IMX_DISPLAY_H__
 #define __IMX_DISPLAY_H__
 
-#define EDID_MIN_SIZE       128
-#define EDID_I2C_ADDRESS    0x50
+#define IMX_EDID_MIN_SIZE       128
+#define IMX_EDID_I2C_ADDRESS    0x50
 
 // The first DTD is the preferred timing, refer to 3.1 VESA EDID spec.
-#define EDID_DTD_1_OFFSET   0x36
-#define EDID_DTD_2_OFFSET   0x48
-#define EDID_DTD_3_OFFSET   0x5A
-#define EDID_DTD_4_OFFSET   0x6C
+#define IMX_EDID_DTD_1_OFFSET   0x36
+#define IMX_EDID_DTD_2_OFFSET   0x48
+#define IMX_EDID_DTD_3_OFFSET   0x5A
+#define IMX_EDID_DTD_4_OFFSET   0x6C
+
+#define IMX_DISPLAY_TIMING_NO_FLAGS 0
 
 typedef enum {
   PIXEL_FORMAT_ARGB32,
   PIXEL_FORMAT_BGRA32,
-} PIXEL_FORMAT;
+} IMX_PIXEL_FORMAT;
 
-typedef struct _DISPLAY_TIMING {
+typedef struct _IMX_DISPLAY_TIMING {
   UINT32 PixelClock;
   UINT32 HActive;
   UINT32 HBlank;
@@ -47,10 +49,10 @@ typedef struct _DISPLAY_TIMING {
   UINT32 Flags;
   UINT32 PixelRepetition;
   UINT32 Bpp;
-  PIXEL_FORMAT PixelFormat;
-} DISPLAY_TIMING, *PDISPLAY_TIMING, DTD;
+  IMX_PIXEL_FORMAT PixelFormat;
+} IMX_DISPLAY_TIMING;
 
-typedef struct _DETAILED_TIMING_DESCRIPTOR {
+typedef struct _IMX_DETAILED_TIMING_DESCRIPTOR {
   UINT8 PixelClock[2];
   UINT8 HActive;
   UINT8 HBlank;
@@ -68,7 +70,7 @@ typedef struct _DETAILED_TIMING_DESCRIPTOR {
   UINT8 HBorder;
   UINT8 VBorder;
   UINT8 EdidFlags;
-} DETAILED_TIMING_DESCRIPTOR, *PDETAILED_TIMING_DESCRIPTOR;
+} IMX_DETAILED_TIMING_DESCRIPTOR;
 
 /**
   Convert detailed timing descriptor to display timing format
@@ -80,9 +82,9 @@ typedef struct _DETAILED_TIMING_DESCRIPTOR {
 
 **/
 EFI_STATUS
-ConvertDTDToDisplayTiming (
-  IN DETAILED_TIMING_DESCRIPTOR   *DTDPtr,
-  OUT DISPLAY_TIMING              *DisplayTimingPtr
+ImxConvertDTDToDisplayTiming (
+  IN IMX_DETAILED_TIMING_DESCRIPTOR   *DTDPtr,
+  OUT IMX_DISPLAY_TIMING              *DisplayTimingPtr
   );
 
 /**
@@ -92,9 +94,9 @@ ConvertDTDToDisplayTiming (
   @param[in]    DisplayTimingPtr      Pointer to display timing structure.
 **/
 VOID
-PrintDisplayTiming (
-  IN CHAR8            *DisplayTimingNamePtr,
-  IN DISPLAY_TIMING   *DisplayTimingPtr
+ImxPrintDisplayTiming (
+  IN CHAR8                *DisplayTimingNamePtr,
+  IN IMX_DISPLAY_TIMING   *DisplayTimingPtr
   );
 
 /**
@@ -107,7 +109,7 @@ PrintDisplayTiming (
 
 **/
 EFI_STATUS
-ValidateEdidData (
+ImxValidateEdidData (
   IN UINT8 *EdidDataPtr
   );
 
