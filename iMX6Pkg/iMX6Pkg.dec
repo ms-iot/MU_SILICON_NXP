@@ -53,12 +53,6 @@
   giMX6TokenSpaceGuid.PcdFrameBufferSize|0x00800000|UINT32|0x0000000B
 
   #
-  # Performance counter
-  #
-  gEmbeddedTokenSpaceGuid.PcdEmbeddedFdPerformanceCounterFrequencyInHz|1000000|UINT32 |0xC
-  gEmbeddedTokenSpaceGuid.PcdEmbeddedFdPerformanceCounterPeriodInNanoseconds|1000|UINT32 |0xD
-
-  #
   # USB EHCI Controller
   #
   giMX6TokenSpaceGuid.PcdEHCIBase|0x02184000|UINT32|0xE
