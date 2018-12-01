@@ -43,12 +43,6 @@
 [PcdsFixedAtBuild.common]
 
   #
-  # Performance counter
-  #
-  gEmbeddedTokenSpaceGuid.PcdEmbeddedFdPerformanceCounterFrequencyInHz|1000000|UINT32 |0xA
-  gEmbeddedTokenSpaceGuid.PcdEmbeddedFdPerformanceCounterPeriodInNanoseconds|1000|UINT32 |0xB
-
-  #
   # UART
   #
   giMX7TokenSpaceGuid.PcdUARTBaseDebug|0x30860000|UINT32|0x0C	# UART1 is set as UEFI debug port

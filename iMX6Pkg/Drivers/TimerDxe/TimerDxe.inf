@@ -48,7 +48,6 @@
   gHardwareInterruptProtocolGuid
 
 [Pcd.common]
-  gEmbeddedTokenSpaceGuid.PcdEmbeddedFdPerformanceCounterPeriodInNanoseconds
   gEmbeddedTokenSpaceGuid.PcdTimerPeriod
 
 [Depex]
