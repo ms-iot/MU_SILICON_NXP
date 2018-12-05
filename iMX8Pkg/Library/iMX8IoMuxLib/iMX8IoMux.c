@@ -41,7 +41,7 @@ ImxPadConfig (
   // Configure Mux Control
   //
   MmioWrite32 (
-    IOMUXC_SW_MUX_PAD_BASE_ADDRESS + _IMX_PAD_MUX_OFFSET(Pad),
+    IOMUXC_SW_MUX_PAD_BASE_ADDRESS + IMX_IOMUX_PAD_MUX_OFFSET(Pad),
     _IMX_PADCFG_MUX_CTL(PadConfig));
 
   //
@@ -61,7 +61,7 @@ ImxPadConfig (
   // Configure Pad Control
   //
   MmioWrite32 (
-    IOMUXC_SW_MUX_PAD_BASE_ADDRESS + _IMX_PAD_CTL_OFFSET(Pad),
+    IOMUXC_SW_MUX_PAD_BASE_ADDRESS + IMX_IOMUX_PAD_CTL_OFFSET(Pad),
     _IMX_PADCFG_PAD_CTL(PadConfig));
 }
 
@@ -73,26 +73,26 @@ ImxPadDumpConfig (
 {
   IMX_IOMUXC_MUX_CTL muxCtl;
   muxCtl.AsUint32 = MmioRead32 (
-    IOMUXC_SW_MUX_PAD_BASE_ADDRESS + _IMX_PAD_MUX_OFFSET(Pad));
+    IOMUXC_SW_MUX_PAD_BASE_ADDRESS + IMX_IOMUX_PAD_MUX_OFFSET(Pad));
 
   DEBUG ((
     DEBUG_INIT,
     "- %a MUX_CTL(0x%p)=0x%08x: MUX_MODE:%d SION:%d | ",
     SignalFriendlyName,
-    IOMUXC_SW_MUX_PAD_BASE_ADDRESS + _IMX_PAD_MUX_OFFSET(Pad),
+    IOMUXC_SW_MUX_PAD_BASE_ADDRESS + IMX_IOMUX_PAD_MUX_OFFSET(Pad),
     muxCtl.AsUint32,
     muxCtl.Fields.MUX_MODE,
     muxCtl.Fields.SION));
 
   IMX_IOMUXC_PAD_CTL padCtl;
   padCtl.AsUint32 = MmioRead32 (
-    IOMUXC_SW_MUX_PAD_BASE_ADDRESS + _IMX_PAD_CTL_OFFSET(Pad));
+    IOMUXC_SW_MUX_PAD_BASE_ADDRESS + IMX_IOMUX_PAD_CTL_OFFSET(Pad));
 
 #if defined(CPU_IMX8MM)
   DEBUG ((
 	DEBUG_INIT,
 	"PAD_CTL(0x%p)=0x%08x: DSE:%d FSEL:%d ODE:%d PUE:%d HYS:%d PE:%d\n",
-	IOMUXC_SW_MUX_PAD_BASE_ADDRESS + _IMX_PAD_CTL_OFFSET(Pad),
+	IOMUXC_SW_MUX_PAD_BASE_ADDRESS + IMX_IOMUX_PAD_CTL_OFFSET(Pad),
 	padCtl.AsUint32,
 	padCtl.Fields.DSE,
 	padCtl.Fields.FSEL,
@@ -104,7 +104,7 @@ ImxPadDumpConfig (
   DEBUG ((
     DEBUG_INIT,
     "PAD_CTL(0x%p)=0x%08x: DSE:%d SRE:%d ODE:%d PUE:%d HYS:%d LVTTL:%d VSEL:%d\n",
-    IOMUXC_SW_MUX_PAD_BASE_ADDRESS + _IMX_PAD_CTL_OFFSET(Pad),
+    IOMUXC_SW_MUX_PAD_BASE_ADDRESS + IMX_IOMUX_PAD_CTL_OFFSET(Pad),
     padCtl.AsUint32,
     padCtl.Fields.DSE,
     padCtl.Fields.SRE,
