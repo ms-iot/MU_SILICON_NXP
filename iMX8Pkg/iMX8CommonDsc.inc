@@ -380,7 +380,7 @@
   #                              // significantly impact boot performance
   #  DEBUG_ERROR     0x80000000  // Error
 #  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8012004F
-  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x80080246
+  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x80080206
 
   gEfiMdePkgTokenSpaceGuid.PcdReportStatusCodePropertyMask|0x07
 
@@ -410,6 +410,50 @@
 #
 ########################
 [PcdsFixedAtBuild.common]
+!if $(IMX_FAMILY) == IMX8MM
+  #
+  # iMX8MM Plaform Memory Layout
+  #                                        PcdSystemMemoryBase
+  # +-------------------+===> (0x40000000) PcdArmLcdDdrFrameBufferBase (Frame buffer)
+  # | HDMI framebuffer  |  ^
+  # |                   |  |  (0x007E9000) PcdArmLcdDdrFrameBufferSize ~8MB
+  # |                   |  v
+  # +-------------------+===> (0x407E9000) PcdGlobalDataBaseAddress
+  # | Global Data       |  ^
+  # |                   |  |  (0x00001000) PcdGlobalDataSize 4KB
+  # |                   |  v
+  # +-------------------+===> (0x407EA000) 
+  # | Operating System  |  ^
+  # | Memory            |  |
+  # |                   |  |
+  # |                   |  v
+  # +-------------------+===> (0xBE000000) PcdTrustZonePrivateMemoryBase (OPTEE image base address)
+  # | TZ Private Memory |  ^
+  # | (OPTEE)           |  |  (0x01E00000) PcdTrustZonePrivateMemorySize 30MB
+  # |                   |  v
+  # +-------------------+===> (0xBFE00000) PcdTrustZoneSharedMemoryBase (includes mobj bookkeeping page)
+  # | TZ Shared Memory  |  ^
+  # |                   |  |  (0x00200000) PcdTrustZoneSharedMemorySize 2MB
+  # |                   |  v
+  # +-------------------|===>
+
+!if $(CONFIG_OPTEE) == TRUE
+  gOpteeClientPkgTokenSpaceGuid.PcdTrustZonePrivateMemoryBase|0xBE000000
+  gOpteeClientPkgTokenSpaceGuid.PcdTrustZonePrivateMemorySize|0x01E00000
+
+  #
+  # TrustZone shared memory (2Mb)
+  # This memory is managed by the normal world but shared with the OpTEE OS.
+  # It must match OpTEE optee_os/core/arch/arm/plat-imx/platform_config.h:
+  #    CFG_SHMEM_START & CFG_SHMEM_SIZE
+  # NOTE: The first page of the SHMEM is owned by OPTEE for mobj bookkeeping
+  # and we should not touch it. We will skip the first 4K of SHMEM and take that
+  # into account for SHMEM size in PcdTrustZoneSharedMemorySize.
+  #
+  gOpteeClientPkgTokenSpaceGuid.PcdTrustZoneSharedMemoryBase|0xBFE00000
+  gOpteeClientPkgTokenSpaceGuid.PcdTrustZoneSharedMemorySize|0x00200000
+!endif
+!else  # IMX8MQ
   #
   # iMX8 Plaform Memory Layout
   #                                        PcdSystemMemoryBase
@@ -452,6 +496,7 @@
   gOpteeClientPkgTokenSpaceGuid.PcdTrustZoneSharedMemoryBase|0xFFE00000
   gOpteeClientPkgTokenSpaceGuid.PcdTrustZoneSharedMemorySize|0x00200000
 !endif
+!endif
 
   #
   # iMXPlatformPkg
@@ -482,11 +527,19 @@
   gOpteeClientPkgTokenSpaceGuid.PcdTpm2AcpiBufferSize|0x3000
 !endif
 
+!if $(IMX_FAMILY) == IMX8MM
+  # SDHC memory
+  giMXPlatformTokenSpaceGuid.PcdSdhc1Base|0x30B40000
+  giMXPlatformTokenSpaceGuid.PcdSdhc2Base|0x30B50000
+  giMXPlatformTokenSpaceGuid.PcdSdhc3Base|0x30B60000
+  giMXPlatformTokenSpaceGuid.PcdSdhc4Base|0x00000000
+!else
   # SDHC memory
   giMXPlatformTokenSpaceGuid.PcdSdhc1Base|0x30B40000
   giMXPlatformTokenSpaceGuid.PcdSdhc2Base|0x30B50000
   giMXPlatformTokenSpaceGuid.PcdSdhc3Base|0x00000000
   giMXPlatformTokenSpaceGuid.PcdSdhc4Base|0x00000000
+!endif
 
   # RunAxf support via Dynamic Shell Command protocol
   # We want to use the Shell Libraries but don't want it to initialise
@@ -649,10 +702,14 @@
   MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf
   MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf
   MdeModulePkg/Universal/SetupBrowserDxe/SetupBrowserDxe.inf
+!if TRUE == FALSE
   MdeModulePkg/Universal/BdsDxe/BdsDxe.inf {
     <LibraryClasses>
       PlatformBootManagerLib|MsCorePkg/Library/PlatformBootManagerLib/PlatformBootManagerLib.inf
   }
+!else
+  MdeModulePkg/Universal/BdsDxe/BdsDxe.inf
+!endif
   MdeModulePkg/Application/UiApp/UiApp.inf {
     <LibraryClasses>
       NULL|MdeModulePkg/Library/DeviceManagerUiLib/DeviceManagerUiLib.inf
@@ -681,14 +738,17 @@
   # Usb Support
   #
 !if $(CONFIG_USB) == TRUE
+!if $(IMX_FAMILY) == IMX8MM
+  # TODO : add Ehci packages
+!else
   MdeModulePkg/Bus/Pci/XhciDxe/XhciDxe.inf
+!endif
   MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
   MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
   MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
   MdeModulePkg/Bus/Usb/UsbMouseDxe/UsbMouseDxe.inf
   MdeModulePkg/Bus/Pci/NonDiscoverablePciDeviceDxe/NonDiscoverablePciDeviceDxe.inf
 !endif
-
   #
   # UEFI application (Shell Embedded Boot Loader)
   #

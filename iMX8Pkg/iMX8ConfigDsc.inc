@@ -98,10 +98,13 @@
 [BuildOptions]
 #
 # For each enabled CONFIG_* flag in the dsc files, define that flag in C code.
-# Description of each CONFIG_* flag exist in iMX6DefaultConfigDsc.inc
 # Note: The = sign in BuildOptions section appends to the existing macro, while
 # == can be used to replace its value. See the EDK2 DSC specs.
 #
+
+# CPU_* compiler flag is used to select constants for iMX8.h
+  GCC:*_*_*_CC_FLAGS = -D$(BOARD_NAME) -DCPU_$(IMX_FAMILY)
+
 !if $(CONFIG_HEADLESS) == TRUE
   GCC:*_*_*_CC_FLAGS = -DCONFIG_HEADLESS=1
 !endif
