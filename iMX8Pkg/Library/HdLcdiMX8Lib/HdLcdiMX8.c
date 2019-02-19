@@ -140,9 +140,18 @@ LcdPlatformQueryMode (
   ASSERT (Info != NULL);
 
   Info->Version = 0;
+
+#if defined(CPU_IMX8MM)
+  Info->HorizontalResolution = HD_H_RES_PIXELS;
+  Info->VerticalResolution = HD_V_RES_PIXELS;
+  Info->PixelsPerScanLine = HD_H_RES_PIXELS;
+#elif defined(CPU_IMX8M)
   Info->HorizontalResolution = HD720_H_RES_PIXELS;
   Info->VerticalResolution = HD720_V_RES_PIXELS;
   Info->PixelsPerScanLine = HD720_H_RES_PIXELS;
+#elif
+#error "Unknown CPU family"
+#endif
 
   Info->PixelFormat = PixelBlueGreenRedReserved8BitPerColor;
 
