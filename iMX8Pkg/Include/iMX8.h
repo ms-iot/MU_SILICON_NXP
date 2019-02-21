@@ -23,6 +23,24 @@
 
 // TODO: probably need to add references to all other hardware blocks,
 // unlike imx6/7, AARCH64 uses the MMU and if it's not mapped you get an exception
+#if defined(CPU_IMX8MM)
+#define ARM_PERIPHERALS_REGISTERS_PHYSICAL  0x31000000
+#define ARM_PERIPHERALS_REGISTERS_LENGTH    0x00400000
+
+#define ARM_IP_BUS_REGISTERS_PHYSICAL       0x30000000
+#define ARM_IP_BUS_REGISTERS_LENGTH         0x01000000
+
+#define PCIE_REG_REGISTER_PHYSICAL          0x33800000
+#define PCIE_REG_REGISTER_LENGTH            0x00400000
+
+#define ARM_USB_REG_REGISTER_PHYSICAL       0x32E40000
+#define ARM_USB_REG_REGISTER_LENGTH         0x00020000
+
+#define ARM_GIC_REG_REGISTER_PHYSICAL       0x38800000
+#define ARM_GIC_REG_REGISTER_LENGTH         0x00100000
+
+#else // IMX8MQ
+
 #define ARM_PERIPHERALS_REGISTERS_PHYSICAL  0x31000000
 #define ARM_PERIPHERALS_REGISTERS_LENGTH    0x00400000
 
@@ -37,15 +55,11 @@
 
 #define ARM_GIC_REG_REGISTER_PHYSICAL       0x38800000
 #define ARM_GIC_REG_REGISTER_LENGTH         0x00100000
+#endif
 
 //
 // Interrupts
 //
-#define INTERRUPT_BASE_ADDRESS  0x31000000
-
-#define INTERRUPT_DISTRIBUTOR_OFFSET    0x1000
-#define INTERRUPT_CPU_INTERFACE_OFFSET  0x2000
-
 #define TOTAL_PRIVATE_INTERRUPT     32
 #define DEFINE_IMX8_INTERRUPT(a)    (a + TOTAL_PRIVATE_INTERRUPT)
 
@@ -66,7 +80,11 @@
 //
 // Clock Source
 //
+#if defined(CPU_IMX8MM)
+#define SOC_OSC_FREQUENCY_REF_HZ  24000000  // Oscillator frequency 24Mhz
+#else
 #define SOC_OSC_FREQUENCY_REF_HZ  25000000  // Oscillator frequency 25Mhz
+#endif
 
 // General Purpose Timers
 
@@ -105,10 +123,19 @@
 #define GPT_TIMER_DEFAULT_PRESCALER         (2 - 1)
 
 // SDMA (Smart DMA) controllers
+#if defined(CPU_IMX8MM)
 #define SDMA1_BASE_ADDRESS      0x30BD0000
+#define SDMA1_IRQ               DEFINE_IMX8_INTERRUPT(2)
 #define SDMA2_BASE_ADDRESS      0x302C0000
-#define SDMA1_IRQ               34
-#define SDMA2_IRQ               135
+#define SDMA2_IRQ               DEFINE_IMX8_INTERRUPT(103)
+#define SDMA3_BASE_ADDRESS      0x302B0000
+#define SDMA3_IRQ               DEFINE_IMX8_INTERRUPT(34)
+#else
+#define SDMA1_BASE_ADDRESS      0x30BD0000
+#define SDMA1_IRQ               DEFINE_IMX8_INTERRUPT(2)
+#define SDMA2_BASE_ADDRESS      0x302C0000
+#define SDMA2_IRQ               DEFINE_IMX8_INTERRUPT(103)
+#endif
 
 #pragma pack(push, 1)
 typedef union {
@@ -173,12 +200,6 @@ typedef struct {
 #pragma pack(pop)
 
 //
-// MPPP definitions
-//
-#define CPU0_MPPP_PHYSICAL_BASE            0x8080F000
-#define CPU1_MPPP_PHYSICAL_BASE            0x80810000
-
-//
 // Secure Non-Volatile Storage (SNVS)
 //
 
@@ -228,52 +249,6 @@ typedef union {
         UINT32 Reserved2 : 7;       // 25-31 ???
     };
 } SNVS_LPCR_REG;
-#pragma pack(pop)
-
-//
-// SRC (System Reset Controller) register offsets & masks
-// TODO: update for IMX8
-
-#define SRC_BASE_ADDRESS    0x30390000
-
-#define SRC_SCR_OFFSET      0x00
-#define SRC_A7RCR0_OFFSET   0x04
-#define SRC_A7RCR1_OFFSET   0x08
-#define SRC_GPR1_OFFSET     0x74
-#define SRC_GPR2_OFFSET     0x78
-#define SRC_GPR3_OFFSET     0x7C
-#define SRC_GPR4_OFFSET     0x80
-
-#pragma pack(push, 1)
-typedef union {
-    UINT32 AsUint32;
-    struct {
-        UINT32 A7_CORE_POR_RESET0 : 1;  // 0 POR reset for A7 core0 only.
-        UINT32 A7_CORE_POR_RESET1 : 1;  // 1 POR reset for A7 core1 only.
-        UINT32 Reserved0 : 2;           // 2-3 Reserved
-        UINT32 A7_CORE_RESET0 : 1;      // 4 Software reset for A7 core0 only.
-        UINT32 A7_CORE_RESET1 : 1;      // 5 Software reset for A7 core1 only.
-        UINT32 Reserved1 : 2;           // 6-7 Reserved
-        UINT32 A7_DBG_RESET0 : 1;       // 8 Software reset for A7 core0 debug only.
-        UINT32 A7_DBG_RESET1 : 1;       // 9 Software reset for A7 core1 debug only.
-        UINT32 Reserved2 : 2;           // 10-11 Reserved
-        UINT32 A7_ETM_RESET0 : 1;       // 12 Software reset for cor01 ETM only.
-        UINT32 A7_ETM_RESET1 : 1;       // 13 Software reset for core1 ETM only.
-        UINT32 Reserved3 : 2;           // 14-15 Reserved
-        UINT32 MASK_WDOG1_RST : 4;      // 16-19 Mask wdog1_rst_b source.
-        UINT32 A7_SOC_DBG_RESET : 1;    // 20 Software reset for system level debug reset.
-        UINT32 A7_L2RESET : 1;          // 21 Software reset for A7 Snoop Control Unit (SCU).
-        UINT32 Reserved4 : 2;           // 22-23 Reserved
-        UINT32 DOMAIN0 : 1;             // 24 Domain0 assignment control.
-        UINT32 DOMAIN1 : 1;             // 25 Domain1 assignment control.
-        UINT32 DOMAIN2 : 1;             // 26 Domain2 assignment control.
-        UINT32 DOMAIN3 : 1;             // 27 Domain3 assignment control.
-        UINT32 Reserved5 : 2;           // 28-29 Reserved
-        UINT32 LOCK : 1;                // 30 Domain control bits lock
-        UINT32 DOM_EN : 1;              // 31 Domain Control enable for this register.
-    };
-}SRC_A7RCR0_REG;
-
 #pragma pack(pop)
 
 //
