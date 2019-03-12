@@ -17,7 +17,11 @@
 #include <Library/DebugLib.h>
 
 #include <iMX8.h>
-#include <iMX8IoMux.h>
+#if defined(CPU_IMX8MM)
+#include <iMX8MMiniIoMux.h>
+#else
+#include <iMX8MIoMux.h>
+#endif
 
 //
 // Muxing functions
@@ -84,6 +88,19 @@ ImxPadDumpConfig (
   padCtl.AsUint32 = MmioRead32 (
     IOMUXC_SW_MUX_PAD_BASE_ADDRESS + _IMX_PAD_CTL_OFFSET(Pad));
 
+#if defined(CPU_IMX8MM)
+  DEBUG ((
+	DEBUG_INIT,
+	"PAD_CTL(0x%p)=0x%08x: DSE:%d FSEL:%d ODE:%d PUE:%d HYS:%d PE:%d\n",
+	IOMUXC_SW_MUX_PAD_BASE_ADDRESS + _IMX_PAD_CTL_OFFSET(Pad),
+	padCtl.AsUint32,
+	padCtl.Fields.DSE,
+	padCtl.Fields.FSEL,
+	padCtl.Fields.ODE,
+	padCtl.Fields.PUE,
+	padCtl.Fields.HYS,
+	padCtl.Fields.PE));
+#else
   DEBUG ((
     DEBUG_INIT,
     "PAD_CTL(0x%p)=0x%08x: DSE:%d SRE:%d ODE:%d PUE:%d HYS:%d LVTTL:%d VSEL:%d\n",
@@ -96,6 +113,7 @@ ImxPadDumpConfig (
     padCtl.Fields.HYS,
     padCtl.Fields.LVTTL,
     padCtl.Fields.VSEL));
+#endif
 }
 
 //
