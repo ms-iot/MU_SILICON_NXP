@@ -123,18 +123,13 @@
 #define GPT_TIMER_DEFAULT_PRESCALER         (2 - 1)
 
 // SDMA (Smart DMA) controllers
-#if defined(CPU_IMX8MM)
 #define SDMA1_BASE_ADDRESS      0x30BD0000
 #define SDMA1_IRQ               DEFINE_IMX8_INTERRUPT(2)
 #define SDMA2_BASE_ADDRESS      0x302C0000
 #define SDMA2_IRQ               DEFINE_IMX8_INTERRUPT(103)
+#if defined(CPU_IMX8MM)
 #define SDMA3_BASE_ADDRESS      0x302B0000
 #define SDMA3_IRQ               DEFINE_IMX8_INTERRUPT(34)
-#else // CPU_IMX8MQ
-#define SDMA1_BASE_ADDRESS      0x30BD0000
-#define SDMA1_IRQ               DEFINE_IMX8_INTERRUPT(2)
-#define SDMA2_BASE_ADDRESS      0x302C0000
-#define SDMA2_IRQ               DEFINE_IMX8_INTERRUPT(103)
 #endif
 
 #pragma pack(push, 1)
@@ -293,7 +288,7 @@ typedef union {
 
 //
 // IOMux:
-// IMX8 specific
+// IMX8M specific
 //
 
 #if defined(CPU_IMX8MM)
