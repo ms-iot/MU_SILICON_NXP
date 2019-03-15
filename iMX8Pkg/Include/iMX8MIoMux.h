@@ -1,6 +1,6 @@
 /** @file
 *
-*  Header defining IMX8 Muxing
+*  Header defining IMX8M Muxing
 *
 *  Copyright (c), Microsoft Corporation. All rights reserved.
 *
@@ -13,8 +13,8 @@
 *  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 *
 **/
-#ifndef _IMX8_IOMUX_H_
-#define _IMX8_IOMUX_H_
+#ifndef _IMX8M_IOMUX_H_
+#define _IMX8M_IOMUX_H_
 
 //
 // IOMux common definition
@@ -2027,4 +2027,4 @@ VOID ImxPadConfig (IMX_PAD Pad, IMX_PADCFG PadConfig);
 **/
 VOID ImxPadDumpConfig (char *PadName, IMX_PAD Pad);
 
-#endif // _IMX8_IOMUX_H_
+#endif // _IMX8M_IOMUX_H_
