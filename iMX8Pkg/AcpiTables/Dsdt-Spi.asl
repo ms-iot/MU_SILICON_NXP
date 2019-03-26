@@ -60,7 +60,7 @@ Device (SPI3)
   Method (_CRS, 0x0, NotSerialized) {
     Name (RBUF, ResourceTemplate () {
       MEMORY32FIXED(ReadWrite, 0x30840000, 0x4000, )
-      Interrupt(ResourceConsumer, Level, ActiveHigh, Exclusive) { 65}
+      Interrupt(ResourceConsumer, Level, ActiveHigh, Exclusive) { 65 }
     })
     Return(RBUF)
   }
