@@ -15,51 +15,53 @@
 
 Device (SPI1)
 {
-   Name (_HID, "NXP0105")
-   Name (_UID, 0x1)
-   Method (_STA)
-   {
-       Return(0x0)
-   }
-   Method (_CRS, 0x0, NotSerialized) {
-       Name (RBUF, ResourceTemplate () {
-           MEMORY32FIXED(ReadWrite, 0x30820000, 0x4000, )
-           Interrupt(ResourceConsumer, Level, ActiveHigh, Exclusive) { 63 }
-       })
-       Return(RBUF)
-   }
+  Name (_HID, "NXP0105")
+  Name (_HRV, 0x1)  // REV_0001
+  Method (_STA)
+  {
+    Return(0x0)
+  }
+  Method (_CRS, 0x0, NotSerialized) {
+    Name (RBUF, ResourceTemplate () {
+      MEMORY32FIXED(ReadWrite, 0x30820000, 0x4000, )
+      Interrupt(ResourceConsumer, Level, ActiveHigh, Exclusive) { 63 }
+    })
+    Return(RBUF)
+  }
 }
 
 Device (SPI2)
 {
-   Name (_HID, "NXP0105")
-   Name (_UID, 0x2)
-   Method (_STA)
-   {
-       Return(0x0)
-   }
-   Method (_CRS, 0x0, NotSerialized) {
-       Name (RBUF, ResourceTemplate () {
-           MEMORY32FIXED(ReadWrite, 0x30830000, 0x4000, )
-           Interrupt(ResourceConsumer, Level, ActiveHigh, Exclusive) { 64 }
-       })
-       Return(RBUF)
-   }
+  Name (_HID, "NXP0105")
+  Name (_HRV, 0x1)  // REV_0001
+  Name (_UID, 0x2)
+  Method (_STA)
+  {
+    Return(0x0)
+  }
+  Method (_CRS, 0x0, NotSerialized) {
+    Name (RBUF, ResourceTemplate () {
+      MEMORY32FIXED(ReadWrite, 0x30830000, 0x4000, )
+      Interrupt(ResourceConsumer, Level, ActiveHigh, Exclusive) { 64 }
+    })
+    Return(RBUF)
+  }
 }
 
 Device (SPI3)
 {
-   Name (_HID, "NXP0105")
-   Name (_UID, 0x3)
-   Method (_STA)
-   {
-       Return(0x0)
-   }
-   Method (_CRS, 0x0, NotSerialized) {
-       Name (RBUF, ResourceTemplate () {
-           MEMORY32FIXED(ReadWrite, 0x30840000, 0x4000, )
-           Interrupt(ResourceConsumer, Level, ActiveHigh, Exclusive) { 65}
-       })
-       Return(RBUF)
-   }
+  Name (_HID, "NXP0105")
+  Name (_HRV, 0x1)  // REV_0001
+  Name (_UID, 0x3)
+  Method (_STA)
+  {
+    Return(0x0)
+  }
+  Method (_CRS, 0x0, NotSerialized) {
+    Name (RBUF, ResourceTemplate () {
+      MEMORY32FIXED(ReadWrite, 0x30840000, 0x4000, )
+      Interrupt(ResourceConsumer, Level, ActiveHigh, Exclusive) { 65}
+    })
+    Return(RBUF)
+  }
 }
