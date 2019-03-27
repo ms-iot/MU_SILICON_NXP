@@ -17,6 +17,7 @@ Device (SPI1)
 {
   Name (_HID, "NXP0105")
   Name (_HRV, 0x1)  // REV_0001
+  Name (_UID, 0x1)
   Method (_STA)
   {
     Return(0x0)
