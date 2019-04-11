@@ -1,0 +1,12 @@
+# Ignore build artifacts.
+/Build
+tags/
+.DS_Store
+*.pyc
+*.bak
+BuildConfig.conf
+
+# Ignore SelfDescribingEnvironment artifacts.
+*_extdep/
+
+.vscode/
