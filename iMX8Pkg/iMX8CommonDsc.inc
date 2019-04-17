@@ -252,6 +252,7 @@
   PerformanceLib|MdeModulePkg/Library/DxePerformanceLib/DxePerformanceLib.inf
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
   HiiLib|MdeModulePkg/Library/UefiHiiLib/UefiHiiLib.inf
+  IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
 
   # UiApp dependencies
   FileExplorerLib|MdeModulePkg/Library/FileExplorerLib/FileExplorerLib.inf
@@ -783,7 +784,11 @@
 
 !if $(CONFIG_OPTEE) == TRUE
   Microsoft/OpteeClientPkg/Application/OpteeClientApiTest/OpteeClientApiTest.inf
-# SecurityPkg/Application/VariableAuthTestDxe/VariableAuthTestDxe.inf
+!endif
+
+!if $(CONFIG_EDK_TESTS) == TRUE
+  Microsoft/Application/StorageTest/StorageTest.inf
+  Microsoft/Application/AuthVarTest/AuthVarTest.inf
 !endif
 
 !if $(CONFIG_MEASURED_BOOT) == TRUE

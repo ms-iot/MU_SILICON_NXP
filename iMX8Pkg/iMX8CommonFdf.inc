@@ -133,6 +133,19 @@
   }
 !endif
 
+!if $(CONFIG_EDK_TESTS) == TRUE
+  INF Microsoft/Application/AuthVarTest/AuthVarTest.inf
+  INF Microsoft/Application/StorageTest/StorageTest.inf
+
+  FILE FREEFORM = 33630B18-7705-468B-92BD-FEBE27799EDB {
+    SECTION RAW = Microsoft/Application/AuthVarTest/Test_KEK.bin
+  }
+
+  FILE FREEFORM = 27A9C9E7-4B7A-4C7E-A8F5-77DB38D7100A {
+    SECTION RAW = Microsoft/Application/AuthVarTest/Test_db.bin
+  }
+!endif
+
 [FV.FVMAIN_COMPACT]
 FvAlignment        = 8
 ERASE_POLARITY     = 1
