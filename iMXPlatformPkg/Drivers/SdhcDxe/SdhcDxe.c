@@ -291,7 +291,8 @@ WaitForCmdAndOrDataLine (
 
 EFI_STATUS
 WaitForCmdResponse (
-  IN USDHC_PRIVATE_CONTEXT *SdhcCtx
+  IN USDHC_PRIVATE_CONTEXT *SdhcCtx,
+  IN BOOLEAN WaitOnBusy
   )
 {
   USDHC_REGISTERS       *Reg;
@@ -309,6 +310,10 @@ WaitForCmdResponse (
     gBS->Stall (USDHC_POLL_WAIT_US);
     --Retry;
     IntStatus.AsUint32 = MmioRead32 ((UINTN)&Reg->INT_STATUS);
+  }
+
+  if (WaitOnBusy) {
+    gBS->Stall (USDHC_POLL_WAIT_US);
   }
 
   if (IntStatus.AsUint32 & USDHC_INT_STATUS_ERROR) {
@@ -699,7 +704,9 @@ SdhcSendCommand (
   MmioWrite32 ((UINTN)&Reg->CMD_ARG, Argument);
   MmioWrite32 ((UINTN)&Reg->CMD_XFR_TYP, CmdXfrTyp.AsUint32);
 
-  Status = WaitForCmdResponse (SdhcCtx);
+  Status = WaitForCmdResponse (
+    SdhcCtx,
+    CmdXfrTyp.Fields.RSPTYP == USDHC_CMD_XFR_TYP_RSPTYP_RSP_48_CHK_BSY);
   if (EFI_ERROR (Status)) {
     LOG_ERROR ("WaitForCmdResponse() failed. %r", Status);
     return Status;
