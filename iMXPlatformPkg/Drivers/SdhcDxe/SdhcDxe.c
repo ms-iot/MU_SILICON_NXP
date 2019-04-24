@@ -292,28 +292,28 @@ WaitForCmdAndOrDataLine (
 EFI_STATUS
 WaitForCmdResponse (
   IN USDHC_PRIVATE_CONTEXT *SdhcCtx,
-  IN BOOLEAN WaitOnBusy
+  IN BOOLEAN WaitForBusy
   )
 {
   USDHC_REGISTERS       *Reg;
   USDHC_INT_STATUS_REG  IntStatus;
+  USDHC_PRES_STATE_REG  PresState;
   UINT32                Retry;
 
   Reg = SdhcCtx->RegistersBase;
-  IntStatus.AsUint32 = MmioRead32 ((UINTN)&Reg->INT_STATUS) ;
+  IntStatus.AsUint32 = MmioRead32 ((UINTN)&Reg->INT_STATUS);
+  PresState.AsUint32 = MmioRead32 ((UINTN)&Reg->PRES_STATE);
   Retry = USDHC_POLL_RETRY_COUNT;
 
   // Wait for command to finish execution either with success or failure
-  while (!IntStatus.Fields.CC &&
+  while ((!IntStatus.Fields.CC ||
+          (WaitForBusy && PresState.Fields.DLA)) &&
          !(IntStatus.AsUint32 & USDHC_INT_STATUS_ERROR) &&
          Retry) {
     gBS->Stall (USDHC_POLL_WAIT_US);
     --Retry;
     IntStatus.AsUint32 = MmioRead32 ((UINTN)&Reg->INT_STATUS);
-  }
-
-  if (WaitOnBusy) {
-    gBS->Stall (USDHC_POLL_WAIT_US);
+    PresState.AsUint32 = MmioRead32 ((UINTN)&Reg->PRES_STATE);
   }
 
   if (IntStatus.AsUint32 & USDHC_INT_STATUS_ERROR) {
