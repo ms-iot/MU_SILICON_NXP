@@ -29,6 +29,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/DevicePathLib.h>
 #include <Library/BaseMemoryLib.h>
+#include <Library/BootGraphicsLib.h>
 
 #define gEndEntire \
   { \
@@ -174,6 +175,8 @@ DeviceBootManagerAfterConsole (
   VOID
   )
 {
+  DisplayBootGraphic(BG_SYSTEM_LOGO);
+  gBS->Stall(STALL_1_SECOND * 10);
   return NULL;
 }
 

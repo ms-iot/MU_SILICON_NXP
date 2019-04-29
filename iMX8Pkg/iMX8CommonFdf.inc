@@ -97,7 +97,7 @@
   # Bds
   #
   INF MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf
-  INF MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf
+#  INF MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf
   INF MdeModulePkg/Universal/SetupBrowserDxe/SetupBrowserDxe.inf
   INF MdeModulePkg/Universal/BdsDxe/BdsDxe.inf
   INF MdeModulePkg/Application/UiApp/UiApp.inf
@@ -144,6 +144,10 @@
   FILE FREEFORM = 27A9C9E7-4B7A-4C7E-A8F5-77DB38D7100A {
     SECTION RAW = Microsoft/Application/AuthVarTest/Test_db.bin
   }
+!endif
+
+!if $(CONFIG_FRONTPAGE) == TRUE
+!include FrontpageFdf.inc
 !endif
 
 [FV.FVMAIN_COMPACT]

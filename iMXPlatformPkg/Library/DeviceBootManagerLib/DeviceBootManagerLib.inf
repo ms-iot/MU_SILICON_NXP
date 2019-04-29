@@ -43,6 +43,7 @@ CONSTRUCTOR                    = DeviceBootManagerConstructor
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MsCorePkg/MsCorePkg.dec
+  MsGraphicsPkg/MsGraphicsPkg.dec
 
 [LibraryClasses]
   DebugLib
@@ -51,6 +52,7 @@ CONSTRUCTOR                    = DeviceBootManagerConstructor
   BaseMemoryLib
   DevicePathLib
   UefiBootServicesTableLib
+  BootGraphicsLib
 
 [Protocols]
 [Guids]
