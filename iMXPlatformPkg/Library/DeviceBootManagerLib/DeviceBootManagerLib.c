@@ -175,8 +175,6 @@ DeviceBootManagerAfterConsole (
   VOID
   )
 {
-  DisplayBootGraphic(BG_SYSTEM_LOGO);
-  gBS->Stall(STALL_1_SECOND * 10);
   return NULL;
 }
 
