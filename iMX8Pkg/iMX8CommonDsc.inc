@@ -437,8 +437,9 @@
   #                              // significantly impact boot performance
   #  DEBUG_ERROR     0x80000000  // Error
 #  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8012004F
+# Turn on FixedDebugPrintErrorLevel for more debug!!!
+#  gEfiMdePkgTokenSpaceGuid.PcdFixedDebugPrintErrorLevel|0x80080246
   gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x80080246
-  gEfiMdePkgTokenSpaceGuid.PcdFixedDebugPrintErrorLevel|0x80080246
   gEfiMdePkgTokenSpaceGuid.PcdReportStatusCodePropertyMask|0x07
 
   #
