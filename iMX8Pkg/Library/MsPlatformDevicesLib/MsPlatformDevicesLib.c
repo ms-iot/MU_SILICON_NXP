@@ -208,7 +208,7 @@ GetSdCardDevicePath (VOID) {
  * Returns an array of device paths of devices to connect at every boot.
  *
  * @return NULL                           No devices required to be connected
- * @return EFI_DEVICE_PATH_PROTOCOL       Array of device paths returned
+ * @return EFI_DEVICE_PATH_PROTOCOL       Array of device paths returned. Must be NULL terminated.
  */
 EFI_DEVICE_PATH_PROTOCOL **
 EFIAPI
