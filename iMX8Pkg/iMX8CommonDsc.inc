@@ -75,6 +75,8 @@
   GCC:*_*_AARCH64_DLINK_FLAGS = -z common-page-size=0x10000
 
 [LibraryClasses.common]
+  HwResetSystemLib|ArmPkg/Library/ArmSmcPsciResetSystemLib/ArmSmcPsciResetSystemLib.inf
+
   AuthVariableLib|MdeModulePkg/Library/AuthVariableLibNull/AuthVariableLibNull.inf
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
   ArmMmuLib|ArmPkg/Library/ArmMmuLib/ArmMmuBaseLib.inf
@@ -95,6 +97,12 @@
 !if $(CONFIG_HEADLESS) != TRUE
   LcdHwLib|ArmPlatformPkg/Library/LcdHwNullLib/LcdHwNullLib.inf
   LcdPlatformLib|iMX8Pkg/Library/HdLcdiMX8Lib/HdLcdiMX8Lib.inf
+!endif
+
+!if $(CONFIG_FRONTPAGE) == TRUE
+  MsPlatformDevicesLib|iMX8Pkg/Library/MsPlatformDevicesLib/MsPlatformDevicesLib.inf
+  DfciDeviceIdSupportLib|iMX8Pkg/Library/DfciDeviceIdSupportLibStub/Imx8DeviceIdSupportLibStub.inf
+  PlatformThemeLib|iMX8Pkg/Library/PlatformThemeLib/PlatformThemeLib.inf
 !endif
 
   BaseLib|MdePkg/Library/BaseLib/BaseLib.inf
@@ -765,7 +773,7 @@
   # Bds
   #
   MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf
-  MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf
+  # MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf                                MAX UNDO
   MdeModulePkg/Universal/SetupBrowserDxe/SetupBrowserDxe.inf
   MdeModulePkg/Universal/BdsDxe/BdsDxe.inf {
     <LibraryClasses>

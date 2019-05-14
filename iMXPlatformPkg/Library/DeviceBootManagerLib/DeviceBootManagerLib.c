@@ -30,6 +30,8 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Library/DevicePathLib.h>
 #include <Library/BaseMemoryLib.h>
 #include <Library/BootGraphicsLib.h>
+#include <Library/PcdLib.h>
+#include <Guid/ZeroGuid.h>
 
 #define gEndEntire \
   { \
@@ -59,7 +61,7 @@ static GRAPHICS_DEVICE_PATH gPlatformGraphicsDevice = {
         (UINT8)((sizeof(VENDOR_DEVICE_PATH)) >> 8)
       }
     },
-    GRAPHICS_DEVICE_PATH_GUID
+    ZERO_GUID
   },
   gEndEntire
 };
@@ -167,7 +169,7 @@ Done:
 /**
   Do the device specific action after the console is connected.
 
-  Such as:
+  Such as: Nothing right now.
 **/
 EFI_DEVICE_PATH_PROTOCOL **
 EFIAPI
