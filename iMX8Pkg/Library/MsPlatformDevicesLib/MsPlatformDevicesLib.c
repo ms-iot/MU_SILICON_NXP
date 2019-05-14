@@ -135,7 +135,11 @@ static SIMPLE_TEXT_OUT_DEVICE_PATH gUartDevicePath = {
   },
   {
     { MESSAGING_DEVICE_PATH, MSG_UART_DP,
-      {sizeof (UART_DEVICE_PATH), (UINT8) ((sizeof (UART_DEVICE_PATH)) >> 8)}},
+      {
+        sizeof (UART_DEVICE_PATH),
+        (UINT8) ((sizeof (UART_DEVICE_PATH)) >> 8)
+      }
+    },
     0,        // Reserved
     FixedPcdGet64 (PcdUartDefaultBaudRate),
     FixedPcdGet8 (PcdUartDefaultDataBits),

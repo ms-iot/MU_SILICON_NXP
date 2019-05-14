@@ -50,7 +50,7 @@ EFI_STATUS
 EFIAPI
 DfciIdSupportV1GetSerialNumber(
   OUT UINTN*  SerialNumber
-  ) {
+) {
     DEBUG((DEBUG_INFO, "%a - \n", __FUNCTION__));
    *SerialNumber = 1;
    return EFI_SUCCESS;
@@ -69,19 +69,22 @@ DfciIdSupportV1GetSerialNumber(
 EFI_STATUS
 EFIAPI
 DfciIdSupportGetManufacturer (
-    CHAR8   **Manufacturer,
-    UINTN    *ManufacturerSize   OPTIONAL
-  ) {
-    DEBUG((DEBUG_INFO, "%a - \n", __FUNCTION__));
-    CHAR8* name = "NXP";
-    UINTN size = AsciiStrnSizeS(name, 50);
-    *Manufacturer = AllocateCopyPool(size, name);
-    DEBUG((DEBUG_INFO, "%a - \n", name));
+  OUT  CHAR8   **Manufacturer,
+  OUT  UINTN    *ManufacturerSize   OPTIONAL
+) {
+  DEBUG((DEBUG_INFO, "%a - \n", __FUNCTION__));
+  CHAR8* name = "NXP";
+  UINTN size = AsciiStrnSizeS(name, 50);
+  *Manufacturer = AllocateCopyPool(size, name);
+  if (Manufacturer == NULL) {
+    return EFI_OUT_OF_RESOURCES;
+  }
+  DEBUG((DEBUG_INFO, "%a - \n", name));
 
-    if (ManufacturerSize) {
-      *ManufacturerSize = size;
-    }
-    return EFI_SUCCESS;
+  if (ManufacturerSize) {
+    *ManufacturerSize = size;
+  }
+  return EFI_SUCCESS;
 }
 
 /**
@@ -97,17 +100,20 @@ DfciIdSupportGetManufacturer (
 EFI_STATUS
 EFIAPI
 DfciIdSupportGetProductName (
-    CHAR8   **ProductName,
-    UINTN    *ProductNameSize  OPTIONAL
-  ) {
-    CHAR8* name = "IMX8";
-    UINTN size = AsciiStrnSizeS(name, 50);
-    *ProductName = AllocateCopyPool(size, name);
-    DEBUG((DEBUG_INFO, "%a - %a\n", __FUNCTION__, *ProductName));
-    if (ProductNameSize) {
-      *ProductNameSize = size;
-    }
-    return EFI_SUCCESS;
+  OUT  CHAR8   **ProductName,
+  OUT  UINTN    *ProductNameSize  OPTIONAL
+) {
+  CHAR8* name = "IMX8";
+  UINTN size = AsciiStrnSizeS(name, 50);
+  *ProductName = AllocateCopyPool(size, name);
+  if (ProductName == NULL) {
+    return EFI_OUT_OF_RESOURCES;
+  }
+  DEBUG((DEBUG_INFO, "%a - %a\n", __FUNCTION__, *ProductName));
+  if (ProductNameSize) {
+    *ProductNameSize = size;
+  }
+  return EFI_SUCCESS;
 }
 
 /**
@@ -123,17 +129,20 @@ DfciIdSupportGetProductName (
 EFI_STATUS
 EFIAPI
 DfciIdSupportGetSerialNumber (
-    CHAR8   **SerialNumber,
-    UINTN    *SerialNumberSize  OPTIONAL
-  ) {
-    CHAR8* serialNumber = "1";
-    UINTN size = AsciiStrnSizeS(serialNumber, 50);
-    *SerialNumber = AllocateCopyPool(size, serialNumber);
-    DEBUG((DEBUG_INFO, "%a - %a\n", __FUNCTION__, *SerialNumber));
-    if (SerialNumberSize) {
-      *SerialNumberSize = size;
-    }
-    return EFI_SUCCESS;
+  OUT  CHAR8   **SerialNumber,
+  OUT  UINTN    *SerialNumberSize  OPTIONAL
+) {
+  CHAR8* serialNumber = "1";
+  UINTN size = AsciiStrnSizeS(serialNumber, 50);
+  *SerialNumber = AllocateCopyPool(size, serialNumber);
+  if (SerialNumber == NULL) {
+    return EFI_OUT_OF_RESOURCES;
+  }
+  DEBUG((DEBUG_INFO, "%a - %a\n", __FUNCTION__, *SerialNumber));
+  if (SerialNumberSize) {
+    *SerialNumberSize = size;
+  }
+  return EFI_SUCCESS;
 }
 
 /**
@@ -149,15 +158,18 @@ DfciIdSupportGetSerialNumber (
 EFI_STATUS
 EFIAPI
 DfciIdSupportGetUuid (
-    CHAR8   **Uuid,
-    UINTN    *UuidSize  OPTIONAL
-  ) {
-    CHAR8* uuid = "{0BC8D9D3-D9F6-4C25-92CB-2C63C47977A7}"; // fake
-    UINTN size = AsciiStrnSizeS(uuid, 50);
-    *Uuid = AllocateCopyPool(size, uuid);
-    DEBUG((DEBUG_INFO, "%a - %a\n", __FUNCTION__, *Uuid));
-    if (UuidSize) {
-      *UuidSize = size;
-    }
-    return EFI_SUCCESS;
+  OUT  CHAR8   **Uuid,
+  OUT  UINTN    *UuidSize  OPTIONAL
+) {
+  CHAR8* uuid = "{0BC8D9D3-D9F6-4C25-92CB-2C63C47977A7}"; // fake
+  UINTN size = AsciiStrnSizeS(uuid, 50);
+  *Uuid = AllocateCopyPool(size, uuid);
+  if (Uuid == NULL) {
+    return EFI_OUT_OF_RESOURCES;
+  }
+  DEBUG((DEBUG_INFO, "%a - %a\n", __FUNCTION__, *Uuid));
+  if (UuidSize) {
+    *UuidSize = size;
+  }
+  return EFI_SUCCESS;
 }

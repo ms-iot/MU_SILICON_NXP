@@ -773,7 +773,9 @@
   # Bds
   #
   MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf
+!if $(CONFIG_FRONTPAGE) != TRUE
   MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf
+!endif
   MdeModulePkg/Universal/SetupBrowserDxe/SetupBrowserDxe.inf
   MdeModulePkg/Universal/BdsDxe/BdsDxe.inf {
     <LibraryClasses>
