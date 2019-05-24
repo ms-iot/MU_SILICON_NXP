@@ -29,7 +29,6 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/DevicePathLib.h>
 #include <Library/BaseMemoryLib.h>
-#include <Library/BootGraphicsLib.h>
 #include <Library/PcdLib.h>
 #include <Guid/ZeroGuid.h>
 
@@ -42,9 +41,6 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       0 \
     } \
   }
-
-//89464DAE-8DAA-41FE-A4C8-40 D2 17 5A F1 E9
-#define GRAPHICS_DEVICE_PATH_GUID  {0x89464DAE, 0x8DAA, 0x41FE, {0xa4, 0xc8, 0x40, 0xd2, 0x17, 0x5a, 0xf1, 0xe9}}
 
 typedef struct {
     VENDOR_DEVICE_PATH             VendorDevicePath;
