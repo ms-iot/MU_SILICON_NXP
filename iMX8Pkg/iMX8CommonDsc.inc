@@ -787,7 +787,11 @@
   MdeModulePkg/Universal/SetupBrowserDxe/SetupBrowserDxe.inf
   MdeModulePkg/Universal/BdsDxe/BdsDxe.inf {
     <LibraryClasses>
+!if $(CONFIG_FRONTPAGE) == TRUE
       PlatformBootManagerLib|MsCorePkg/Library/PlatformBootManagerLib/PlatformBootManagerLib.inf
+!else
+      PlatformBootManagerLib|ArmPkg/Library/PlatformBootManagerLib/PlatformBootManagerLib.inf
+!endif
   }
   MdeModulePkg/Application/UiApp/UiApp.inf {
     <LibraryClasses>
