@@ -39,6 +39,32 @@ Device (CPU0)
     {
         Return(0xf)
     }
+    Name (_LPI, Package () {
+      0, // Revision
+      0, // LevelID
+      1, // Count of packages
+
+      // Standby / WFI state.
+      Package () {
+        0, // Min Residency (us)
+        0, // Wakeup Latency (us)
+        1, // Flags, set bit0 to 1 to enable this state
+        0, // Arch. Context Lost Flags
+        0, // Residency Counter Frequency
+        0, // Enabled Parent State
+        ResourceTemplate () {
+          // Entry method for the WFI state. See the ARM FFH Specification (ARM DEN 0048).
+          Register (FFixedHW, 0x20, 0, 0x00000000FFFFFFFF, 3)
+        },
+        ResourceTemplate () {
+          Register (SystemMemory,0,0,0,0) // Residency counter register
+        },
+        ResourceTemplate () {
+          Register (SystemMemory,0,0,0,0) // Usage counter register
+        },
+        "WFI"       // Name
+      },
+    })
 }
 
 //
@@ -52,6 +78,32 @@ Device (CPU1)
     {
         Return(0xf)
     }
+    Name (_LPI, Package () {
+      0, // Revision
+      0, // LevelID
+      1, // Count of packages
+
+      // Standby / WFI state.
+      Package () {
+        0, // Min Residency (us)
+        0, // Wakeup Latency (us)
+        1, // Flags, set bit0 to 1 to enable this state
+        0, // Arch. Context Lost Flags
+        0, // Residency Counter Frequency
+        0, // Enabled Parent State
+        ResourceTemplate () {
+          // Entry method for the WFI state. See the ARM FFH Specification (ARM DEN 0048).
+          Register (FFixedHW, 0x20, 0, 0x00000000FFFFFFFF, 3)
+        },
+        ResourceTemplate () {
+          Register (SystemMemory,0,0,0,0) // Residency counter register
+        },
+        ResourceTemplate () {
+          Register (SystemMemory,0,0,0,0) // Usage counter register
+        },
+        "WFI"       // Name
+      },
+    })
 }
 
 //
@@ -65,6 +117,32 @@ Device (CPU2)
     {
         Return(0xf)
     }
+    Name (_LPI, Package () {
+      0, // Revision
+      0, // LevelID
+      1, // Count of packages
+
+      // Standby / WFI state.
+      Package () {
+        0, // Min Residency (us)
+        0, // Wakeup Latency (us)
+        1, // Flags, set bit0 to 1 to enable this state
+        0, // Arch. Context Lost Flags
+        0, // Residency Counter Frequency
+        0, // Enabled Parent State
+        ResourceTemplate () {
+          // Entry method for the WFI state. See the ARM FFH Specification (ARM DEN 0048).
+          Register (FFixedHW, 0x20, 0, 0x00000000FFFFFFFF, 3)
+        },
+        ResourceTemplate () {
+          Register (SystemMemory,0,0,0,0) // Residency counter register
+        },
+        ResourceTemplate () {
+          Register (SystemMemory,0,0,0,0) // Usage counter register
+        },
+        "WFI"       // Name
+      },
+    })
 }
 
 //
@@ -78,5 +156,31 @@ Device (CPU3)
     {
         Return(0xf)
     }
+    Name (_LPI, Package () {
+      0, // Revision
+      0, // LevelID
+      1, // Count of packages
+
+      // Standby / WFI state.
+      Package () {
+        0, // Min Residency (us)
+        0, // Wakeup Latency (us)
+        1, // Flags, set bit0 to 1 to enable this state
+        0, // Arch. Context Lost Flags
+        0, // Residency Counter Frequency
+        0, // Enabled Parent State
+        ResourceTemplate () {
+          // Entry method for the WFI state. See the ARM FFH Specification (ARM DEN 0048).
+          Register (FFixedHW, 0x20, 0, 0x00000000FFFFFFFF, 3)
+        },
+        ResourceTemplate () {
+          Register (SystemMemory,0,0,0,0) // Residency counter register
+        },
+        ResourceTemplate () {
+          Register (SystemMemory,0,0,0,0) // Usage counter register
+        },
+        "WFI"       // Name
+      },
+    })
 }
 
