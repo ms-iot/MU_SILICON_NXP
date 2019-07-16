@@ -62,7 +62,7 @@ Device (CPU0)
         ResourceTemplate () {
           Register (SystemMemory,0,0,0,0) // Usage counter register
         },
-        "WFI"       // Name
+        "WFI" // Name
       },
     })
 }
@@ -101,7 +101,7 @@ Device (CPU1)
         ResourceTemplate () {
           Register (SystemMemory,0,0,0,0) // Usage counter register
         },
-        "WFI"       // Name
+        "WFI" // Name
       },
     })
 }
@@ -140,7 +140,7 @@ Device (CPU2)
         ResourceTemplate () {
           Register (SystemMemory,0,0,0,0) // Usage counter register
         },
-        "WFI"       // Name
+        "WFI" // Name
       },
     })
 }
@@ -179,7 +179,7 @@ Device (CPU3)
         ResourceTemplate () {
           Register (SystemMemory,0,0,0,0) // Usage counter register
         },
-        "WFI"       // Name
+        "WFI" // Name
       },
     })
 }
