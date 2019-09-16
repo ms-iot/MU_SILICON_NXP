@@ -37,7 +37,7 @@
 #define KD_UART_BASE_ADDR                 UART3_BASE_ADDRESS // iMX8 0x30880000
 #define KD_UART_ACPI_PATH                 "\\_SB.UAR3"
 #elif FixedPcdGet32(PcdKdUartInstance) == 4
-#define KD_UART_BASE_ADDR                 UART4_BASE_ADDRESS // iMX8 0x30A80000
+#define KD_UART_BASE_ADDR                 UART4_BASE_ADDRESS // iMX8 0x30A60000
 #define KD_UART_ACPI_PATH                 "\\_SB.UAR4"
 #endif
 
